@@ -1,16 +1,46 @@
-import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import MetaTags from "react-meta-tags";
-import { Link } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import { useDispatch, useSelector } from "react-redux";
+import LoginPage from "../../components/auth/LoginPage";
+import { useToasts } from 'react-toast-notifications';
+import { registerActionRequest } from '../../redux/actions/userActions';
 
-const LoginRegister = ({ location }) => {
+const LoginRegister = ({ location, history }) => {
+  const { addToast } = useToasts();
+  const dispatch = useDispatch();
+  const [values, setValues] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    address: ""
+  })
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const registerHandler = (e, values) => {
+      e.preventDefault();
+      if(values.password !== confirmPassword) {
+          return addToast('Password and confirm password not match', {
+              autoDismiss: true,
+              appearance: 'error',
+              autoDismissTimeout: 1000,
+          })
+      } else {
+        dispatch(registerActionRequest(values, addToast));
+      }
+  }
+  const { userInfo } = useSelector((state) => state.userLogin);
   const { pathname } = location;
-
+  const redirect = location.search ? location.search.split('=')[1] : '/';
+  useEffect(() => {
+    if(userInfo) {
+      history.push(redirect);
+    }
+  }, [history, userInfo, redirect])
   return (
     <Fragment>
       <MetaTags>
@@ -47,53 +77,48 @@ const LoginRegister = ({ location }) => {
                     </Nav>
                     <Tab.Content>
                       <Tab.Pane eventKey="login">
-                        <div className="login-form-container">
-                          <div className="login-register-form">
-                            <form>
-                              <input
-                                type="text"
-                                name="user-name"
-                                placeholder="Username"
-                              />
-                              <input
-                                type="password"
-                                name="user-password"
-                                placeholder="Password"
-                              />
-                              <div className="button-box">
-                                <div className="login-toggle-btn">
-                                  <input type="checkbox" />
-                                  <label className="ml-10">Remember me</label>
-                                  <Link to={process.env.PUBLIC_URL + "/"}>
-                                    Forgot Password?
-                                  </Link>
-                                </div>
-                                <button type="submit">
-                                  <span>Login</span>
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
+                         <LoginPage />
                       </Tab.Pane>
                       <Tab.Pane eventKey="register">
                         <div className="login-form-container">
                           <div className="login-register-form">
-                            <form>
+                            <form onSubmit={(e) => registerHandler(e, values)}>
+                            <input
+                                type="text"
+                                name="user-firstName"
+                                placeholder="Full Name"
+                                onChange={(e) => setValues({...values, firstName: e.target.value})}
+                              />
                               <input
                                 type="text"
-                                name="user-name"
-                                placeholder="Username"
+                                name="user-lastName"
+                                placeholder="Full Name"
+                                onChange={(e) => setValues({...values, lastName: e.target.value})}
+                              />
+                               <input
+                                name="user-email"
+                                placeholder="Email"
+                                type="email"
+                                onChange={(e) => setValues({...values, email: e.target.value})}
                               />
                               <input
                                 type="password"
                                 name="user-password"
                                 placeholder="Password"
+                                onChange={(e) => setValues({...values, password: e.target.value})}
                               />
-                              <input
-                                name="user-email"
-                                placeholder="Email"
-                                type="email"
+                               <input
+                                type="password"
+                                name="user-confirm-password"
+                                placeholder="Confirm Password"
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                              />
+                             
+                               <input
+                                name="user-address"
+                                placeholder="Address"
+                                type="text"
+                                onChange={(e) => setValues({...values, address: e.target.value})}
                               />
                               <div className="button-box">
                                 <button type="submit">
@@ -116,8 +141,5 @@ const LoginRegister = ({ location }) => {
   );
 };
 
-LoginRegister.propTypes = {
-  location: PropTypes.object
-};
 
 export default LoginRegister;

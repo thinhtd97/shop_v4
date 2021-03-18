@@ -1,22 +1,23 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { multilanguage } from "redux-multilanguage";
-import { connect } from "react-redux";
-import { changeCurrency } from "../../redux/actions/currencyActions";
-import LanguageCurrencyChanger from "./sub-components/LanguageCurrencyChanger";
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { multilanguage } from 'redux-multilanguage'
+import { connect, useSelector } from 'react-redux'
+import { changeCurrency } from '../../redux/actions/currencyActions'
+import LanguageCurrencyChanger from './sub-components/LanguageCurrencyChanger'
+import { Link } from 'react-router-dom'
 
 const HeaderTop = ({
   currency,
   changeCurrency,
   currentLanguageCode,
   dispatch,
-  borderStyle
+  borderStyle,
 }) => {
+  const { userInfo } = useSelector((state) => state.userLogin)
   return (
     <div
       className={`header-top-wap ${
-        borderStyle === "fluid-border" ? "border-bottom" : ""
+        borderStyle === 'fluid-border' ? 'border-bottom' : ''
       }`}
     >
       <LanguageCurrencyChanger
@@ -25,36 +26,42 @@ const HeaderTop = ({
         currentLanguageCode={currentLanguageCode}
         dispatch={dispatch}
       />
-      <div className="header-offer">
+      {!userInfo ? (
+        <div className="header-offer">
           <Link to="/login-register">Login / Register</Link>
-      </div>
+        </div>
+      ) : (
+        <div className="header-offer">
+        Hello,  <Link to={process.env.PUBLIC_URL + '/my-account'}>{`${userInfo.firstName} ${userInfo.lastName}`}</Link>
+        </div>
+      )}
     </div>
-  );
-};
+  )
+}
 
 HeaderTop.propTypes = {
   borderStyle: PropTypes.string,
   changeCurrency: PropTypes.func,
   currency: PropTypes.object,
   currentLanguageCode: PropTypes.string,
-  dispatch: PropTypes.func
-};
+  dispatch: PropTypes.func,
+}
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    currency: state.currencyData
-  };
-};
+    currency: state.currencyData,
+  }
+}
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    changeCurrency: currencyName => {
-      dispatch(changeCurrency(currencyName));
-    }
-  };
-};
+    changeCurrency: (currencyName) => {
+      dispatch(changeCurrency(currencyName))
+    },
+  }
+}
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(multilanguage(HeaderTop));
+  mapDispatchToProps,
+)(multilanguage(HeaderTop))

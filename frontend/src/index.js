@@ -18,7 +18,9 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { rootSaga } from "./redux/sagas";
 
 const createSagaMiddleware = sagaMiddleware();
-const middleware = [thunk, createSagaMiddleware];
+const middleware = [createSagaMiddleware, thunk];
+
+// const getUserInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
 
 const store = createStore(
   rootReducer,
@@ -26,7 +28,7 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(...middleware, save()))
 );
 
-createSagaMiddleware.run(rootSaga());
+createSagaMiddleware.run(rootSaga);
 
 // fetch products from json file
 store.dispatch(fetchProducts(products));

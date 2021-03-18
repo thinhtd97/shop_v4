@@ -4,6 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
+import sagaMiddleware from "redux-saga";
 import { save, load } from "redux-localstorage-simple";
 import { Provider } from "react-redux";
 import { fetchProducts } from "./redux/actions/productActions";
@@ -14,12 +15,18 @@ import "./assets/scss/style.scss";
 import * as serviceWorker from "./serviceWorker";
 
 import { composeWithDevTools } from "redux-devtools-extension";
+import { rootSaga } from "./redux/sagas";
+
+const createSagaMiddleware = sagaMiddleware();
+const middleware = [thunk, createSagaMiddleware];
 
 const store = createStore(
   rootReducer,
   load(),
-  composeWithDevTools(applyMiddleware(thunk, save()))
+  composeWithDevTools(applyMiddleware(...middleware, save()))
 );
+
+createSagaMiddleware.run(rootSaga());
 
 // fetch products from json file
 store.dispatch(fetchProducts(products));

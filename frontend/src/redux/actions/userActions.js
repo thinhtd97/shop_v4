@@ -14,7 +14,7 @@ export const registerActionRequest = (user, addToast) => ({
 })
 
 export const logoutAction = () => ({
-    type: userConstants.LOGOUT,
+    type: userConstants.LOGOUT_REQUEST,
 })
 
 export const sendMailAction = (email, addToast) => ({
@@ -28,4 +28,22 @@ export const newPasswordAction = (password, token, history, addToast) => ({
     addToast,
     token,
     history
+})
+
+export const userProfileAction = (addToast) => ({
+    type: userConstants.USER_PROFILE_REQUEST,
+    addToast
+})
+
+export const userProfileUpdateAction = (addToast, user) => ({
+    type: userConstants.USER_UPDATE_PROFILE_REQUEST,
+    addToast,
+    user
+})
+
+export const userChangePasswordAction = (addToast, password, oldPassword) => ({
+    type: userConstants.USER_UPDATE_PW_REQUEST,
+    addToast,
+    password,
+    oldPassword
 })

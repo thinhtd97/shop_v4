@@ -11,8 +11,10 @@ export const loginReducer = (state = {}, action) => {
                 loading: false,
                 error: action.payload
             }
-        case userConstants.LOGOUT: 
-            return {}
+        case userConstants.LOGOUT_REQUEST: 
+            return { loading: true }
+        case userConstants.LOGOUT_SUCCESS:
+            return {};
         default: 
             return state;
     } 
@@ -54,6 +56,53 @@ export const newPasswordReducer = (state = {}, action) => {
         case userConstants.USER_NEWPW_SUCCESS:
             return { loading: false, success: true }
         case userConstants.USER_NEWPW_FAILED:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default: 
+            return state;
+    } 
+}
+export const userProfileReducer = (state = {}, action) => {
+    switch(action.type) {
+        case userConstants.USER_PROFILE_REQUEST:
+            return { loading: true }
+        case userConstants.USER_PROFILE_SUCCESS:
+            return { loading: false, user: action.payload }
+        case userConstants.USER_PROFILE_FAILED:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case userConstants.USER_PROFILE_RESET: 
+            return {}
+        default: 
+            return state;
+    } 
+}
+export const userUpdateProfileReducer = (state = {}, action) => {
+    switch(action.type) {
+        case userConstants.USER_UPDATE_PROFILE_REQUEST:
+            return { loading: true }
+        case userConstants.USER_UPDATE_PROFILE_SUCCESS:
+            return { loading: false, success: true }
+        case userConstants.USER_UPDATE_PROFILE_FAILED:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default: 
+            return state;
+    } 
+}
+export const userUpdatePasswordReducer = (state = {}, action) => {
+    switch(action.type) {
+        case userConstants.USER_UPDATE_PW_REQUEST:
+            return { loading: true }
+        case userConstants.USER_UPDATE_PW_SUCCESS:
+            return { loading: false, success: true }
+        case userConstants.USER_UPDATE_PW_FAILED:
             return {
                 loading: false,
                 error: action.payload

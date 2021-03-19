@@ -61,6 +61,22 @@ export const NewPassword = asyncHandler(async (req, res) => {
     })
 })
 
+export const changePassword = asyncHandler(async (req, res) => {
+    let { password, oldPassword } = req.body;
+    const user = await User.findById(req.user.id);
+    const passwordUser = await user.matchPassword(oldPassword);
+    if(passwordUser) {
+        user.password = password;
+        user.save();
+        res.status(200).json({
+            message: "Change password success."
+        })
+    } else {
+        res.status(404)
+        throw new Error("Old password did't not match");
+    }
+})
+
 export const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body 
     const user = await User.findOne({ email });
@@ -70,6 +86,7 @@ export const authUser = asyncHandler(async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            address: user.address,
             role: user.role,
             token: generateToken(user._id)
         })
@@ -87,6 +104,7 @@ export const authAdmin = asyncHandler(async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            address: user.address,
             role: user.role,
             token: generateToken(user._id)
         })
@@ -100,9 +118,11 @@ export const getProfile = asyncHandler(async (req, res) => {
     if(user) {
         res.json({
             _id: user._id,
-            fistName: user.firstName,
+            firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            phone: user.phone,
+            address: user.address,
             role: user.role,
         })
     } else {
@@ -112,7 +132,7 @@ export const getProfile = asyncHandler(async (req, res) => {
 })
 
 export const registerUser = asyncHandler(async (req, res) => {
-    const { firstName, lastName, email, username, password, address } = req.body
+    const { firstName, lastName, email, username, password, address, phone } = req.body
     const user = await User.findOne({ email, username })
 
     if(user) {
@@ -124,7 +144,8 @@ export const registerUser = asyncHandler(async (req, res) => {
             lastName, 
             email,
             password,
-            address
+            address,
+            phone
         })
         if(userCreated) {
             res.json({
@@ -132,6 +153,7 @@ export const registerUser = asyncHandler(async (req, res) => {
                 firstName: userCreated.firstName,
                 lastName: userCreated.lastName,
                 email: userCreated.email,
+                phone: userCreated.phone,
                 address: userCreated.address,
                 role: userCreated.role,
                 token: generateToken(userCreated._id)
@@ -144,10 +166,13 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 })
 export const updateProfileUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user.id)
+    const user = await User.findById(req.user.id);
     if(user) {
-        user.name = req.body.name || user.name 
+        user.firstName = req.body.firstName || user.firstName 
+        user.lastName = req.body.lastName || user.lastName
         user.email = req.body.email || user.email 
+        user.address = req.body.address || user.address 
+        user.phone = req.body.phone || user.phone 
         if(req.body.password) {
             user.password = req.body.password
         }
@@ -155,8 +180,11 @@ export const updateProfileUser = asyncHandler(async (req, res) => {
 
         res.json({
             _id: updatedUser._id,
-            name: updatedUser.name,
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
             email: updatedUser.email,
+            address: updatedUser.address,
+            phone: updatedUser.phone,
             role: updatedUser.role,
             token: generateToken(updatedUser._id)
         })

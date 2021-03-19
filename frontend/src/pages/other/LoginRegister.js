@@ -18,7 +18,8 @@ const LoginRegister = ({ location, history }) => {
     lastName: "",
     email: "",
     password: "",
-    address: ""
+    address: "",
+    phone: ""
   })
   const [confirmPassword, setConfirmPassword] = useState('')
   const registerHandler = (e, values) => {
@@ -137,7 +138,12 @@ const LoginRegister = ({ location, history }) => {
                                 placeholder="Confirm Password"
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                               />
-                             
+                             <input
+                                name="user-phone"
+                                placeholder="Phone"
+                                type="text"
+                                onChange={(e) => setValues({...values, phone: e.target.value})}
+                              />
                                <input
                                 name="user-address"
                                 placeholder="Address"

@@ -3,6 +3,7 @@ import { protect } from '../middleware/middlewares.js';
 import { admin } from '../middleware/authMiddleware.js';
 import { 
     authUser, 
+    changePassword, 
     deleteUserByID, 
     getProfile, 
     getUserByID, 
@@ -17,8 +18,9 @@ router.post('/user/login', authUser);
 router.post('/user/reset-password', resetPassword);
 router.post('/user/new-password', NewPassword);
 router.post('/user/register', registerUser);
+router.put('/user/change-password', protect, changePassword);
 router.route('/user/profile').get(protect, getProfile).put(protect, updateProfileUser)
-router.get('/user/:id')
+router.route('/user/:id')
 .get(protect, admin, getUserByID)
 .delete(protect, admin, deleteUserByID)
 .put(protect, admin, updateUserByID)

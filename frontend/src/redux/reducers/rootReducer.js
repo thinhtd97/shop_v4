@@ -5,7 +5,14 @@ import wishlistReducer from "./wishlistReducer";
 import compareReducer from "./compareReducer";
 import { combineReducers } from "redux";
 import { createMultilanguageReducer } from "redux-multilanguage";
-import { loginReducer, registerReducer, sendMailReducer, newPasswordReducer } from "./userReducer";
+import { 
+  loginReducer, 
+  registerReducer, 
+  sendMailReducer, 
+  newPasswordReducer, 
+  userProfileReducer, 
+  userUpdateProfileReducer,
+  userUpdatePasswordReducer } from "./userReducer";
 
 const rootReducer = combineReducers({
   multilanguage: createMultilanguageReducer({ currentLanguageCode: "en" }),
@@ -17,7 +24,10 @@ const rootReducer = combineReducers({
   userLogin: loginReducer,
   userRegister: registerReducer,
   sendEmail: sendMailReducer,
-  newPassword: newPasswordReducer
+  newPassword: newPasswordReducer,
+  userProfile: userProfileReducer,
+  updateProfileReducer: userUpdateProfileReducer,
+  updatePasswordReducer: userUpdatePasswordReducer
 });
 
 export default rootReducer;

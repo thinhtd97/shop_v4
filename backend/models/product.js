@@ -52,10 +52,10 @@ const productSchema = mongoose.Schema({
         trim: true,
         maxLength: 32
     },
-    category: {
+    category: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-    },
+        ref: 'Category'
+    }],
     subs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Sub'
@@ -91,13 +91,25 @@ const productSchema = mongoose.Schema({
         required: true,
         default: 0
     },
-    // rating: [{
-    //     star: Number,
-    //     postedBy: {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'User'
-    //     }
-    // }]
+    rating: [{
+        star: Number,
+        postedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    }],
+    variation: [{
+        color: String,
+        image: String,
+        size: [{
+            name: String,
+            stock: {
+                type: Number,
+                required: true,
+                default: 0
+            }
+        }]
+    }]
 }, { timestamps: true })
 
 const Product = mongoose.model('Product', productSchema);

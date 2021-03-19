@@ -25,6 +25,8 @@ const About = lazy(() => import("./pages/other/About"));
 const Contact = lazy(() => import("./pages/other/Contact"));
 const MyAccount = lazy(() => import("./pages/other/MyAccount"));
 const LoginRegister = lazy(() => import("./pages/other/LoginRegister"));
+const ResetPassword = lazy(() => import("./pages/other/ResetPassword"));
+const NewPassword = lazy(() => import("./pages/other/NewPassword"));
 
 const Cart = lazy(() => import("./pages/other/Cart"));
 const Wishlist = lazy(() => import("./pages/other/Wishlist"));
@@ -50,7 +52,6 @@ const App = props => {
     <>
     <ToastProvider>
       <BreadcrumbsProvider>
-
         <Router>
           <ScrollToTop>
             <Suspense
@@ -127,6 +128,16 @@ const App = props => {
                 <Route
                   path={process.env.PUBLIC_URL + "/not-found"}
                   component={NotFound}
+                />
+
+                <Route
+                  path={process.env.PUBLIC_URL + "/reset-password"}
+                  component={ResetPassword}
+                />
+
+                <Route
+                  path={process.env.PUBLIC_URL + "/reset/:token"}
+                  component={NewPassword}
                 />
 
                 <Route exact component={NotFound} />

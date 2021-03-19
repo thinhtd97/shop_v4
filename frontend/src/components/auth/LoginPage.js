@@ -10,8 +10,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
   const loginSubmit = (e) => {
-    e.preventDefault()
-    dispatch(loginActionRequest(email, password, addToast))
+    e.preventDefault();
+    dispatch(loginActionRequest(email, password, addToast));
   }
   return (
     <div className="login-form-container">
@@ -34,7 +34,7 @@ const LoginPage = () => {
             <div className="login-toggle-btn">
               <input type="checkbox" />
               <label className="ml-10">Remember me</label>
-              <Link to={process.env.PUBLIC_URL + '/'}>Forgot Password?</Link>
+              <Link to={process.env.PUBLIC_URL + '/reset-password'}>Forgot Password?</Link>
             </div>
             <button type="submit">
               <span>Login</span>

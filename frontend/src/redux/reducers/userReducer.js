@@ -32,3 +32,33 @@ export const registerReducer = (state = {}, action) => {
             return state;
     } 
 }
+export const sendMailReducer = (state = {}, action) => {
+    switch(action.type) {
+        case userConstants.USER_SENDMAIL_REQUEST:
+            return { loading: true }
+        case userConstants.USER_SENDMAIL_SUCCESS:
+            return { loading: false, success: true }
+        case userConstants.USER_SENDMAIL_FAILED:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default: 
+            return state;
+    } 
+}
+export const newPasswordReducer = (state = {}, action) => {
+    switch(action.type) {
+        case userConstants.USER_NEWPW_REQUEST:
+            return { loading: true }
+        case userConstants.USER_NEWPW_SUCCESS:
+            return { loading: false, success: true }
+        case userConstants.USER_NEWPW_FAILED:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default: 
+            return state;
+    } 
+}

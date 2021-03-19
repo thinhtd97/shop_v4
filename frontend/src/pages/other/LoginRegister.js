@@ -29,6 +29,30 @@ const LoginRegister = ({ location, history }) => {
               appearance: 'error',
               autoDismissTimeout: 1000,
           })
+      } else if (values.firstName === "") {
+          return addToast('First name cannot be empty!', {
+            autoDismiss: true,
+            appearance: 'error',
+            autoDismissTimeout: 1000
+          })
+      } else if (values.lastName === "") {
+        return addToast('Last name cannot be empty!', {
+          autoDismiss: true,
+          appearance: 'error',
+          autoDismissTimeout: 1000
+        })
+      } else if (values.email === "") {
+        return addToast('Email name cannot be empty!', {
+          autoDismiss: true,
+          appearance: 'error',
+          autoDismissTimeout: 1000
+        })
+      } else if (values.address === "") {
+        return addToast('Address cannot be empty!', {
+          autoDismiss: true,
+          appearance: 'error',
+          autoDismissTimeout: 1000
+        })
       } else {
         dispatch(registerActionRequest(values, addToast));
       }

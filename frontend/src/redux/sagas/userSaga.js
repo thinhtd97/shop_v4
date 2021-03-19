@@ -77,11 +77,74 @@ function* register(action) {
 function* logout() {
     yield put({ type: userConstant.LOGOUT });
 }
+function* sendMail(action) {
+    const { email, addToast } = action;
+    try {
+        yield call(() => axios.post(`${process.env.REACT_APP_API}/user/reset-password`, { email }))
+        yield put({ type: userConstant.USER_SENDMAIL_SUCCESS });
+        addToast("We sent an email to verify your account", { 
+            appearance: 'success', 
+            autoDismiss: true,
+            autoDismissTimeout: 3000,
+        });
+
+    } catch (error) {
+        yield put({
+            type: userConstant.USER_SENDMAIL_FAILED,
+            payload: error.response && 
+            error.response.data.message ? 
+            error.response.data.message : 
+            error.message
+        });
+
+        addToast(error.response && 
+            error.response.data.message ? 
+            error.response.data.message : 
+            error.message, { 
+                appearance: 'error', 
+                autoDismiss: true,
+                autoDismissTimeout: 1000,
+        });
+    }
+}
+
+function* newPassword(action) {
+    const { addToast, password, token, history } = action;
+    try {
+        yield call(() => axios.post(`${process.env.REACT_APP_API}/user/new-password`, { password, token }));
+        yield put({ type: userConstant.USER_NEWPW_SUCCESS });
+        addToast("Change password successfully.", { 
+            appearance: 'success', 
+            autoDismiss: true,
+            autoDismissTimeout: 3000,
+        });
+        history.push('/login-register');
+    } catch (error) {
+        yield put({
+            type: userConstant.USER_NEWPW_FAILED,
+            payload: error.response && 
+            error.response.data.message ? 
+            error.response.data.message : 
+            error.message
+        });
+
+        addToast(error.response && 
+            error.response.data.message ? 
+            error.response.data.message : 
+            error.message, { 
+                appearance: 'error', 
+                autoDismiss: true,
+                autoDismissTimeout: 1000,
+        });
+    }
+}
 
 function* userSaga() {
     yield takeEvery(userConstant.USER_LOGIN_REQUEST, login);
     yield takeEvery(userConstant.USER_REGISTER_REQUEST, register);
-    yield take(userConstant.LOGOUT, logout)
+    yield takeEvery(userConstant.USER_SENDMAIL_REQUEST, sendMail);
+    yield takeEvery(userConstant.USER_NEWPW_REQUEST, newPassword);
+    yield take(userConstant.LOGOUT, logout);
 }
 
 export default userSaga;

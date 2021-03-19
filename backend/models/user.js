@@ -12,11 +12,21 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
     },
     role: {
         type: String,
         default: "subscriber",
+    },
+    phone: {
+        type: String,
+        required: true,
+        default: "0123456789"
+    },
+    resetToken: {
+        type: String,
+    },
+    expireToken: {
+        type: Date,
     },
     image: {
         type: String,

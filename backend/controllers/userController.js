@@ -1,6 +1,65 @@
 import asyncHandler from 'express-async-handler'
 import generateToken from '../middleware/generateToken.js'
-import User from '../models/user.js'
+import User from '../models/user.js';
+import nodemailer from 'nodemailer';
+import sendGridTransport from 'nodemailer-sendgrid-transport';
+import crypto from 'crypto';
+
+const transport = nodemailer.createTransport(sendGridTransport({
+    auth: {
+        api_key: "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"
+    }
+}))
+
+
+export const resetPassword = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    crypto.randomBytes(32, (err, buffer) => {
+        if(err) {
+            console.log(err);
+        }
+        const token = buffer.toString('hex');
+        User.findOne({ email }).then((user) => {
+            if(!user) {
+
+                res.status(404)
+                throw new Error("User don't exists with that email.")
+            }
+            user.resetToken = token;
+            user.expireToken = Date.now() + 3600000;
+            user.save().then((result) => {
+                transport.sendMail({
+                    to: user.email,
+                    from: 'thinhtd2109@gmail.com',
+                    subject: 'Password Reset',
+                    html: `<p>You requested for password reset</p>
+                    <h5>Click in this <a href="http://localhost:3000/reset/${token}">Link</a> to reset password</h5>`
+                })
+                res.json({
+                    message: "Check your email."
+                })
+            })
+        })
+    })
+})
+
+export const NewPassword = asyncHandler(async (req, res) => {
+    const newPassword = req.body.password;
+    const sentToken = req.body.token;
+    User.findOne({ resetToken: sentToken, expireToken: { $gt:Date.now() } })
+    .then(user => {
+        if(!user) {
+            res.status(404)
+            throw new Error("Try again session expired.");
+        }
+        user.password = newPassword;
+        user.resetToken = undefined;
+        user.expireToken = undefined;
+        user.save().then(saveUser => {
+            res.json({ message: "Password updated success." })
+        })
+    })
+})
 
 export const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body 

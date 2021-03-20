@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const reviewsSchema = mongoose.Schema(
   {
@@ -16,7 +16,17 @@ const reviewsSchema = mongoose.Schema(
   },
 )
 
-
+const variation = mongoose.Schema(
+  {
+    color: String,
+    image: String,
+    size: String,
+    stock: Number,
+  },
+  {
+    timestamps: true,
+  },
+)
 
 const productSchema = mongoose.Schema(
   {
@@ -33,6 +43,7 @@ const productSchema = mongoose.Schema(
       lowercase: true,
       index: true,
     },
+    variation: [variation],
     discount: {
       type: Number,
       required: true,
@@ -70,12 +81,11 @@ const productSchema = mongoose.Schema(
         ref: 'Sub',
       },
     ],
-    quantity: Number,
     sold: {
       type: Number,
       default: 0,
     },
-    images: {
+    image: {
       type: Array,
     },
     shipping: {
@@ -110,7 +120,6 @@ const productSchema = mongoose.Schema(
         },
       },
     ],
-    variation: [{}],
   },
   { timestamps: true },
 )

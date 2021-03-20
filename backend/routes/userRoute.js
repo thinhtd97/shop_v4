@@ -2,6 +2,7 @@ import express from 'express';
 import { protect } from '../middleware/middlewares.js';
 import { admin } from '../middleware/authMiddleware.js';
 import { 
+    authAdmin,
     authUser, 
     changePassword, 
     deleteUserByID, 
@@ -15,6 +16,7 @@ import {
 const router = express.Router();
 
 router.post('/user/login', authUser);
+router.post('/user/login-admin', authAdmin);
 router.post('/user/reset-password', resetPassword);
 router.post('/user/new-password', NewPassword);
 router.post('/user/register', registerUser);

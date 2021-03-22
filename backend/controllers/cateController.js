@@ -9,7 +9,7 @@ export const create = asyncHandle(async (req, res) => {
   try {
     const category = await new Category({
       name,
-      slug: slugify(name).toLowerCase(),
+      slug: `${slugify(name).toLowerCase()}-${Date.now()}`,
     }).save()
 
     res.json(category)
@@ -35,7 +35,7 @@ export const update = asyncHandle(async (req, res) => {
   try {
     const updated = await Category.findOneAndUpdate(
       { slug: req.params.slug },
-      { name, slug: slugify(name) },
+      { name, slug: `${slugify(name)}${Date.now()}` },
       { new: true },
     )
     if (!updated) {
@@ -59,11 +59,13 @@ export const remove = asyncHandle(async (req, res) => {
 })
 export const getSubs = asyncHandle(async (req, res) => {
   try {
-    const subs = await Sub.find({ parent: req.params.id }).populate(
+    const subs = Sub.find({ parent: req.params.id }).populate(
       'parent',
       '_id name',
-    )
-    res.json(subs)
+    ).exec((err, subs) => {
+      if (err) console.log(err);
+      res.json(subs);
+    })
   } catch (error) {
     res.status(400)
     throw new Error(error)

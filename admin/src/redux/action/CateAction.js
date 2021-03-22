@@ -22,3 +22,8 @@ export const deleteCategoryAction = (slug) => ({
     type: cateConstant.CATEGORY_DELETE_REQUEST,
     slug,
 })
+
+export const listSubCategoryRequest = (id) => ({
+    type: cateConstant.SUB_CATEGORY_REQUEST,
+    id
+})

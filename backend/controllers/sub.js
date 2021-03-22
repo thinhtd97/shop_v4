@@ -1,22 +1,23 @@
 import Sub from '../models/sub.js'
+import Category from '../models/category.js'
 import asyncHandle from 'express-async-handler'
 import slugify from 'slugify'
 
 export const create = asyncHandle(async (req, res) => {
   const { name, parent } = req.body
-  const subExist = await Sub.findOne({ name })
+  const subExist = await Sub.find({ $and: [{ name }, { parent }] })
   try {
     const sub = await new Sub({
       name,
       parent,
-      slug: slugify(name).toLowerCase(),
+      slug: `${slugify(name).toLowerCase()}-${Date.now()}`,
     }).save()
     res.json(sub)
   } catch (error) {
     console.log(error)
     if (subExist) {
       res.status(400)
-      throw new Error('Sub already exists.')
+      throw new Error('Sub Category Exist.')
     }
     res.status(400)
     throw new Error('Create Sub Failed.')
@@ -41,7 +42,7 @@ export const update = asyncHandle(async (req, res) => {
   try {
     const updated = await Sub.findOneAndUpdate(
       { slug: req.params.slug },
-      { name, slug: slugify(name), parent },
+      { name, slug: `${slugify(name)}${Date.now()}`, parent },
       { new: true },
     )
     if (!updated) {

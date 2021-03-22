@@ -31,7 +31,7 @@ const UpdateSub = ({ history, match }) => {
     if (!adminInfo) {
       history.push('/auth/login')
     } else {
-      if (!sub) {
+      if (!sub || !sub.name || sub.slug !== slug) {
         dispatch(detailSubAction(slug))
         dispatch(listCateAction())
       } else {

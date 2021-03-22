@@ -1,10 +1,10 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import axios from 'axios'
-import * as cateConstant from '../constant/categoryConstant.js'
+import * as productConstant from '../constant/ProductConstant.js'
 import { notification } from 'antd'
 
-function* createCate(action) {
-  const { name } = action
+function* createProduct(action) {
+  const { product } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -14,23 +14,23 @@ function* createCate(action) {
       },
     }
     const { data } = yield call(() =>
-      axios.post(`${process.env.REACT_APP_API}/category`, { name }, config),
+      axios.post(`${process.env.REACT_APP_API}/products`, product, config),
     )
-    yield put({ type: cateConstant.CATEGORY_CREATE_SUCCESS, payload: data })
+    yield put({ type: productConstant.PRODUCT_CREATE_SUCCESS, payload: data })
     notification['success']({
-      message: 'Category',
+      message: 'Product',
       description: `Created Success`,
     })
   } catch (error) {
     yield put({
-      type: cateConstant.CATEGORY_CREATE_FAILED,
+      type: productConstant.PRODUCT_CREATE_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
     })
     notification['error']({
-      message: 'Category',
+      message: 'Product',
       description: `${
         error.response && error.response.data.message
           ? error.response.data.message
@@ -40,15 +40,15 @@ function* createCate(action) {
   }
 }
 
-function* listCategory() {
+function* listProduct() {
   try {
     const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/category`),
+      axios.get(`${process.env.REACT_APP_API}/products`),
     )
-    yield put({ type: cateConstant.CATEGORY_LIST_SUCCESS, payload: data })
+    yield put({ type: productConstant.PRODUCT_LIST_SUCCESS, payload: data })
   } catch (error) {
     yield put({
-      type: cateConstant.CATEGORY_LIST_FAILED,
+      type: productConstant.PRODUCT_LIST_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -57,7 +57,7 @@ function* listCategory() {
   }
 }
 
-function* detailCategory(action) {
+function* detailProduct(action) {
   const { slug } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
@@ -68,12 +68,12 @@ function* detailCategory(action) {
       },
     }
     const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/category/${slug}`, config),
+      axios.get(`${process.env.REACT_APP_API}/products/${slug}`, config),
     )
-    yield put({ type: cateConstant.CATEGORY_DETAIL_SUCCESS, payload: data })
+    yield put({ type: productConstant.PRODUCT_DETAIL_SUCCESS, payload: data })
   } catch (error) {
     yield put({
-      type: cateConstant.CATEGORY_DETAIL_FAILED,
+      type: productConstant.PRODUCT_DETAIL_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -82,8 +82,8 @@ function* detailCategory(action) {
   }
 }
 
-function* updateCate(action) {
-  const { name, slug, history } = action
+function* updateProduct(action) {
+  const { product, slug, history } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -94,28 +94,28 @@ function* updateCate(action) {
     }
     const { data } = yield call(() =>
       axios.put(
-        `${process.env.REACT_APP_API}/category/${slug}`,
-        { name },
+        `${process.env.REACT_APP_API}/products/${slug}`,
+        product,
         config,
       ),
     )
-    yield put({ type: cateConstant.CATEGORY_UPDATE_SUCCESS, payload: data })
-    yield put({ type: cateConstant.CATEGORY_DETAIL_SUCCESS, payload: data })
-    history.push('/category/list-categories')
+    yield put({ type: productConstant.PRODUCT_UPDATE_SUCCESS, payload: data })
+    yield put({ type: productConstant.PRODUCT_DETAIL_SUCCESS, payload: data })
+    history.push('/product/list-products')
     notification['success']({
-      message: 'Category',
+      message: 'Product',
       description: `Update Success`,
     })
   } catch (error) {
     yield put({
-      type: cateConstant.CATEGORY_UPDATE_FAILED,
+      type: productConstant.PRODUCT_UPDATE_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
     })
     notification['error']({
-      message: 'Category',
+      message: 'Product',
       description: `${
         error.response && error.response.data.message
           ? error.response.data.message
@@ -125,7 +125,7 @@ function* updateCate(action) {
   }
 }
 
-function* deleteCate(action) {
+function* deleteProduct(action) {
   const { slug } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
@@ -136,24 +136,24 @@ function* deleteCate(action) {
       },
     }
     yield call(() =>
-      axios.delete(`${process.env.REACT_APP_API}/category/${slug}`, config),
+      axios.delete(`${process.env.REACT_APP_API}/products/${slug}`, config),
     )
-    yield put({ type: cateConstant.CATEGORY_DELETE_SUCCESS })
-    yield put({ type: cateConstant.CATEGORY_LIST_REQUEST })
+    yield put({ type: productConstant.PRODUCT_DELETE_SUCCESS })
+    yield put({ type: productConstant.PRODUCT_LIST_REQUEST })
     notification['success']({
-      message: 'Category',
+      message: 'Product',
       description: `Delete Success`,
     })
   } catch (error) {
     yield put({
-      type: cateConstant.CATEGORY_DELETE_FAILED,
+      type: productConstant.PRODUCT_DELETE_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
     })
     notification['error']({
-      message: 'Category',
+      message: 'Product',
       description: `${
         error.response && error.response.data.message
           ? error.response.data.message
@@ -163,31 +163,11 @@ function* deleteCate(action) {
   }
 }
 
-function* listSubCate(action) {
-  const { id } = action
-  try {
-    const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/category/subs/${id}`),
-    )
-    yield put({ type: cateConstant.SUB_CATEGORY_SUCCESS, payload: data })
-  } catch (error) {
-    yield put({
-      type: cateConstant.SUB_CATEGORY_FAILED,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
-  }
+function* productSaga() {
+  yield takeEvery(productConstant.PRODUCT_CREATE_REQUEST, createProduct)
+  yield takeEvery(productConstant.PRODUCT_LIST_REQUEST, listProduct)
+  yield takeEvery(productConstant.PRODUCT_DETAIL_REQUEST, detailProduct)
+  yield takeEvery(productConstant.PRODUCT_UPDATE_REQUEST, updateProduct)
+  yield takeEvery(productConstant.PRODUCT_DELETE_REQUEST, deleteProduct)
 }
-
-function* cateSaga() {
-  yield takeEvery(cateConstant.CATEGORY_CREATE_REQUEST, createCate)
-  yield takeEvery(cateConstant.CATEGORY_LIST_REQUEST, listCategory)
-  yield takeEvery(cateConstant.CATEGORY_DETAIL_REQUEST, detailCategory)
-  yield takeEvery(cateConstant.CATEGORY_UPDATE_REQUEST, updateCate)
-  yield takeEvery(cateConstant.CATEGORY_DELETE_REQUEST, deleteCate)
-  yield takeEvery(cateConstant.SUB_CATEGORY_REQUEST, listSubCate)
-}
-
-export default cateSaga
+export default productSaga

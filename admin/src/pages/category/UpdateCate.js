@@ -30,7 +30,7 @@ const UpdateCate = ({ history, match }) => {
     if (!adminInfo) {
       history.push('/auth/login')
     } else {
-      if (!category) {
+      if (!category || !category.name || category.slug !== slug) {
         dispatch(detailCategoryAction(slug))
       } else {
         setName(category.name)

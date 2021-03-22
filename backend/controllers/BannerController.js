@@ -5,7 +5,7 @@ import slugify from 'slugify'
 
 export const create = asyncHandle(async (req, res) => {
   const { name, image } = req.body
-  const subExist = await Sub.findOne({ name })
+  const bannerExist = await BannerSlider.findOne({ name });
   try {
     const banner = new BannerSlider({
       name,
@@ -15,11 +15,11 @@ export const create = asyncHandle(async (req, res) => {
     const bannerCreated = await banner.save()
     res.json(bannerCreated)
   } catch (error) {
-    console.log(error)
-    if (subExist) {
+    if(bannerExist) {
       res.status(400)
-      throw new Error('Sub already exists.')
+      throw new Error('Name Already Exists.')
     }
+    console.log(error)
     res.status(400)
     throw new Error('Create Banner Failed.')
   }

@@ -19,6 +19,9 @@ import UpdateCate from './pages/category/UpdateCate'
 import CreateSub from './pages/subCategory/CreateSub'
 import ListSub from './pages/subCategory/ListSub'
 import UpdateSub from './pages/subCategory/UpdateSub'
+import CreateProduct from './pages/product/create_product/CreateProduct'
+import ListProduct from './pages/product/ListProduct'
+import UpdateProduct from './pages/product/UpdateProduct'
 const { Content, Footer } = Layout
 
 function App() {
@@ -57,6 +60,9 @@ function App() {
                     <Route path="/sub-category/create-sub-category" component={CreateSub} exact />
                     <Route path="/sub-category/list-sub-catgories" component={ListSub} exact />
                     <Route path="/sub-category/update/:slug" component={UpdateSub} exact />
+                    <Route path="/product/create-product" component={CreateProduct}  exact />
+                    <Route path="/product/list-products" component={ListProduct}  exact />
+                    <Route path="/product/update/:slug" component={UpdateProduct}  exact />
                     <Route path="*" component={NotFound} />
                   </Switch>
                 </div>

@@ -1,23 +1,21 @@
 import express from 'express'
 import {
-  create,
-  getSubs,
   list,
-  read,
-  remove,
+  create,
   update,
-} from '../controllers/cateController.js'
+  remove,
+  read,
+} from '../controllers/productController.js'
 import { admin } from '../middleware/authMiddleware.js'
 import { protect } from '../middleware/middlewares.js'
 
 const router = express.Router()
 
-router.route('/category').get(list).post(protect, admin, create)
+router.route('/products').get(list).post(protect, admin, create)
 router
-  .route('/category/:slug')
+  .route('/products/:slug')
   .put(protect, admin, update)
   .delete(protect, admin, remove)
   .get(protect, admin, read)
-router.get('/category/subs/:id', getSubs)
 
 export default router

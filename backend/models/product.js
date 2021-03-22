@@ -58,7 +58,7 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    new: {
+    newLaunced: {
       type: Boolean,
       default: true,
     },
@@ -78,12 +78,10 @@ const productSchema = mongoose.Schema(
       trim: true,
       maxLength: 32,
     },
-    category: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-      },
-    ],
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+    },
     subs: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -98,16 +96,12 @@ const productSchema = mongoose.Schema(
       type: Array,
     },
     shipping: {
-      type: String,
-      enum: ['Yes', 'No'],
-    },
-    color: {
-      type: String,
-      enum: ['Black', 'Brown', 'Silver', 'White', 'Blue'],
+      type: Boolean,
+      default: false,
     },
     brand: {
       type: String,
-      enum: ['Apple', 'Samsung', 'Microsoft', 'DELL', 'ASUS'],
+      enum: ['Gucci', 'Louis Vuitton', 'Chanel', 'Dior', 'Armani', 'Tiffany'],
     },
     reviews: [reviewsSchema],
     numReviews: {
@@ -120,15 +114,11 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    rating: [
-      {
-        star: Number,
-        postedBy: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-        },
-      },
-    ],
+    rating: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   { timestamps: true },
 )

@@ -62,3 +62,15 @@ export const deleteCategoryReducer = (state = {}, action) => {
       return state
   }
 }
+export const listSubCategoryReducer = (state = { subCate: [] }, action) => {
+  switch (action.type) {
+    case cateConstant.SUB_CATEGORY_REQUEST:
+      return { loading: true }
+    case cateConstant.SUB_CATEGORY_SUCCESS:
+      return { loading: false, success: true, subCate: action.payload }
+    case cateConstant.SUB_CATEGORY_FAILED:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}

@@ -21,7 +21,7 @@ const SiderNav = () => {
     breakpoint: 'lg',
     collapsedWidth: '0',
   }
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const logout = () => {
     dispatch(logoutAdminAction())
   }
@@ -48,7 +48,7 @@ const SiderNav = () => {
             <Link to="/product/create-product">Create</Link>
           </Menu.Item>
           <Menu.Item key="list-product">
-            <Link to="/product/list-produdct">List</Link>
+            <Link to="/product/list-products">List</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key="category" icon={<SisternodeOutlined />} title="Category">

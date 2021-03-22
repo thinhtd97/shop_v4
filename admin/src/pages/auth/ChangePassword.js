@@ -56,6 +56,7 @@ const ChangePassword = ({ history }) => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>My Account</Breadcrumb.Item>
       </Breadcrumb>
+      <hr />
       <Form {...layout} ref={formRef} name="control-ref" onFinish={onFinish}>
         <Form.Item
           name="Your password"

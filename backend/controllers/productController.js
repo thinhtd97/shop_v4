@@ -1,10 +1,9 @@
-import Product from ('../models/product.js');
-import asyncHandle from ('express-async-handler');
-import slugify from ('slugify')
+import Product from '../models/product.js';
+import asyncHandle from 'express-async-handler';
+import slugify from 'slugify'
 
 export const create = asyncHandle(async (req, res) => {
-   try {
-        const { 
+     const { 
           name, 
           description, 
           price, 
@@ -16,6 +15,8 @@ export const create = asyncHandle(async (req, res) => {
           shipping, 
           color, 
           brand } = req.body;
+     const existProduct = await Product.findOne({ name });
+   try {
         const newProduct = new Product({
              name, 
              slug: slugify(name).toLowerCase(), 
@@ -35,6 +36,10 @@ export const create = asyncHandle(async (req, res) => {
           res.json(createProduct);
    } catch (error) {
         console.log(error);
+        if(existProduct) {
+          res.status(400)
+          throw new Error("Product already exists.");
+        }
         res.status(400)
         throw new Error("Create Product Failed.");
    }

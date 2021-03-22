@@ -12,6 +12,13 @@ import LoginPage from './pages/auth/LoginPage.js'
 import AuthStyle from './assets/AuthStyle.js'
 import ChangePassword from './pages/auth/ChangePassword'
 import MyAccount from './pages/auth/MyAccount'
+import CreateCate from './pages/category/CreateCate'
+import NotFoundAuth from './pages/auth/NotFoundAuth'
+import ListCate from './pages/category/ListCate'
+import UpdateCate from './pages/category/UpdateCate'
+import CreateSub from './pages/subCategory/CreateSub'
+import ListSub from './pages/subCategory/ListSub'
+import UpdateSub from './pages/subCategory/UpdateSub'
 const { Content, Footer } = Layout
 
 function App() {
@@ -23,6 +30,7 @@ function App() {
               <div className="auth-inner">
                 <Switch>
                   <Route path="/auth/login" component={LoginPage} />
+                  <Route path="*" component={NotFoundAuth} />
                 </Switch>
               </div>
           </AuthStyle>
@@ -43,6 +51,12 @@ function App() {
                     <Route path="/dashboard" component={Dashboard} exact />
                     <Route path="/change-password" component={ChangePassword} exact />
                     <Route path="/my-account" component={MyAccount} exact />
+                    <Route path="/category/create-category" component={CreateCate} exact />
+                    <Route path="/category/list-categories" component={ListCate} exact />
+                    <Route path="/category/update/:slug" component={UpdateCate} exact />
+                    <Route path="/sub-category/create-sub-category" component={CreateSub} exact />
+                    <Route path="/sub-category/list-sub-catgories" component={ListSub} exact />
+                    <Route path="/sub-category/update/:slug" component={UpdateSub} exact />
                     <Route path="*" component={NotFound} />
                   </Switch>
                 </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Breadcrumb, Form, Input, Button, notification } from 'antd'
+import { Breadcrumb, Form, Input, Button } from 'antd'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -50,27 +50,7 @@ const MyAccount = ({ history }) => {
   const [form] = Form.useForm()
 
   const onFinish = (values) => {
-    if (values.firstName === '')
-      return notification['error']({
-        description: 'First name cannot be empty',
-      })
-    else if (values.lastName === '')
-      return notification['error']({
-        description: 'Last name cannot be empty',
-      })
-    else if (values.email === '')
-      return notification['error']({
-        description: 'E-mail cannot be empty',
-      })
-    else if (values.phone === '')
-      return notification['error']({
-        description: 'Phone cannot be empty',
-      })
-    else if (values.address === '')
-      return notification['error']({
-        description: 'Address cannot be empty',
-      })
-    else dispatch(updateAdminAction(values))
+    dispatch(updateAdminAction(values))
   }
 
   useEffect(() => {
@@ -99,6 +79,7 @@ const MyAccount = ({ history }) => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>Change Password</Breadcrumb.Item>
       </Breadcrumb>
+      <hr />
       <Form
         {...formItemLayout}
         form={form}

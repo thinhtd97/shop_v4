@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const reviewsSchema = mongoose.Schema(
   {
@@ -16,12 +16,21 @@ const reviewsSchema = mongoose.Schema(
   },
 )
 
+const SizeStockSchema = mongoose.Schema(
+  {
+    size: { type: String },
+    stock: { type: Number },
+  },
+  {
+    timestamps: true,
+  },
+)
+
 const variation = mongoose.Schema(
   {
     color: String,
     image: String,
-    size: String,
-    stock: Number,
+    size: [SizeStockSchema],
   },
   {
     timestamps: true,

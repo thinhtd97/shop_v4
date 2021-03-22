@@ -17,6 +17,7 @@ const Dashboard = ({ history }) => {
           <Link to="/dashboard">Dashboard</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
+      <hr />
     </>
   )
 }

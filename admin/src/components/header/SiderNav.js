@@ -44,20 +44,32 @@ const SiderNav = () => {
           icon={<InsertRowRightOutlined />}
           title="Product"
         >
-          <Menu.Item key="create-product">Create</Menu.Item>
-          <Menu.Item key="list-product">List</Menu.Item>
+          <Menu.Item key="create-product">
+            <Link to="/product/create-product">Create</Link>
+          </Menu.Item>
+          <Menu.Item key="list-product">
+            <Link to="/product/list-produdct">List</Link>
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="category" icon={<SisternodeOutlined />} title="Category">
-          <Menu.Item key="create-category">Create</Menu.Item>
-          <Menu.Item key="list-categories">List</Menu.Item>
+          <Menu.Item key="create-category">
+            <Link to="/category/create-category">Create</Link>
+          </Menu.Item>
+          <Menu.Item key="list-categories">
+            <Link to="/category/list-categories">List</Link>
+          </Menu.Item>
         </SubMenu>
         <SubMenu
           key="sub-category"
           icon={<AppstoreAddOutlined />}
           title="Sub Category"
         >
-          <Menu.Item key="create-sub-category">Create</Menu.Item>
-          <Menu.Item key="list-sub-categories">List</Menu.Item>
+          <Menu.Item key="create-sub-category">
+            <Link to="/sub-category/create-sub-category">Create</Link>
+          </Menu.Item>
+          <Menu.Item key="list-sub-categories">
+            <Link to="/sub-category/list-sub-catgories">List</Link>
+          </Menu.Item>
         </SubMenu>
         <Menu.Item key="change-password" icon={<SyncOutlined />}>
           <Link to="/change-password">Change Password</Link>

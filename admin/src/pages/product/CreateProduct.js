@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Form, Input, Breadcrumb, Button, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { createProductAction } from '../../../redux/action/ProductAction'
+import { createProductAction } from '../../redux/action/ProductAction'
 import {
   listSubCategoryRequest,
   listCateAction,
-} from '../../../redux/action/CateAction'
+} from '../../redux/action/CateAction'
 import Resizer from 'react-image-file-resizer'
 import axios from 'axios'
 

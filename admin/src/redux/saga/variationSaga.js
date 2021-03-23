@@ -1,10 +1,10 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import axios from 'axios'
-import * as productConstant from '../constant/ProductConstant.js'
+import * as variationConstant from '../constant/variationConstant.js'
 import { notification } from 'antd'
 
-function* createProduct(action) {
-  const { product } = action
+function* createVariation(action) {
+  const { color, product, image } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -14,23 +14,30 @@ function* createProduct(action) {
       },
     }
     const { data } = yield call(() =>
-      axios.post(`${process.env.REACT_APP_API}/products`, product, config),
+      axios.post(
+        `${process.env.REACT_APP_API}/variation`,
+        { color, product, image },
+        config,
+      ),
     )
-    yield put({ type: productConstant.PRODUCT_CREATE_SUCCESS, payload: data })
+    yield put({
+      type: variationConstant.VARIATION_CREATE_SUCCESS,
+      payload: data,
+    })
     notification['success']({
-      message: 'Product',
+      message: 'Variation',
       description: `Created Success`,
     })
   } catch (error) {
     yield put({
-      type: productConstant.PRODUCT_CREATE_FAILED,
+      type: variationConstant.VARIATION_CREATE_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
     })
     notification['error']({
-      message: 'Product',
+      message: 'Variation',
       description: `${
         error.response && error.response.data.message
           ? error.response.data.message
@@ -40,15 +47,15 @@ function* createProduct(action) {
   }
 }
 
-function* listProduct() {
+function* listVariation() {
   try {
     const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/products`),
+      axios.get(`${process.env.REACT_APP_API}/variation`),
     )
-    yield put({ type: productConstant.PRODUCT_LIST_SUCCESS, payload: data })
+    yield put({ type: variationConstant.VARIATION_LIST_SUCCESS, payload: data })
   } catch (error) {
     yield put({
-      type: productConstant.PRODUCT_LIST_FAILED,
+      type: variationConstant.VARIATION_LIST_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -56,9 +63,8 @@ function* listProduct() {
     })
   }
 }
-
-function* detailProduct(action) {
-  const { slug } = action
+function* detailVariation(action) {
+  const { id } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -68,12 +74,15 @@ function* detailProduct(action) {
       },
     }
     const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/products/${slug}`, config),
+      axios.get(`${process.env.REACT_APP_API}/variation/${id}`, config),
     )
-    yield put({ type: productConstant.PRODUCT_DETAIL_SUCCESS, payload: data })
+    yield put({
+      type: variationConstant.VARIATION_DETAIL_SUCCESS,
+      payload: data,
+    })
   } catch (error) {
     yield put({
-      type: productConstant.PRODUCT_DETAIL_FAILED,
+      type: variationConstant.VARIATION_DETAIL_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -81,9 +90,8 @@ function* detailProduct(action) {
     })
   }
 }
-
-function* updateProduct(action) {
-  const { product, slug, history } = action
+function* updateVariation(action) {
+  const { color, product, image, variation_id } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -94,28 +102,33 @@ function* updateProduct(action) {
     }
     const { data } = yield call(() =>
       axios.put(
-        `${process.env.REACT_APP_API}/products/${slug}`,
-        product,
+        `${process.env.REACT_APP_API}/variation/${variation_id}`,
+        { color, product, image },
         config,
       ),
     )
-    yield put({ type: productConstant.PRODUCT_UPDATE_SUCCESS, payload: data })
-    yield put({ type: productConstant.PRODUCT_DETAIL_SUCCESS, payload: data })
-    history.push('/product/list-products')
+    yield put({
+      type: variationConstant.VARIATION_UPDATE_SUCCESS,
+      payload: data,
+    })
+    yield put({
+      type: variationConstant.VARIATION_DETAIL_SUCCESS,
+      payload: data,
+    })
     notification['success']({
-      message: 'Product',
+      message: 'Variation',
       description: `Update Success`,
     })
   } catch (error) {
     yield put({
-      type: productConstant.PRODUCT_UPDATE_FAILED,
+      type: variationConstant.VARIATION_UPDATE_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
     })
     notification['error']({
-      message: 'Product',
+      message: 'Variation',
       description: `${
         error.response && error.response.data.message
           ? error.response.data.message
@@ -124,9 +137,8 @@ function* updateProduct(action) {
     })
   }
 }
-
-function* deleteProduct(action) {
-  const { slug } = action
+function* deleteVariation(action) {
+  const { variation_id } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -136,24 +148,29 @@ function* deleteProduct(action) {
       },
     }
     yield call(() =>
-      axios.delete(`${process.env.REACT_APP_API}/products/${slug}`, config),
+      axios.delete(
+        `${process.env.REACT_APP_API}/variation/${variation_id}`,
+        config,
+      ),
     )
-    yield put({ type: productConstant.PRODUCT_DELETE_SUCCESS })
-    yield put({ type: productConstant.PRODUCT_LIST_REQUEST })
+    yield put({
+      type: variationConstant.VARIATION_DELETE_SUCCESS,
+    })
+    yield put({ type: variationConstant.VARIATION_LIST_REQUEST })
     notification['success']({
-      message: 'Product',
+      message: 'Variation',
       description: `Delete Success`,
     })
   } catch (error) {
     yield put({
-      type: productConstant.PRODUCT_DELETE_FAILED,
+      type: variationConstant.VARIATION_DELETE_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
     })
     notification['error']({
-      message: 'Product',
+      message: 'Variation',
       description: `${
         error.response && error.response.data.message
           ? error.response.data.message
@@ -162,37 +179,11 @@ function* deleteProduct(action) {
     })
   }
 }
-function* currentProduct(action) {
-  const { variant_id } = action
-  try {
-    const { adminInfo } = yield select((state) => state.adminLogin)
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${adminInfo.token}`,
-      },
-    }
-    const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/products/current/${variant_id}`, config),
-    )
-    yield put({ type: productConstant.PRODUCT_CURRENT_SUCCESS, payload: data })
-  } catch (error) {
-    yield put({
-      type: productConstant.PRODUCT_CURRENT_FAILED,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
-  }
+function* variationSaga() {
+  yield takeEvery(variationConstant.VARIATION_CREATE_REQUEST, createVariation)
+  yield takeEvery(variationConstant.VARIATION_LIST_REQUEST, listVariation)
+  yield takeEvery(variationConstant.VARIATION_DETAIL_REQUEST, detailVariation)
+  yield takeEvery(variationConstant.VARIATION_UPDATE_REQUEST, updateVariation)
+  yield takeEvery(variationConstant.VARIATION_DELETE_REQUEST, deleteVariation)
 }
-
-function* productSaga() {
-  yield takeEvery(productConstant.PRODUCT_CREATE_REQUEST, createProduct)
-  yield takeEvery(productConstant.PRODUCT_LIST_REQUEST, listProduct)
-  yield takeEvery(productConstant.PRODUCT_DETAIL_REQUEST, detailProduct)
-  yield takeEvery(productConstant.PRODUCT_UPDATE_REQUEST, updateProduct)
-  yield takeEvery(productConstant.PRODUCT_DELETE_REQUEST, deleteProduct)
-  yield takeEvery(productConstant.PRODUCT_CURRENT_REQUEST, currentProduct)
-}
-export default productSaga
+export default variationSaga

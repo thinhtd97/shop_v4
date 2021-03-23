@@ -5,6 +5,7 @@ import {
   update,
   remove,
   read,
+  getProductCurrent,
 } from '../controllers/productController.js'
 import { admin } from '../middleware/authMiddleware.js'
 import { protect } from '../middleware/middlewares.js'
@@ -17,5 +18,5 @@ router
   .put(protect, admin, update)
   .delete(protect, admin, remove)
   .get(protect, admin, read)
-
+router.get('/products/current/:variId', protect, admin, getProductCurrent)
 export default router

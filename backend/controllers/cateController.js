@@ -35,7 +35,7 @@ export const update = asyncHandle(async (req, res) => {
   try {
     const updated = await Category.findOneAndUpdate(
       { slug: req.params.slug },
-      { name, slug: `${slugify(name)}${Date.now()}` },
+      { name, slug: `${slugify(name)}-${Date.now()}` },
       { new: true },
     )
     if (!updated) {

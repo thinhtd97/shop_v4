@@ -15,7 +15,7 @@ const layout = {
 
 const { Option } = Select;
 
-const CreateCate = ({ history }) => {
+const CreateSub = ({ history }) => {
   const dispatch = useDispatch()
   const [name, setName] = useState();
   const [parent, setParent] = useState('');
@@ -80,4 +80,4 @@ const CreateCate = ({ history }) => {
   )
 }
 
-export default CreateCate
+export default CreateSub

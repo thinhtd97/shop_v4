@@ -22,3 +22,7 @@ export const deleteProductAction = (slug) => ({
   type: productConstant.PRODUCT_DELETE_REQUEST,
   slug,
 })
+export const currentProductAction = (variant_id) => ({
+  type: productConstant.PRODUCT_CURRENT_REQUEST,
+  variant_id,
+})

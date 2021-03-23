@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form, Input, Button, Breadcrumb, Select } from 'antd'
+import { Form, Input, Button, Breadcrumb, Select, notification } from 'antd'
 import { Link } from 'react-router-dom'
 import {
   detailProductAction,
@@ -26,7 +26,6 @@ const layout = {
 
 const UpdateProduct = ({ history, match }) => {
   const slug = match.params.slug
-  const colors = ['Black', 'Brown', 'Silver', 'White', 'Blue']
   const brands = [
     'Gucci',
     'Louis Vuitton',
@@ -73,7 +72,7 @@ const UpdateProduct = ({ history, match }) => {
     setValues({ ...values, newLaunced: value })
   }
   const handleCategoryChange = async (value) => {
-    setValues({ ...values, subs: [], category: { _id: value, ...category } })
+    setValues({ ...values, subs: [], category: { _id: value } })
     dispatch(listSubCategoryRequest(value))
   }
   const selectProps = {
@@ -116,6 +115,10 @@ const UpdateProduct = ({ history, match }) => {
               .then((res) => {
                 allUploadedFiles.push(res.data)
                 setValues({ ...values, image: allUploadedFiles })
+                notification['success']({
+                  message: 'Upload',
+                  description: `Upload Success`,
+                })
               })
               .catch((err) => {
                 console.log('Upload Error: ' + err)
@@ -146,9 +149,7 @@ const UpdateProduct = ({ history, match }) => {
           shipping: product.shipping,
           brand: product.brand,
         })
-        if (subs) {
-          dispatch(listSubCategoryRequest(product.category._id))
-        }
+        dispatch(listSubCategoryRequest(product.category._id))
       }
     }
   }, [adminInfo, history, slug, dispatch, product])
@@ -157,6 +158,9 @@ const UpdateProduct = ({ history, match }) => {
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/dashboard">Dashboard</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link to="/product/list-products">List Product</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Update Product</Breadcrumb.Item>
       </Breadcrumb>
@@ -174,7 +178,7 @@ const UpdateProduct = ({ history, match }) => {
           <Form
             {...layout}
             name="nest-messages"
-            onFinish={() => onFinish(values)}
+            onFinish={() => onFinish(values, slug, history)}
           >
             <Form.Item label="Image">
               <Input

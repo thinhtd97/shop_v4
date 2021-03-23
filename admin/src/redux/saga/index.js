@@ -3,12 +3,14 @@ import cateSaga from './cateSaga'
 import userAdminSaga from './userAdminSaga'
 import subSaga from './subSaga'
 import productSaga from './productSaga'
+import variationSaga from './variationSaga'
 
 export function* rootSaga() {
   yield all([
     userAdminSaga(),
     cateSaga(),
     subSaga(),
-    productSaga()
+    productSaga(),
+    variationSaga()
   ])
 }

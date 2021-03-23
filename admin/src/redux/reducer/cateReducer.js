@@ -26,7 +26,7 @@ export const listCategoryReducer = (state = {}, action) => {
   }
 }
 
-export const detailCategoryReducer = (state = {}, action) => {
+export const detailCategoryReducer = (state = { category: {} }, action) => {
   switch (action.type) {
     case cateConstant.CATEGORY_DETAIL_REQUEST:
       return { loading: true }

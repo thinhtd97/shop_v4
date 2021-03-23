@@ -2,97 +2,82 @@ import React, { useEffect, useState } from 'react'
 import { Table, Space, Button, Input, Image } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  listProductAction,
-  deleteProductAction,
-} from '../../redux/action/ProductAction.js'
+  deleteVariationAction,
+  listVariationAction,
+} from '../../redux/action/variationAction.js'
+import {
+  detailProductAction,
+} from '../../redux/action/ProductAction'
 import { Link } from 'react-router-dom'
 import { Breadcrumb } from 'antd'
 import {
   DeleteOutlined,
   FileSyncOutlined,
   LoadingOutlined,
-  PlusCircleOutlined,
-  OrderedListOutlined
 } from '@ant-design/icons'
 
 const { Search } = Input
 
-const ListProduct = ({ history }) => {
+const ListVariation = ({ history, match }) => {
   const [keyword, setKeyword] = useState('')
-  const { products, loading } = useSelector((state) => state.productList)
+  const { variations, loading } = useSelector((state) => state.variationList)
+  const { product: productDetail } = useSelector((state) => state.productDetail)
   const { adminInfo } = useSelector((state) => state.adminLogin)
-  const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword)
+  const searched = (keyword) => (c) => c.color.toLowerCase().includes(keyword)
   const columns = [
     {
       title: 'Image',
       dataIndex: 'image',
       render: (value) => (
-        <Image style={{ maxWidth: '150px' }} src={value} alt="Image Products" />
+        <Image src={value} alt={'Image'} style={{ maxWidth: '100px' }} />
       ),
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Color',
+      dataIndex: 'color',
+      key: 'color',
     },
     {
-      title: 'Discount',
-      dataIndex: 'discount',
-      key: 'discount',
+      title: 'Parent Product',
+      dataIndex: 'product',
+      key: 'product',
     },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-    },
-
     {
       title: 'Action',
       key: 'action',
       render: (value) => (
         <Space>
           <Button type="primary">
-            <Link to={`/product/update/${value.slug}`}>
+            <Link to={`/variation/update/${value.key}`}>
               <FileSyncOutlined />
             </Link>
           </Button>
-          <Button type="danger" onClick={() => handleRemove(value.slug)}>
+          <Button type="danger" onClick={() => handleRemove(value.key)}>
             <DeleteOutlined />
-          </Button>
-          <Button type="ghost">
-            <Link to={`/product/create-variation/${value.key}`}>
-              <PlusCircleOutlined />
-            </Link>
-          </Button>
-          <Button type="ghost">
-            <Link to={`/product/list-variation/${value.slug}`}>
-              <OrderedListOutlined />
-            </Link>
           </Button>
         </Space>
       ),
     },
   ]
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
-  const data = products?.filter(searched(keyword)).map((row) => ({
-    image: row.image[row.image.length - 1].url,
+  const data = variations?.filter(searched(keyword)).map((row) => ({
     name: row.name,
-    slug: row.slug,
-    discount: row.discount,
-    price: row.price,
-    variation: row.variation,
+    image: row.image.url,
+    color: row.color,
+    product: row.product.name,
     key: row._id,
   }))
-  const handleRemove = (slug) => {
-    dispatch(deleteProductAction(slug))
+  const handleRemove = (variationId) => {
+    dispatch(deleteVariationAction(variationId))
   }
   const dispatch = useDispatch()
   useEffect(() => {
     if (!adminInfo) {
       history.push('/auth/login')
     }
-    dispatch(listProductAction())
-  }, [dispatch, adminInfo, history])
+    dispatch(listVariationAction())
+    dispatch(detailProductAction(match.params.slug))
+  }, [dispatch, adminInfo, history, match])
   const handleSearchChange = (e) => {
     e.preventDefault()
     setKeyword(e.target.value.toLowerCase())
@@ -103,7 +88,10 @@ const ListProduct = ({ history }) => {
         <Breadcrumb.Item>
           <Link to="/dashboard">Dashboard</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>List Product</Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link to="/product/list-products">List Product</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>List Variation {productDetail?.name}</Breadcrumb.Item>
       </Breadcrumb>
       <hr />
       <Search
@@ -121,4 +109,4 @@ const ListProduct = ({ history }) => {
   )
 }
 
-export default ListProduct
+export default ListVariation

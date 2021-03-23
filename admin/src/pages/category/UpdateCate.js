@@ -30,7 +30,7 @@ const UpdateCate = ({ history, match }) => {
     if (!adminInfo) {
       history.push('/auth/login')
     } else {
-      if (!category || !category.name || category.slug !== slug) {
+      if (!category || !category.name || category?.slug !== slug) {
         dispatch(detailCategoryAction(slug))
       } else {
         setName(category.name)
@@ -46,7 +46,13 @@ const UpdateCate = ({ history, match }) => {
         <Breadcrumb.Item>Update Category</Breadcrumb.Item>
       </Breadcrumb>
       <hr />
-      <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column'}}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+        }}
+      >
         {loading ? (
           antIcon
         ) : (

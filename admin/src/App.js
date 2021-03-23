@@ -19,9 +19,13 @@ import UpdateCate from './pages/category/UpdateCate'
 import CreateSub from './pages/subCategory/CreateSub'
 import ListSub from './pages/subCategory/ListSub'
 import UpdateSub from './pages/subCategory/UpdateSub'
-import CreateProduct from './pages/product/create_product/CreateProduct'
+import CreateProduct from './pages/product/CreateProduct'
 import ListProduct from './pages/product/ListProduct'
 import UpdateProduct from './pages/product/UpdateProduct'
+import CreateVariation from './pages/product/CreateVariation'
+import ListVariation from './pages/product/ListVariation'
+import UpdateVariation from './pages/product/UpdateVariation'
+
 const { Content, Footer } = Layout
 
 function App() {
@@ -30,12 +34,12 @@ function App() {
       <Switch>
         <Route path="/auth/:path?" exact>
           <AuthStyle className="auth-wrapper">
-              <div className="auth-inner">
-                <Switch>
-                  <Route path="/auth/login" component={LoginPage} />
-                  <Route path="*" component={NotFoundAuth} />
-                </Switch>
-              </div>
+            <div className="auth-inner">
+              <Switch>
+                <Route path="/auth/login" component={LoginPage} />
+                <Route path="*" component={NotFoundAuth} />
+              </Switch>
+            </div>
           </AuthStyle>
         </Route>
 
@@ -52,28 +56,82 @@ function App() {
                   <Switch>
                     <Route path="/" component={Dashboard} exact />
                     <Route path="/dashboard" component={Dashboard} exact />
-                    <Route path="/change-password" component={ChangePassword} exact />
+                    <Route
+                      path="/change-password"
+                      component={ChangePassword}
+                      exact
+                    />
                     <Route path="/my-account" component={MyAccount} exact />
-                    <Route path="/category/create-category" component={CreateCate} exact />
-                    <Route path="/category/list-categories" component={ListCate} exact />
-                    <Route path="/category/update/:slug" component={UpdateCate} exact />
-                    <Route path="/sub-category/create-sub-category" component={CreateSub} exact />
-                    <Route path="/sub-category/list-sub-catgories" component={ListSub} exact />
-                    <Route path="/sub-category/update/:slug" component={UpdateSub} exact />
-                    <Route path="/product/create-product" component={CreateProduct}  exact />
-                    <Route path="/product/list-products" component={ListProduct}  exact />
-                    <Route path="/product/update/:slug" component={UpdateProduct}  exact />
+                    <Route
+                      path="/category/create-category"
+                      component={CreateCate}
+                      exact
+                    />
+                    <Route
+                      path="/category/list-categories"
+                      component={ListCate}
+                      exact
+                    />
+                    <Route
+                      path="/category/update/:slug"
+                      component={UpdateCate}
+                      exact
+                    />
+                    <Route
+                      path="/sub-category/create-sub-category"
+                      component={CreateSub}
+                      exact
+                    />
+                    <Route
+                      path="/sub-category/list-sub-catgories"
+                      component={ListSub}
+                      exact
+                    />
+                    <Route
+                      path="/sub-category/update/:slug"
+                      component={UpdateSub}
+                      exact
+                    />
+                    <Route
+                      path="/product/create-product"
+                      component={CreateProduct}
+                      exact
+                    />
+                    <Route
+                      path="/product/list-products"
+                      component={ListProduct}
+                      exact
+                    />
+                    <Route
+                      path="/product/update/:slug"
+                      component={UpdateProduct}
+                      exact
+                    />
+                    <Route
+                      path="/product/create-variation/:slug"
+                      component={CreateVariation}
+                      exact
+                    />
+                    <Route
+                      path="/product/list-variation/:slug"
+                      component={ListVariation}
+                      exact
+                    />
+                    <Route
+                      path="/variation/update/:id"
+                      component={UpdateVariation}
+                      exact
+                    />
                     <Route path="*" component={NotFound} />
                   </Switch>
                 </div>
               </Content>
               <Footer style={{ textAlign: 'center' }}>
-                Ant Design ©2018 Created by Ant UED
+                Copyright &copy; 2021
               </Footer>
             </Layout>
           </Layout>
         </Route>
-   
       </Switch>
     </Router>
   )

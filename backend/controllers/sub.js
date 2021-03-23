@@ -42,7 +42,7 @@ export const update = asyncHandle(async (req, res) => {
   try {
     const updated = await Sub.findOneAndUpdate(
       { slug: req.params.slug },
-      { name, slug: `${slugify(name)}${Date.now()}`, parent },
+      { name, slug: `${slugify(name)}-${Date.now()}`, parent },
       { new: true },
     )
     if (!updated) {

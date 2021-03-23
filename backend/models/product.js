@@ -16,27 +16,6 @@ const reviewsSchema = mongoose.Schema(
   },
 )
 
-const SizeStockSchema = mongoose.Schema(
-  {
-    size: { type: String },
-    stock: { type: Number },
-  },
-  {
-    timestamps: true,
-  },
-)
-
-const variation = mongoose.Schema(
-  {
-    color: String,
-    image: String,
-    size: [SizeStockSchema],
-  },
-  {
-    timestamps: true,
-  },
-)
-
 const productSchema = mongoose.Schema(
   {
     name: {
@@ -52,7 +31,6 @@ const productSchema = mongoose.Schema(
       lowercase: true,
       index: true,
     },
-    variation: [variation],
     discount: {
       type: Number,
       required: true,
@@ -78,6 +56,9 @@ const productSchema = mongoose.Schema(
       trim: true,
       maxLength: 32,
     },
+    variation: [{
+        type: mongoose.Schema.Types.ObjectId,
+    }],
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',

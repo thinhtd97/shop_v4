@@ -71,13 +71,13 @@ export const read = asyncHandle(async (req, res) => {
   let product = await Product.findOne({ slug: req.params.slug }).populate(
     'category',
     '_id name',
-  )
+  ).populate('variation')
   res.json(product)
 })
 export const update = asyncHandle(async (req, res) => {
   try {
     if (req.body.name) {
-      req.body.slug = `${slugify(req.body.name)}${Date.now()}`
+      req.body.slug = `${slugify(req.body.name)}-${Date.now()}`
     }
     const updated = await Product.findOneAndUpdate(
       { slug: req.params.slug },
@@ -97,7 +97,18 @@ export const remove = asyncHandle(async (req, res) => {
     const deleted = await Product.findOneAndDelete({ slug: req.params.slug })
     res.json(deleted)
   } catch (error) {
+    console.log(error);
     res.status(400)
     throw new Error('Product Delete failed.')
+  }
+})
+export const getProductCurrent = asyncHandle(async (req, res) => {
+  try {
+    const product = await Product.findOne({ variation: { $in: [req.params.variId] } });
+    res.json(product);
+  } catch (error) {
+    console.log(error);
+    res.status(400)
+    throw new Error('Product not found.')
   }
 })

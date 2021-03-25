@@ -9,6 +9,7 @@ import subRoute from './routes/subRoute.js';
 import productRoute from './routes/productRoute.js';
 import cloundinaryRoute from './routes/cloundinary.js';
 import variationRoute from './routes/Variation.js';
+import sizeRoute from './routes/SizeRoute.js';
 import cors from 'cors';
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.use('/api', subRoute);
 app.use('/api', productRoute);
 app.use('/api', cloundinaryRoute);
 app.use('/api', variationRoute);
+app.use('/api', sizeRoute);
 
 app.use(notFound)
 

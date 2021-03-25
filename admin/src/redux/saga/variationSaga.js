@@ -25,7 +25,7 @@ function* createVariation(action) {
       type: variationConstant.VARIATION_CREATE_SUCCESS,
       payload: data,
     })
-    history.push(`/variation/create-size/${data._id}`)
+    history.push(`/product/create-variation/${product}`)
     message.success('Create Variation Success')
   } catch (error) {
     yield put({
@@ -132,6 +132,7 @@ function* updateVariation(action) {
     )
   }
 }
+// /variation/:sizeId/:id
 function* deleteVariation(action) {
   const { variation_id, slug } = action
   try {
@@ -148,6 +149,7 @@ function* deleteVariation(action) {
         config,
       ),
     )
+
     const { data } = yield call(() =>
       axios.get(`${process.env.REACT_APP_API}/products/${slug}`),
     )
@@ -172,93 +174,12 @@ function* deleteVariation(action) {
       }`,
     )
   }
-}
-function* createSize(action) {
-  const { size, stock, variation_id } = action
-  try {
-    const { adminInfo } = yield select((state) => state.adminLogin)
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${adminInfo.token}`,
-      },
-    }
-    yield call(() =>
-      axios.post(
-        `${process.env.REACT_APP_API}/variation/create-size/${variation_id}`,
-        { size, stock },
-        config,
-      ),
-    )
-    yield put({
-      type: variationConstant.SIZE_CREATE_SUCCESS,
-    })
-    message.success('Created Size Success')
-  } catch (error) {
-    yield put({
-      type: variationConstant.SIZE_CREATE_FAILED,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
-    message.error(
-      `${
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      }`,
-    )
-  }
-}
-function* deleteSize(action) {
-  const { variation_id, size_id } = action
-  try {
-    const { adminInfo } = yield select((state) => state.adminLogin)
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${adminInfo.token}`,
-      },
-    }
-    yield call(() =>
-      axios.delete(
-        `${process.env.REACT_APP_API}/variation/delete-size/${variation_id}/${size_id}`,
-        config,
-      ),
-    )
-    const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/variation/${variation_id}`, config),
-    )
-    yield put({
-      type: variationConstant.SIZE_DELETE_SUCCESS,
-    })
-    yield put({ type: variationConstant.VARIATION_DETAIL_SUCCESS, payload: data })
-    message.success('Variation Delete Success')
-  } catch (error) {
-    yield put({
-      type: variationConstant.SIZE_DELETE_FAILED,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
-    message.error(
-      `${
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      }`,
-    )
-  }
-}
+} 
 function* variationSaga() {
   yield takeEvery(variationConstant.VARIATION_CREATE_REQUEST, createVariation)
   yield takeEvery(variationConstant.VARIATION_LIST_REQUEST, listVariation)
   yield takeEvery(variationConstant.VARIATION_DETAIL_REQUEST, detailVariation)
   yield takeEvery(variationConstant.VARIATION_UPDATE_REQUEST, updateVariation)
   yield takeEvery(variationConstant.VARIATION_DELETE_REQUEST, deleteVariation)
-  yield takeEvery(variationConstant.SIZE_CREATE_REQUEST, createSize)
-  yield takeEvery(variationConstant.SIZE_DELETE_REQUEST, deleteSize)
 }
 export default variationSaga

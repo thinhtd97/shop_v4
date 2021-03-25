@@ -4,6 +4,7 @@ import * as cateReducer from './cateReducer.js';
 import * as subReducer from './subReducer.js';
 import * as productReducer from './productReducer.js';
 import * as variationReducer from './variationReducer.js';
+import * as sizeReducer from './sizeReducer.js';
 
 const rootReducer = combineReducers({
     adminLogin: adminReducer.loginReducer,
@@ -30,8 +31,10 @@ const rootReducer = combineReducers({
     variationDetail: variationReducer.detailVariationReducer,
     variationDelete: variationReducer.deleteVariationReducer,
     variationUpdate: variationReducer.updateVariationReducer,
-    sizeCreate: variationReducer.createSizeReducer,
-    sizeDelete: variationReducer.deleteSizeReducer
+    sizeCreate: sizeReducer.createSizeReducer,
+    sizeDelete: sizeReducer.deleteSizeReducer,
+    sizeDetail: sizeReducer.detailSizeReducer,
+    sizeUpdate: sizeReducer.updateSizeReducer
 })
 
 export default rootReducer

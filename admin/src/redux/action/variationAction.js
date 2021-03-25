@@ -32,16 +32,5 @@ export const updateVariationAction = (
 export const deleteVariationAction = (variation_id, slug) => ({
   type: variationConstant.VARIATION_DELETE_REQUEST,
   variation_id,
-  slug
-})
-export const createSizeAction = (size, stock, variation_id) => ({
-  type: variationConstant.SIZE_CREATE_REQUEST,
-  variation_id,
-  size,
-  stock
-})
-export const deleteSizeAction = (variation_id, size_id) => ({
-  type: variationConstant.SIZE_DELETE_REQUEST,
-  variation_id,
-  size_id
+  slug,
 })

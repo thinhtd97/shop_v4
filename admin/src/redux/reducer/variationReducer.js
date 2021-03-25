@@ -63,27 +63,3 @@ export const deleteVariationReducer = (state = {}, action) => {
       return state
   }
 }
-export const createSizeReducer = (state = {}, action) => {
-  switch (action.type) {
-    case variationConstant.SIZE_CREATE_REQUEST:
-      return { loading: true }
-    case variationConstant.SIZE_CREATE_SUCCESS:
-      return { loading: false, success: true }
-    case variationConstant.SIZE_CREATE_FAILED:
-      return { loading: false, error: action.payload }
-    default:
-      return state
-  }
-}
-export const deleteSizeReducer = (state = {}, action) => {
-  switch (action.type) {
-    case variationConstant.SIZE_DELETE_REQUEST:
-      return { loading: true }
-    case variationConstant.SIZE_DELETE_SUCCESS:
-      return { loading: false, success: true }
-    case variationConstant.SIZE_DELETE_FAILED:
-      return { loading: false, error: action.payload }
-    default:
-      return state
-  }
-}

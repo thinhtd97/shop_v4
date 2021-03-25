@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Table, Space, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
+import { detailVariationAction } from '../../redux/action/variationAction.js'
 import { Link } from 'react-router-dom'
 import { Breadcrumb } from 'antd'
 import {
@@ -8,19 +9,14 @@ import {
   FileSyncOutlined,
   LoadingOutlined,
 } from '@ant-design/icons'
-import {
-  deleteSizeAction,
-  detailVariationAction,
-} from '../../redux/action/variationAction.js'
-import {  detailProductAction } from '../../redux/action/ProductAction.js'
+import { sizeDeleteAction } from '../../redux/action/SizeAction.js'
+import { detailProductAction } from '../../redux/action/ProductAction.js'
 
 const ListSize = ({ history, match }) => {
-  const variationId = match.params.id;
-  const slugProduct = match.params.slug;
-  const { product } = useSelector(
-    (state) => state.productDetail,
-  )
+  const variationId = match.params.variationId
+  const slugProduct = match.params.slugProduct
   const { variation, loading } = useSelector((state) => state.variationDetail)
+  const { product: productDetail } = useSelector((state) => state.productDetail)
   const { adminInfo } = useSelector((state) => state.adminLogin)
   const columns = [
     {
@@ -39,7 +35,7 @@ const ListSize = ({ history, match }) => {
       render: (value) => (
         <Space>
           <Button type="primary">
-            <Link to={`/product/list-variation/update-size/${variationId}/${value.key}`}>
+            <Link to={`/product/variation/list-size/update/${slugProduct}/${variation?._id}/${value.key}`}>
               <FileSyncOutlined />
             </Link>
           </Button>
@@ -56,12 +52,11 @@ const ListSize = ({ history, match }) => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
   const data = variation?.size?.map((row) => ({
     size: row.size,
-    size_id: row.size._id,
     stock: row.stock,
     key: row._id,
   }))
-  const handleRemove = (variation_id, size_id) => {
-    dispatch(deleteSizeAction(variation_id, size_id))
+  const handleRemove = (variationId, sizeId) => {
+    dispatch(sizeDeleteAction(variationId, sizeId))
   }
   const dispatch = useDispatch()
   useEffect(() => {
@@ -70,7 +65,7 @@ const ListSize = ({ history, match }) => {
     }
     dispatch(detailVariationAction(variationId))
     dispatch(detailProductAction(slugProduct))
-  }, [dispatch, adminInfo, history, slugProduct, variationId])
+  }, [dispatch, adminInfo, history, variationId, slugProduct])
   return (
     <>
       <Breadcrumb>
@@ -78,18 +73,17 @@ const ListSize = ({ history, match }) => {
           <Link to="/dashboard">Dashboard</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to="/product/list-products">List Product</Link>
+          <Link to={`/product/list-products`}>List Product</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to={`/product/list-variation/${slugProduct}`}>{product && `List Variation ${product.name}`} </Link>
+          <Link to={`/product/list-variation/${slugProduct}`}>List Variation</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>{product && `List Size ${product?.name}`}</Breadcrumb.Item>
+        <Breadcrumb.Item>List Size </Breadcrumb.Item>
       </Breadcrumb>
       <hr />
       <Button type="primary">
-         <Link to={`/product/list-variation/${slugProduct}`}>Go Back</Link>
+        <Link to={`/product/list-variation/${slugProduct}`}>Go Back</Link>
       </Button>
-     
       <Table
         loading={{ indicator: antIcon, spinning: loading }}
         columns={columns}

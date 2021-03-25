@@ -10,7 +10,7 @@ import {
   FileSyncOutlined,
   PlusSquareFilled,
   LoadingOutlined,
-  OrderedListOutlined
+  OrderedListOutlined,
 } from '@ant-design/icons'
 
 const ListVariation = ({ history, match }) => {
@@ -43,13 +43,13 @@ const ListVariation = ({ history, match }) => {
             </Link>
           </Button>
           <Button type="dashed">
-            <Link to={`/variation/create-size/${value.key}`}>
+            <Link to={`/variation/create-size/${slug}/${value.key}`}>
               <PlusSquareFilled />
             </Link>
           </Button>
           <Button type="warning">
             {/* /product/list-variation/:slug/:id */}
-            <Link to={`/product/list-variation/${slug}/${value.key}`}>
+            <Link to={`/product/variation/list-size/${slug}/${value.key}`}>
               <OrderedListOutlined />
             </Link>
           </Button>
@@ -62,11 +62,12 @@ const ListVariation = ({ history, match }) => {
   ]
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
   const data = productDetail?.variation?.map((row) => ({
-      name: row.name,
-      image: row.image.url,
-      color: row.color,
-      key: row._id,
-    }))
+    name: row.name,
+    image: row.image?.url,
+    color: row.color,
+    size: row.size,
+    key: row._id,
+  }))
   const handleRemove = (variationId, slug) => {
     dispatch(deleteVariationAction(variationId, slug))
   }
@@ -87,14 +88,11 @@ const ListVariation = ({ history, match }) => {
         <Breadcrumb.Item>
           <Link to="/product/list-products">List Product</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          {' '}
-          {productDetail && `List Variation ${productDetail.name}`}{' '}
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>List Variation</Breadcrumb.Item>
       </Breadcrumb>
       <hr />
       <Button type="primary">
-          <Link to="/product/list-products">Go Back </Link>
+        <Link to="/product/list-products">Go Back </Link>
       </Button>
       <Table
         loading={{ indicator: antIcon, spinning: loading }}

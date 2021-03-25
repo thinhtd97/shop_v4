@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { setActiveSort } from "../../helpers/product";
+import PropTypes from 'prop-types'
+import React from 'react'
+import { setActiveSort } from '../../helpers/product'
 
-const ShopColor = ({ colors, getSortParams }) => {
+const ShopColor = ({ colors }) => {
   return (
     <div className="sidebar-widget mt-50">
       <h4 className="pro-sidebar-title">Color </h4>
@@ -12,12 +12,11 @@ const ShopColor = ({ colors, getSortParams }) => {
             <li>
               <div className="sidebar-widget-list-left">
                 <button
-                  onClick={e => {
-                    getSortParams("color", "");
-                    setActiveSort(e);
+                  onClick={(e) => {
+                    setActiveSort(e)
                   }}
                 >
-                  <span className="checkmark" /> All Colors{" "}
+                  <span className="checkmark" /> All Colors{' '}
                 </button>
               </div>
             </li>
@@ -26,29 +25,28 @@ const ShopColor = ({ colors, getSortParams }) => {
                 <li key={key}>
                   <div className="sidebar-widget-list-left">
                     <button
-                      onClick={e => {
-                        getSortParams("color", color);
-                        setActiveSort(e);
+                      onClick={(e) => {
+                        setActiveSort(e)
                       }}
                     >
-                      <span className="checkmark" /> {color}{" "}
+                      <span className="checkmark" /> {color}{' '}
                     </button>
                   </div>
                 </li>
-              );
+              )
             })}
           </ul>
         ) : (
-          "No colors found"
+          'No colors found'
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 ShopColor.propTypes = {
   colors: PropTypes.array,
-  getSortParams: PropTypes.func
-};
+  getSortParams: PropTypes.func,
+}
 
-export default ShopColor;
+export default ShopColor

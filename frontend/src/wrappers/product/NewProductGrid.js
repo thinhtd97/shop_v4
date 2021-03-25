@@ -15,7 +15,6 @@ const NewProductGrid = ({ category, limit }) => {
         />
         <div className="row five-column">
           <ProductGridTwo
-            category={category}
             type="new"
             limit={limit}
             spaceBottomClass="mb-25"

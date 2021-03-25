@@ -1,50 +1,34 @@
-import PropTypes from "prop-types";
-import React from "react";
-import {
-  getUniqueCategories,
-  getUniqueTags,
-  getUniqueColors,
-  getProductsUniqueSizes
-} from "../../helpers/product";
-import ShopSearch from "../../components/product/ShopSearch";
-import ShopCategories from "../../components/product/ShopCategories";
-import ShopColor from "../../components/product/ShopColor";
-import ShopSize from "../../components/product/ShopSize";
-import ShopTag from "../../components/product/ShopTag";
+import PropTypes from 'prop-types'
+import React from 'react' 
+import ShopSearch from '../../components/product/ShopSearch'
+import ShopCategories from '../../components/product/ShopCategories'
+import ShopColor from '../../components/product/ShopColor'
+import ShopSize from '../../components/product/ShopSize'
+import ShopTag from '../../components/product/ShopTag'
 
-const ShopSidebar = ({ products, getSortParams, sideSpaceClass }) => {
-  const uniqueCategories = getUniqueCategories(products);
-  const uniqueColors = getUniqueColors(products);
-  const uniqueSizes = getProductsUniqueSizes(products);
-  const uniqueTags = getUniqueTags(products);
-
+const ShopSidebar = ({ sideSpaceClass }) => {
   return (
-    <div className={`sidebar-style ${sideSpaceClass ? sideSpaceClass : ""}`}>
+    <div className={`sidebar-style ${sideSpaceClass ? sideSpaceClass : ''}`}>
       {/* shop search */}
       <ShopSearch />
 
       {/* filter by categories */}
-      <ShopCategories
-        categories={uniqueCategories}
-        getSortParams={getSortParams}
-      />
+      <ShopCategories />
 
       {/* filter by color */}
-      <ShopColor colors={uniqueColors} getSortParams={getSortParams} />
+      <ShopColor />
 
       {/* filter by size */}
-      <ShopSize sizes={uniqueSizes} getSortParams={getSortParams} />
+      <ShopSize />
 
       {/* filter by tag */}
-      <ShopTag tags={uniqueTags} getSortParams={getSortParams} />
+      <ShopTag />
     </div>
-  );
-};
+  )
+}
 
 ShopSidebar.propTypes = {
-  getSortParams: PropTypes.func,
-  products: PropTypes.array,
-  sideSpaceClass: PropTypes.string
-};
+  sideSpaceClass: PropTypes.string,
+}
 
-export default ShopSidebar;
+export default ShopSidebar

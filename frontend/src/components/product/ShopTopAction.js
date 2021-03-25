@@ -4,24 +4,19 @@ import { setActiveLayout } from "../../helpers/product";
 
 const ShopTopAction = ({
   getLayout,
-  getFilterSortParams,
-  productCount,
-  sortedProductCount
 }) => {
   return (
     <div className="shop-top-bar mb-35">
       <div className="select-shoing-wrap">
         <div className="shop-select">
-          <select
-            onChange={e => getFilterSortParams("filterSort", e.target.value)}
-          >
+          <select>
             <option value="default">Default</option>
             <option value="priceHighToLow">Price - High to Low</option>
             <option value="priceLowToHigh">Price - Low to High</option>
           </select>
         </div>
         <p>
-          Showing {sortedProductCount} of {productCount} result
+          Showing 10 of 40 result
         </p>
       </div>
 

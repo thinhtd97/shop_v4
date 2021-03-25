@@ -1,55 +1,30 @@
-import PropTypes from "prop-types";
-import React, { Fragment, useState, useEffect } from "react";
-import MetaTags from "react-meta-tags";
-import Paginator from "react-hooks-paginator";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import { connect } from "react-redux";
-import { getSortedProducts } from "../../helpers/product";
-import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import ShopSidebar from "../../wrappers/product/ShopSidebar";
-import ShopTopbar from "../../wrappers/product/ShopTopbar";
-import ShopProducts from "../../wrappers/product/ShopProducts";
+import PropTypes from 'prop-types'
+import React, { Fragment, useState, useEffect } from 'react'
+import MetaTags from 'react-meta-tags'
+import Paginator from 'react-hooks-paginator'
+import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
+import LayoutOne from '../../layouts/LayoutOne'
+import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb'
+import ShopSidebar from '../../wrappers/product/ShopSidebar'
+import ShopTopbar from '../../wrappers/product/ShopTopbar'
+import ShopProducts from '../../wrappers/product/ShopProducts'
 
 const ShopGridTwoColumn = ({ location, products }) => {
-  const [layout, setLayout] = useState("grid two-column");
-  const [sortType, setSortType] = useState("");
-  const [sortValue, setSortValue] = useState("");
-  const [filterSortType, setFilterSortType] = useState("");
-  const [filterSortValue, setFilterSortValue] = useState("");
-  const [offset, setOffset] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentData, setCurrentData] = useState([]);
-  const [sortedProducts, setSortedProducts] = useState([]);
+  const [layout, setLayout] = useState('grid two-column')
 
-  const pageLimit = 16;
-  const { pathname } = location;
+  const [offset, setOffset] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [currentData, setCurrentData] = useState([])
+  const { pathname } = location
 
-  const getLayout = layout => {
-    setLayout(layout);
-  };
+  const getLayout = (layout) => {
+    setLayout(layout)
+  }
 
-  const getSortParams = (sortType, sortValue) => {
-    setSortType(sortType);
-    setSortValue(sortValue);
-  };
 
-  const getFilterSortParams = (sortType, sortValue) => {
-    setFilterSortType(sortType);
-    setFilterSortValue(sortValue);
-  };
+  // useEffect(() => {
 
-  useEffect(() => {
-    let sortedProducts = getSortedProducts(products, sortType, sortValue);
-    const filterSortedProducts = getSortedProducts(
-      sortedProducts,
-      filterSortType,
-      filterSortValue
-    );
-    sortedProducts = filterSortedProducts;
-    setSortedProducts(sortedProducts);
-    setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-  }, [offset, products, sortType, sortValue, filterSortType, filterSortValue]);
+  // }, [offset, products, sortType, sortValue, filterSortType, filterSortValue])
 
   return (
     <Fragment>
@@ -61,7 +36,7 @@ const ShopGridTwoColumn = ({ location, products }) => {
         />
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>Home</BreadcrumbsItem>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
         Shop
       </BreadcrumbsItem>
@@ -75,29 +50,31 @@ const ShopGridTwoColumn = ({ location, products }) => {
             <div className="row">
               <div className="col-lg-3">
                 {/* shop sidebar */}
-                <ShopSidebar
-                  products={products}
-                  getSortParams={getSortParams}
-                  sideSpaceClass="mr-30"
-                />
+                <ShopSidebar sideSpaceClass="mr-30" />
               </div>
               <div className="col-lg-9">
                 {/* shop topbar default */}
-                <ShopTopbar
-                  getLayout={getLayout}
-                  getFilterSortParams={getFilterSortParams}
-                  productCount={products.length}
-                  sortedProductCount={currentData.length}
-                />
+                <ShopTopbar getLayout={getLayout} />
 
                 {/* shop page content default */}
-                <ShopProducts layout={layout} products={currentData} />
+                <ShopProducts layout={layout} />
 
                 {/* shop product pagination */}
                 <div className="pro-pagination-style text-center mt-30">
-                  <Paginator
+                  {/* <Paginator
                     totalRecords={sortedProducts.length}
-                    pageLimit={pageLimit}
+                    page={pageLimit}
+                    pageNeighbours={2}
+                    setOffset={setOffset}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    pageContainerClass="mb-0 mt-0"
+                    pagePrevText="«"
+                    pageNextText="»"
+                  /> */}
+                  <Paginator
+                    totalRecords={5}
+                    page={3}
                     pageNeighbours={2}
                     setOffset={setOffset}
                     currentPage={currentPage}
@@ -113,18 +90,12 @@ const ShopGridTwoColumn = ({ location, products }) => {
         </div>
       </LayoutOne>
     </Fragment>
-  );
-};
+  )
+}
 
 ShopGridTwoColumn.propTypes = {
   location: PropTypes.object,
-  products: PropTypes.array
-};
+  products: PropTypes.array,
+}
 
-const mapStateToProps = state => {
-  return {
-    products: state.productData.products
-  };
-};
-
-export default connect(mapStateToProps)(ShopGridTwoColumn);
+export default ShopGridTwoColumn

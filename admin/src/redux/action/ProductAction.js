@@ -1,8 +1,30 @@
 import * as productConstant from '../constant/ProductConstant.js'
 
-export const createProductAction = (product) => ({
+export const createProductAction = (
+  name,
+  discount,
+  newLaunced,
+  description,
+  price,
+  category,
+  subs,
+  image,
+  shipping,
+  brand,
+  history
+) => ({
   type: productConstant.PRODUCT_CREATE_REQUEST,
-  product,
+  name,
+  discount,
+  newLaunced,
+  description,
+  price,
+  category,
+  subs,
+  image,
+  shipping,
+  brand,
+  history
 })
 export const listProductAction = () => ({
   type: productConstant.PRODUCT_LIST_REQUEST,
@@ -16,7 +38,7 @@ export const updateProductAction = (product, slug, history) => ({
   type: productConstant.PRODUCT_UPDATE_REQUEST,
   product,
   slug,
-  history
+  history,
 })
 export const deleteProductAction = (slug) => ({
   type: productConstant.PRODUCT_DELETE_REQUEST,

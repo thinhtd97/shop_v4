@@ -8,7 +8,7 @@ import {
   updateVariationAction,
 } from '../../redux/action/variationAction'
 import {
-  currentProductAction,
+  detailProductAction,
   listProductAction,
 } from '../../redux/action/ProductAction'
 import axios from 'axios'
@@ -23,13 +23,15 @@ const UpdateVariation = ({ history, match }) => {
   const { product: productCurrent } = useSelector(
     (state) => state.productCurrent,
   )
+  const slugProduct = match.params.slug;
   const antIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />
   const dispatch = useDispatch()
   const { variation, loading } = useSelector((state) => state.variationDetail)
+  const { product: productDetail } = useSelector((state) => state.productDetail)
   const [color, setColor] = useState('')
   const [product, setProduct] = useState('')
-  const [image, setImage] = useState({})
-
+  const [image, setImage] = useState([])
+  // const [currentProductId, setCurrentProductId] = useState('')
   const layout = {
     labelCol: {
       span: 8,
@@ -40,7 +42,7 @@ const UpdateVariation = ({ history, match }) => {
   }
   const fileUploadChangeAndResize = (e) => {
     let files = e.target.files
-    let allUploadedFiles = image
+    let allUploadedFiles = []
     if (files) {
       Resizer.imageFileResizer(
         files[files.length - 1],
@@ -77,23 +79,31 @@ const UpdateVariation = ({ history, match }) => {
     }
   }
   const onFinish = (color, product, image, variationId) => {
-    dispatch(updateVariationAction(color, product, image, variationId))
+    dispatch(
+      updateVariationAction(
+        color,
+        product,
+        image,
+        variationId,
+        productDetail._id,
+      ),
+    )
   }
   useEffect(() => {
     if (!adminInfo) {
       history.push('/auth/login')
     } else {
       if (!variation || !variation.color || variation._id !== variationId) {
-        dispatch(listProductAction())
         dispatch(detailVariationAction(variationId))
-        dispatch(currentProductAction(variationId))
+        dispatch(listProductAction())
+        dispatch(detailProductAction(slugProduct))
       } else {
         setColor(variation.color)
         setImage(variation.image)
-        setProduct(variation.product)
+        setProduct(variation.product._id)
       }
     }
-  }, [dispatch, history, adminInfo, variation, variationId])
+  }, [dispatch, history, adminInfo, variation, variationId, slugProduct])
   return (
     <>
       <Breadcrumb>
@@ -105,13 +115,16 @@ const UpdateVariation = ({ history, match }) => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>
           <Link to={`/product/list-variation/${productCurrent?.slug}`}>
-            List Variation {productCurrent?.name}
+            { productCurrent && `List Variation ${productCurrent.name}`}
           </Link>
         </Breadcrumb.Item>
 
-        <Breadcrumb.Item>Update Variation</Breadcrumb.Item>
+        <Breadcrumb.Item>{ productCurrent && `Update Variation`}</Breadcrumb.Item>
       </Breadcrumb>
       <hr />
+      <Button type="primary">
+        <Link to={`/product/list-variation/${slugProduct}`}>Go Back</Link>
+      </Button>
       <div
         style={{
           display: 'flex',
@@ -125,7 +138,9 @@ const UpdateVariation = ({ history, match }) => {
           <Form
             {...layout}
             name="nest-messages"
-            onFinish={() => onFinish(color, product, image, variationId)}
+            onFinish={() =>
+              onFinish(color, product, image, variationId)
+            }
           >
             <Form.Item label="Color">
               <Select

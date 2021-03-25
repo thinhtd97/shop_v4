@@ -1,0 +1,13 @@
+{
+    name: { type: String, required: true },
+    active: { type: Boolean, required: true },
+    donuts: [{
+        color: { type: String },
+        glazing: { type: Boolean }
+    }]
+}
+db.donutCombos.updateMany({ 'donuts.color': 'white' }, { 
+    $set: { 
+        'donuts.$.color': 'pink'
+    } 
+});

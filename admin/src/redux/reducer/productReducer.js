@@ -31,7 +31,7 @@ export const detailProductReducer = (state = { product: {} }, action) => {
     case productConstants.PRODUCT_DETAIL_REQUEST:
       return { loading: true }
     case productConstants.PRODUCT_DETAIL_SUCCESS:
-      return { loading: false, product: action.payload }
+      return { loading: false, product: action.payload, success: true }
     case productConstants.PRODUCT_DETAIL_FAILED:
       return { loading: false, error: action.payload }
     default:
@@ -62,7 +62,7 @@ export const deleteProductReducer = (state = {}, action) => {
       return state
   }
 }
-export const currentProductReducer = (state = { product: {} }, action) => {
+export const currentProductReducer = (state = {}, action) => {
   switch (action.type) {
     case productConstants.PRODUCT_CURRENT_REQUEST:
       return { loading: true }

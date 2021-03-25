@@ -58,6 +58,7 @@ const productSchema = mongoose.Schema(
     },
     variation: [{
         type: mongoose.Schema.Types.ObjectId,
+        ref: 'Variation'
     }],
     category: {
       type: mongoose.Schema.Types.ObjectId,

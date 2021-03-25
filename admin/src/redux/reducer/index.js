@@ -30,6 +30,8 @@ const rootReducer = combineReducers({
     variationDetail: variationReducer.detailVariationReducer,
     variationDelete: variationReducer.deleteVariationReducer,
     variationUpdate: variationReducer.updateVariationReducer,
+    sizeCreate: variationReducer.createSizeReducer,
+    sizeDelete: variationReducer.deleteSizeReducer
 })
 
 export default rootReducer

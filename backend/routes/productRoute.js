@@ -17,6 +17,6 @@ router
   .route('/products/:slug')
   .put(protect, admin, update)
   .delete(protect, admin, remove)
-  .get(protect, admin, read)
+  .get(read)
 router.get('/products/current/:variId', protect, admin, getProductCurrent)
 export default router

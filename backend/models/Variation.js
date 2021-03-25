@@ -17,12 +17,11 @@ const VariationSchema = mongoose.Schema(
     size: [SizeStockSchema],
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-        required: true,
+        ref: 'Product'
     }
   },
   { timestamps: true },
 )
 
-const Variation = mongoose.model('variation', VariationSchema)
+const Variation = mongoose.model('Variation', VariationSchema)
 export default Variation

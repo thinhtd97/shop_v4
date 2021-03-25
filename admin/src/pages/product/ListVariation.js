@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { Table, Space, Button, Input, Image } from 'antd'
+import React, { useEffect } from 'react'
+import { Table, Space, Button, Image } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  deleteVariationAction,
-  listVariationAction,
-} from '../../redux/action/variationAction.js'
-import {
-  detailProductAction,
-} from '../../redux/action/ProductAction'
+import { deleteVariationAction } from '../../redux/action/variationAction.js'
+import { detailProductAction } from '../../redux/action/ProductAction'
 import { Link } from 'react-router-dom'
 import { Breadcrumb } from 'antd'
 import {
   DeleteOutlined,
   FileSyncOutlined,
+  PlusSquareFilled,
   LoadingOutlined,
+  OrderedListOutlined
 } from '@ant-design/icons'
 
-const { Search } = Input
-
 const ListVariation = ({ history, match }) => {
-  const [keyword, setKeyword] = useState('')
-  const { variations, loading } = useSelector((state) => state.variationList)
-  const { product: productDetail } = useSelector((state) => state.productDetail)
+  const slug = match.params.slug
+  const { product: productDetail, loading } = useSelector(
+    (state) => state.productDetail,
+  )
   const { adminInfo } = useSelector((state) => state.adminLogin)
-  const searched = (keyword) => (c) => c.color.toLowerCase().includes(keyword)
   const columns = [
     {
       title: 'Image',
@@ -38,21 +33,27 @@ const ListVariation = ({ history, match }) => {
       key: 'color',
     },
     {
-      title: 'Parent Product',
-      dataIndex: 'product',
-      key: 'product',
-    },
-    {
       title: 'Action',
       key: 'action',
       render: (value) => (
         <Space>
           <Button type="primary">
-            <Link to={`/variation/update/${value.key}`}>
+            <Link to={`/variation/update/${slug}/${value.key}`}>
               <FileSyncOutlined />
             </Link>
           </Button>
-          <Button type="danger" onClick={() => handleRemove(value.key)}>
+          <Button type="dashed">
+            <Link to={`/variation/create-size/${value.key}`}>
+              <PlusSquareFilled />
+            </Link>
+          </Button>
+          <Button type="warning">
+            {/* /product/list-variation/:slug/:id */}
+            <Link to={`/product/list-variation/${slug}/${value.key}`}>
+              <OrderedListOutlined />
+            </Link>
+          </Button>
+          <Button type="danger" onClick={() => handleRemove(value.key, slug)}>
             <DeleteOutlined />
           </Button>
         </Space>
@@ -60,28 +61,23 @@ const ListVariation = ({ history, match }) => {
     },
   ]
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
-  const data = variations?.filter(searched(keyword)).map((row) => ({
-    name: row.name,
-    image: row.image.url,
-    color: row.color,
-    product: row.product.name,
-    key: row._id,
-  }))
-  const handleRemove = (variationId) => {
-    dispatch(deleteVariationAction(variationId))
+  const data = productDetail?.variation?.map((row) => ({
+      name: row.name,
+      image: row.image.url,
+      color: row.color,
+      key: row._id,
+    }))
+  const handleRemove = (variationId, slug) => {
+    dispatch(deleteVariationAction(variationId, slug))
   }
   const dispatch = useDispatch()
+
   useEffect(() => {
     if (!adminInfo) {
       history.push('/auth/login')
     }
-    dispatch(listVariationAction())
-    dispatch(detailProductAction(match.params.slug))
-  }, [dispatch, adminInfo, history, match])
-  const handleSearchChange = (e) => {
-    e.preventDefault()
-    setKeyword(e.target.value.toLowerCase())
-  }
+    dispatch(detailProductAction(slug))
+  }, [dispatch, adminInfo, history, slug])
   return (
     <>
       <Breadcrumb>
@@ -91,15 +87,15 @@ const ListVariation = ({ history, match }) => {
         <Breadcrumb.Item>
           <Link to="/product/list-products">List Product</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>List Variation {productDetail?.name}</Breadcrumb.Item>
+        <Breadcrumb.Item>
+          {' '}
+          {productDetail && `List Variation ${productDetail.name}`}{' '}
+        </Breadcrumb.Item>
       </Breadcrumb>
       <hr />
-      <Search
-        placeholder="Search"
-        size="large"
-        style={{ width: 300 }}
-        onChange={handleSearchChange}
-      />
+      <Button type="primary">
+          <Link to="/product/list-products">Go Back </Link>
+      </Button>
       <Table
         loading={{ indicator: antIcon, spinning: loading }}
         columns={columns}

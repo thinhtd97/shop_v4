@@ -1,10 +1,21 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import axios from 'axios'
 import * as productConstant from '../constant/ProductConstant.js'
-import { notification } from 'antd'
+import {  message } from 'antd'
 
 function* createProduct(action) {
-  const { product } = action
+  const {
+    name,
+    discount,
+    newLaunced,
+    description,
+    price,
+    category,
+    subs,
+    image,
+    shipping,
+    brand,
+  } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -14,13 +25,25 @@ function* createProduct(action) {
       },
     }
     const { data } = yield call(() =>
-      axios.post(`${process.env.REACT_APP_API}/products`, product, config),
+      axios.post(
+        `${process.env.REACT_APP_API}/products`,
+        {
+          name,
+          discount,
+          newLaunced,
+          description,
+          price,
+          category,
+          subs,
+          image,
+          shipping,
+          brand,
+        },
+        config,
+      ),
     )
     yield put({ type: productConstant.PRODUCT_CREATE_SUCCESS, payload: data })
-    notification['success']({
-      message: 'Product',
-      description: `Created Success`,
-    })
+    message.success('Create Product Success')
   } catch (error) {
     yield put({
       type: productConstant.PRODUCT_CREATE_FAILED,
@@ -29,14 +52,13 @@ function* createProduct(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Product',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 
@@ -102,10 +124,7 @@ function* updateProduct(action) {
     yield put({ type: productConstant.PRODUCT_UPDATE_SUCCESS, payload: data })
     yield put({ type: productConstant.PRODUCT_DETAIL_SUCCESS, payload: data })
     history.push('/product/list-products')
-    notification['success']({
-      message: 'Product',
-      description: `Update Success`,
-    })
+    message.success('Update Product Success')
   } catch (error) {
     yield put({
       type: productConstant.PRODUCT_UPDATE_FAILED,
@@ -114,14 +133,13 @@ function* updateProduct(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Product',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 
@@ -140,10 +158,7 @@ function* deleteProduct(action) {
     )
     yield put({ type: productConstant.PRODUCT_DELETE_SUCCESS })
     yield put({ type: productConstant.PRODUCT_LIST_REQUEST })
-    notification['success']({
-      message: 'Product',
-      description: `Delete Success`,
-    })
+    message.success('Delete Product Success')
   } catch (error) {
     yield put({
       type: productConstant.PRODUCT_DELETE_FAILED,
@@ -152,14 +167,13 @@ function* deleteProduct(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Product',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 function* currentProduct(action) {
@@ -173,7 +187,10 @@ function* currentProduct(action) {
       },
     }
     const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/products/current/${variant_id}`, config),
+      axios.get(
+        `${process.env.REACT_APP_API}/products/current/${variant_id}`,
+        config,
+      ),
     )
     yield put({ type: productConstant.PRODUCT_CURRENT_SUCCESS, payload: data })
   } catch (error) {

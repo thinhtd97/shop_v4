@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import axios from 'axios'
 import * as subConstant from '../constant/subConstant.js'
-import { notification } from 'antd'
+import { message } from 'antd'
 
 function* createSub(action) {
   const { name, parent } = action
@@ -17,10 +17,7 @@ function* createSub(action) {
       axios.post(`${process.env.REACT_APP_API}/subs`, { name, parent }, config),
     )
     yield put({ type: subConstant.SUB_CREATE_SUCCESS, payload: data })
-    notification['success']({
-      message: 'Sub Category',
-      description: `Created Success`,
-    })
+    message.success(`Create Sub Category Success`)
   } catch (error) {
     yield put({
       type: subConstant.SUB_DELETE_FAILED,
@@ -29,14 +26,13 @@ function* createSub(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Sub Category',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 
@@ -101,11 +97,8 @@ function* updateSub(action) {
     )
     yield put({ type: subConstant.SUB_UPDATE_SUCCESS, payload: data })
     yield put({ type: subConstant.SUB_DETAIL_SUCCESS, payload: data })
-    notification['success']({
-      message: 'Sub Category',
-      description: `Update Success`,
-    })
-    history.push('/sub-category/list-sub-catgories');
+    message.success(`Update Sub Category Success`)
+    history.push('/sub-category/list-sub-catgories')
   } catch (error) {
     yield put({
       type: subConstant.SUB_DETAIL_FAILED,
@@ -114,14 +107,13 @@ function* updateSub(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Sub Category',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 
@@ -140,10 +132,7 @@ function* deleteSub(action) {
     )
     yield put({ type: subConstant.SUB_DELETE_SUCCESS })
     yield put({ type: subConstant.SUB_LIST_REQUEST })
-    notification['success']({
-      message: 'Sub Category',
-      description: `Delete Success`,
-    })
+    message.success('Delete Sub Category Success')
   } catch (error) {
     yield put({
       type: subConstant.SUB_DELETE_FAILED,
@@ -152,14 +141,13 @@ function* deleteSub(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Category Category',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 

@@ -31,34 +31,64 @@ const CreateProduct = ({ history }) => {
     'Tiffany',
   ]
   const dispatch = useDispatch()
-  const [values, setValues] = useState({
-    name: '',
-    discount: 0,
-    newLaunced: true,
-    description: '',
-    price: 0,
-    category: '',
-    subs: [],
-    sold: 0,
-    image: [],
-    shipping: false,
-    brand: '',
-    numReviews: 0,
-    countInStock: 0,
-  })
+  const [name, setName] = useState()
+  const [discount, setDiscount] = useState()
+  const [newLaunced, setNewLaunced] = useState()
+  const [description, setDescription] = useState()
+  const [price, setPrice] = useState()
+  const [category, setCategory] = useState()
+  const [subs, setSubs] = useState()
+  const [image, setImage] = useState([])
+  const [shipping, setShipping] = useState()
+  const [brand, setBrand] = useState()
+
+  // const [values, setValues] = useState({
+  //   name: '',
+  //   discount: 0,
+  //   newLaunced: true,
+  //   description: '',
+  //   price: 0,
+  //   category: '',
+  //   subs: [],
+  //   image: [],
+  //   shipping: false,
+  //   brand: '',
+  // })
   const { adminInfo } = useSelector((state) => state.adminLogin)
   const { categories } = useSelector((state) => state.cateList)
   const { subCate } = useSelector((state) => state.listSubCate)
-  const onFinish = (values) => {
-    dispatch(createProductAction(values))
+  const onFinish = (
+    name,
+    discount,
+    newLaunced,
+    description,
+    price,
+    category,
+    subs,
+    image,
+    shipping,
+    brand,
+    history,
+  ) => {
+    dispatch(
+      createProductAction(
+        name,
+        discount,
+        newLaunced,
+        description,
+        price,
+        category,
+        subs,
+        image,
+        shipping,
+        brand,
+        history,
+      ),
+    )
   }
-  const handleChangeNewProduct = (value) => {
-    setValues({ ...values, newLaunced: value })
-  }
-
   const fileUploadChangeAndResize = (e) => {
     let files = e.target.files
-    let allUploadedFiles = values.image
+    let allUploadedFiles = []
     if (files) {
       for (let i = 0; i < files.length; i++) {
         Resizer.imageFileResizer(
@@ -81,7 +111,7 @@ const CreateProduct = ({ history }) => {
               )
               .then((res) => {
                 allUploadedFiles.push(res.data)
-                setValues({ ...values, image: allUploadedFiles })
+                setImage(allUploadedFiles)
               })
               .catch((err) => {
                 console.log('Upload Error: ' + err)
@@ -94,7 +124,8 @@ const CreateProduct = ({ history }) => {
   }
 
   const handleCategoryChange = async (value) => {
-    setValues({ ...values, subs: [], category: value })
+    setSubs([])
+    setCategory(value)
     dispatch(listSubCategoryRequest(value))
   }
   // const handleImageRemove = (public_id) => {
@@ -126,9 +157,9 @@ const CreateProduct = ({ history }) => {
   const selectProps = {
     mode: 'multiple',
     name: 'categories',
-    value: values.subs,
+    value: subs,
     onChange: (value) => {
-      setValues({ ...values, subs: [...value] })
+      setSubs([...value])
     },
     placeholder: 'Sub Categories',
     maxTagCount: 'responsive',
@@ -149,7 +180,25 @@ const CreateProduct = ({ history }) => {
         <Breadcrumb.Item>Create Product</Breadcrumb.Item>
       </Breadcrumb>
       <hr />
-      <Form {...layout} name="nest-messages" onFinish={() => onFinish(values)}>
+      <Form
+        {...layout}
+        name="nest-messages"
+        onFinish={() =>
+          onFinish(
+            name,
+            discount,
+            newLaunced,
+            description,
+            price,
+            category,
+            subs,
+            image,
+            shipping,
+            brand,
+            history,
+          )
+        }
+      >
         <Form.Item
           label="Image"
           name="image"
@@ -159,7 +208,6 @@ const CreateProduct = ({ history }) => {
             name="image"
             type="file"
             accept="images/*"
-            value={values.image}
             onChange={fileUploadChangeAndResize}
             multiple
           />
@@ -171,7 +219,7 @@ const CreateProduct = ({ history }) => {
         >
           <Input
             type="text"
-            onChange={(e) => setValues({ ...values, name: e.target.value })}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Product Name"
           />
         </Form.Item>
@@ -182,14 +230,17 @@ const CreateProduct = ({ history }) => {
         >
           <Input
             type="number"
-            onChange={(e) => setValues({ ...values, discount: e.target.value })}
+            onChange={(e) => setDiscount(e.target.value)}
             placeholder="discount"
             max={100}
             min={0}
           />
         </Form.Item>
         <Form.Item label="New Product">
-          <Select value={true} onChange={handleChangeNewProduct}>
+          <Select
+            defaultValue={true}
+            onChange={(value) => setNewLaunced(value)}
+          >
             <Option value={true}>Yes</Option>
             <Option value={false}>No</Option>
           </Select>
@@ -200,16 +251,14 @@ const CreateProduct = ({ history }) => {
           rules={[{ required: true }]}
         >
           <Input.TextArea
-            onChange={(e) =>
-              setValues({ ...values, description: e.target.value })
-            }
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Description"
           />
         </Form.Item>
         <Form.Item name="Price" label="Price" rules={[{ required: true }]}>
           <Input
             type="number"
-            onChange={(e) => setValues({ ...values, price: e.target.value })}
+            onChange={(e) => setPrice(e.target.value)}
             placeholder="Product Price"
           />
         </Form.Item>
@@ -248,7 +297,7 @@ const CreateProduct = ({ history }) => {
         >
           <Select
             name="shipping"
-            onChange={(value) => setValues({ ...values, shipping: value })}
+            onChange={(value) => setShipping(value)}
             placeholder="Shipping"
           >
             <Option key={1} value={true}>
@@ -268,7 +317,7 @@ const CreateProduct = ({ history }) => {
         >
           <Select
             name="Brand"
-            onChange={(value) => setValues({ ...values, brand: value })}
+            onChange={(value) => setBrand(value)}
             placeholder="Brand"
           >
             {brands.map((b) => (

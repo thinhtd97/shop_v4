@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import axios from 'axios'
 import * as cateConstant from '../constant/categoryConstant.js'
-import { notification } from 'antd'
+import { message } from 'antd'
 
 function* createCate(action) {
   const { name } = action
@@ -17,10 +17,7 @@ function* createCate(action) {
       axios.post(`${process.env.REACT_APP_API}/category`, { name }, config),
     )
     yield put({ type: cateConstant.CATEGORY_CREATE_SUCCESS, payload: data })
-    notification['success']({
-      message: 'Category',
-      description: `Created Success`,
-    })
+    message.success(`Create Category Success`)
   } catch (error) {
     yield put({
       type: cateConstant.CATEGORY_CREATE_FAILED,
@@ -29,14 +26,13 @@ function* createCate(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Category',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 
@@ -102,10 +98,7 @@ function* updateCate(action) {
     yield put({ type: cateConstant.CATEGORY_UPDATE_SUCCESS, payload: data })
     yield put({ type: cateConstant.CATEGORY_DETAIL_SUCCESS, payload: data })
     history.push('/category/list-categories')
-    notification['success']({
-      message: 'Category',
-      description: `Update Success`,
-    })
+    message.success(`Update Category Success`)
   } catch (error) {
     yield put({
       type: cateConstant.CATEGORY_UPDATE_FAILED,
@@ -114,14 +107,13 @@ function* updateCate(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Category',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 
@@ -140,10 +132,7 @@ function* deleteCate(action) {
     )
     yield put({ type: cateConstant.CATEGORY_DELETE_SUCCESS })
     yield put({ type: cateConstant.CATEGORY_LIST_REQUEST })
-    notification['success']({
-      message: 'Category',
-      description: `Delete Success`,
-    })
+    message.success(`Delete Category Success`)
   } catch (error) {
     yield put({
       type: cateConstant.CATEGORY_DELETE_FAILED,
@@ -152,14 +141,13 @@ function* deleteCate(action) {
           ? error.response.data.message
           : error.message,
     })
-    notification['error']({
-      message: 'Category',
-      description: `${
+    message.error(
+      `${
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       }`,
-    })
+    )
   }
 }
 

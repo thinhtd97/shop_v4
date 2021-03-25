@@ -25,6 +25,9 @@ import UpdateProduct from './pages/product/UpdateProduct'
 import CreateVariation from './pages/product/CreateVariation'
 import ListVariation from './pages/product/ListVariation'
 import UpdateVariation from './pages/product/UpdateVariation'
+import CreateSize from './pages/product/CreateSize'
+import ListSize from './pages/product/ListSize'
+import UpdateSize from './pages/product/UpdateSize'
 
 const { Content, Footer } = Layout
 
@@ -108,7 +111,7 @@ function App() {
                       exact
                     />
                     <Route
-                      path="/product/create-variation/:slug"
+                      path="/product/create-variation/:id"
                       component={CreateVariation}
                       exact
                     />
@@ -118,8 +121,23 @@ function App() {
                       exact
                     />
                     <Route
-                      path="/variation/update/:id"
+                      path="/variation/update/:slug/:id"
                       component={UpdateVariation}
+                      exact
+                    />
+                    <Route
+                      path="/variation/create-size/:id"
+                      component={CreateSize}
+                      exact
+                    />
+                    <Route
+                      path="/product/list-variation/:slug/:id"
+                      component={ListSize}
+                      exact
+                    />
+                    <Route
+                      path="/product/list-variation/update-size/:variationId/:sizeId"
+                      component={UpdateSize}
                       exact
                     />
                     <Route path="*" component={NotFound} />

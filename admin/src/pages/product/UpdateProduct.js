@@ -180,15 +180,6 @@ const UpdateProduct = ({ history, match }) => {
             name="nest-messages"
             onFinish={() => onFinish(values, slug, history)}
           >
-            <Form.Item label="Image">
-              <Input
-                name="image"
-                type="file"
-                accept="images/*"
-                onChange={fileUploadChangeAndResize}
-                multiple
-              />
-            </Form.Item>
             <Form.Item label="Product Name">
               <Input
                 type="text"
@@ -279,6 +270,15 @@ const UpdateProduct = ({ history, match }) => {
                   </Option>
                 ))}
               </Select>
+            </Form.Item>
+            <Form.Item label="Image">
+              <Input
+                name="image"
+                type="file"
+                accept="images/*"
+                onChange={fileUploadChangeAndResize}
+                multiple
+              />
             </Form.Item>
             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
               <Button type="primary" htmlType="submit">

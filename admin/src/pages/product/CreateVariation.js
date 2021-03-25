@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import Resizer from 'react-image-file-resizer'
 import { createVariationAction } from '../../redux/action/variationAction'
-import { listProductAction } from '../../redux/action/ProductAction'
 const layout = {
   labelCol: {
     span: 8,
@@ -17,16 +16,16 @@ const layout = {
 
 const { Option } = Select
 
-const CreateVariation = ({ history }) => {
+const CreateVariation = ({ history, match }) => {
+  const productId = match.params.id;
   const colors = ['Black', 'Brown', 'Silver', 'White', 'Blue']
   const dispatch = useDispatch()
   const [color, setColor] = useState('')
   const [product, setProduct] = useState('')
   const [image, setImage] = useState({})
-  const { products } = useSelector((state) => state.productList)
   const { adminInfo } = useSelector((state) => state.adminLogin)
-  const onFinish = (color, product, image) => {
-    dispatch(createVariationAction(color, product, image))
+  const onFinish = (color, product, image, history) => {
+    dispatch(createVariationAction(color, product, image, history))
   }
 
   const fileUploadChangeAndResize = (e) => {
@@ -72,9 +71,9 @@ const CreateVariation = ({ history }) => {
     if (!adminInfo) {
       history.push('/auth/login')
     } else {
-      dispatch(listProductAction())
+      setProduct(productId)
     }
-  }, [adminInfo, history, dispatch])
+  }, [adminInfo, history, dispatch, productId])
 
   return (
     <>
@@ -88,7 +87,7 @@ const CreateVariation = ({ history }) => {
       <Form
         {...layout}
         name="nest-messages"
-        onFinish={() => onFinish(color, product, image)}
+        onFinish={() => onFinish(color, product, image, history)}
       >
         <Form.Item
           label="Image"
@@ -113,33 +112,6 @@ const CreateVariation = ({ history }) => {
             {colors?.map((color) => (
               <Option key={color} value={color}>
                 {color}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Parent Product"
-          name="Product"
-          rules={[{ required: true, message: 'Please input your product!' }]}
-        >
-          <Select
-            onChange={(value) => setProduct(value)}
-            showSearch
-            style={{ width: 200 }}
-            placeholder="Search to Select Product"
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            filterSort={(optionA, optionB) =>
-              optionA.children
-                .toLowerCase()
-                .localeCompare(optionB.children.toLowerCase())
-            }
-          >
-            {products?.map((product) => (
-              <Option key={product._id} value={product._id}>
-                {product.name}
               </Option>
             ))}
           </Select>

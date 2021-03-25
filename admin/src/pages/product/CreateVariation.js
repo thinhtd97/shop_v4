@@ -81,9 +81,15 @@ const CreateVariation = ({ history, match }) => {
         <Breadcrumb.Item>
           <Link to="/dashboard">Dashboard</Link>
         </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link to="/product/list-products">List Product</Link>
+        </Breadcrumb.Item>
         <Breadcrumb.Item>Create Variation</Breadcrumb.Item>
       </Breadcrumb>
       <hr />
+      <Button type="primary">
+        <Link to="/product/list-products">Go Back</Link>
+      </Button>
       <Form
         {...layout}
         name="nest-messages"

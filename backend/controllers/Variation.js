@@ -30,7 +30,7 @@ export const list = asyncHandle(async (req, res) => {
 export const read = asyncHandle(async (req, res) => {
   const variation = await Variation.findOne({
     _id: req.params.variId,
-  }).populate('product', '_id name').populate('size')
+  }).populate('product', '_id name').populate('size').limit(5)
   res.json(variation)
 })
 export const update = asyncHandle(async (req, res) => {

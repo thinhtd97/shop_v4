@@ -10,11 +10,9 @@ import { protect } from '../middleware/middlewares.js'
 
 const router = express.Router()
 
-router.delete('/size/:variationId/:sizeId', protect, admin, removeSize)
-router
-  .route('/size/:id')
-  .get(protect, admin, detailSize)
-  .put(protect, admin, updateSize)
-router.post('/size/:variationId', protect, admin, createSize)
+router.delete('/size/:slugProduct/:variationId/:sizeId', protect, admin, removeSize)
+router.route('/size/:id').get(protect, admin, detailSize)
+router.put('/size/:slugProduct/:id', protect, admin, updateSize)
+router.post('/size/:slugProduct/:variationId', protect, admin, createSize)
 
 export default router

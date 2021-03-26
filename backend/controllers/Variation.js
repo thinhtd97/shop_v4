@@ -1,10 +1,11 @@
-import Variation from '../models/Variation.js';
-import Product from '../models/product.js';
-import Size from '../models/Size.js';
+import Variation from '../models/Variation.js'
+import Product from '../models/product.js'
+import Size from '../models/Size.js'
 import asyncHandle from 'express-async-handler'
 
 export const create = asyncHandle(async (req, res) => {
   const { color, image, product } = req.body
+  const variationExist = await Variation.findOne({ color })
   try {
     const productExist = await Product.findOne({ _id: product })
     const variation = new Variation({
@@ -19,6 +20,10 @@ export const create = asyncHandle(async (req, res) => {
     }
     res.json(variation)
   } catch (error) {
+    if (variationExist) {
+      res.status(400)
+      throw new Error('Variation Already Exists.')
+    }
     console.log(error)
     res.status(400)
     throw new Error('Create Variation Failed.')
@@ -30,7 +35,10 @@ export const list = asyncHandle(async (req, res) => {
 export const read = asyncHandle(async (req, res) => {
   const variation = await Variation.findOne({
     _id: req.params.variId,
-  }).populate('product', '_id name').populate('size').limit(5)
+  })
+    .populate('product', '_id name')
+    .populate('size')
+    .limit(5)
   res.json(variation)
 })
 export const update = asyncHandle(async (req, res) => {
@@ -38,10 +46,6 @@ export const update = asyncHandle(async (req, res) => {
   try {
     const productUpdate = await Product.findOne({ _id: product })
     const flag = productUpdate.variation.includes(req.params.variId)
-    await Product.updateOne(
-      { _id: currentProductId },
-      { $pull: { 'variation': `${req.params.variId}` } },
-    )
     if (!flag) {
       productUpdate.variation.push(req.params.variId)
       await productUpdate.save()
@@ -69,7 +73,7 @@ export const remove = asyncHandle(async (req, res) => {
     const deleted = await Variation.findOneAndDelete({ _id: req.params.id })
     await Product.updateOne(
       {},
-      { $pull: { 'variation': { $in: `${req.params.id}` } } },
+      { $pull: { variation: { $in: `${req.params.id}` } } },
     )
     await Size.deleteMany({ variation: req.params.id })
     res.json(deleted)

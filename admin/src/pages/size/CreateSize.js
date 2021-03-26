@@ -22,8 +22,8 @@ const CreateSize = ({ history, match }) => {
   const [size, setSize] = useState()
   const [stock, setStock] = useState()
   const { adminInfo } = useSelector((state) => state.adminLogin)
-  const onFinish = (variationId, size, stock) => {
-    dispatch(sizeCreateAction(variationId, size, stock))
+  const onFinish = (variationId, size, stock, slug) => {
+    dispatch(sizeCreateAction(variationId, size, stock, slug))
   }
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const CreateSize = ({ history, match }) => {
       <Form
         {...layout}
         name="nest-messages"
-        onFinish={() => onFinish(variationId, size, stock)}
+        onFinish={() => onFinish(variationId, size, stock, slugProduct)}
       >
         <Form.Item
           label="Size"

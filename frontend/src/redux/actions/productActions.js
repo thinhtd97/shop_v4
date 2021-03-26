@@ -1,13 +1,5 @@
-export const FETCH_PRODUCTS_SUCCESS = "FETCH_PRODUCTS_SUCCESS";
+import * as product from '../constants/productConstant.js'
 
-const fetchProductsSuccess = products => ({
-  type: FETCH_PRODUCTS_SUCCESS,
-  payload: products
-});
-
-// fetch products
-export const fetchProducts = products => {
-  return dispatch => {
-    dispatch(fetchProductsSuccess(products));
-  };
-};
+export const listNewProductAction = () => ({
+  type: product.PRODUCT_LIST_NEW_REQUEST,
+})

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Space, Button, Input, Image } from 'antd'
+import { Table, Space, Button, Input, Image, Pagination } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   listProductAction,
@@ -116,7 +116,9 @@ const ListProduct = ({ history }) => {
         loading={{ indicator: antIcon, spinning: loading }}
         columns={columns}
         dataSource={data}
+        pagination={{ pageSize: 4, total: (products?.length - 1) }}
       />
+   
     </>
   )
 }

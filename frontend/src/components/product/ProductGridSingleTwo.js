@@ -2,10 +2,15 @@ import PropTypes from 'prop-types'
 import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ProductModal from './ProductModal'
+import { getDiscountPrice } from '../../helpers/product';
 
-const ProductGridSingleTwo = ({ sliderClassName, spaceBottomClass }) => {
+const ProductGridSingleTwo = ({
+  sliderClassName,
+  spaceBottomClass,
+  product,
+}) => {
   const [modalShow, setModalShow] = useState(false)
-
+  const discountedPrice = getDiscountPrice(product.price, product.discount);
   return (
     <Fragment>
       <div
@@ -19,33 +24,46 @@ const ProductGridSingleTwo = ({ sliderClassName, spaceBottomClass }) => {
           }`}
         >
           <div className="product-img">
-            <Link to="#">
-              <img
-                className="default-img"
-                src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                alt=""
-              />
-              <img
-                className="hover-img"
-                src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                alt=""
-              />
+            <Link to={`/product/${product.slug}`}>
+              <img className="default-img" src={product.image[0].url} alt="" />
+              {product.image.length > 0 ? (
+                <img className="hover-img" src={product.image[1].url} alt="" />
+              ) : (
+                ''
+              )}
             </Link>
-            <div className="product-img-badges">
-              <span className="pink">-10%</span>
+            {product.discount || product.newLaunced ? (
+              <div className="product-img-badges">
+                {product.discount !== 0 ? (
+                  <span className="pink">-{product.discount}%</span>
+                ) : (
+                  ''
+                )}
 
-              <span className="purple">New</span>
-            </div>
+                {product.newLaunced ? <span className="purple">New</span> : ''}
+              </div>
+            ) : (
+              ''
+            )}
 
             <div className="product-action-2">
-              <Link to={`#`} title="Select options">
-                <i className="fa fa-cog"></i>
-              </Link>
-
-              <button title="Add to cart">
-                {' '}
-                <i className="fa fa-shopping-cart"></i>{' '}
-              </button>
+              {product.variation && product.variation > 0 ? (
+                <Link
+                  to={`${process.env.PUBLIC_URL}/product/${product.slug}`}
+                  title="Select options"
+                >
+                  <i className="fa fa-cog"></i>
+                </Link>
+              ) : product.countInStock && product.countInStock > 0 ? (
+                <button title="Add to cart">
+                  {' '}
+                  <i className="fa fa-shopping-cart"></i>{' '}
+                </button>
+              ) : (
+                <button disabled className="active" title="Out of stock">
+                  <i className="fa fa-shopping-cart"></i>
+                </button>
+              )}
 
               <button onClick={() => setModalShow(true)} title="Quick View">
                 <i className="fa fa-eye"></i>
@@ -59,12 +77,22 @@ const ProductGridSingleTwo = ({ sliderClassName, spaceBottomClass }) => {
           <div className="product-content-2">
             <div className="title-price-wrap-2">
               <h3>
-                <Link to="#">Product 1</Link>
+                <Link to="#">{product.name}</Link>
               </h3>
               <div className="price-2">
-                <Fragment>
-                  <span>$10</span> <span className="old">$8</span>
-                </Fragment>
+                {product.discount === 0 ? (
+                 <span className="old">${product.price.toFixed(2)}</span>
+                ) : (
+                  <Fragment>
+                    <span>
+                      ${discountedPrice.toFixed(2)}
+                    </span>{" "}
+                    <span className="old">
+                      ${product.price.toFixed(2)}
+                    </span>
+                  </Fragment>
+                )}
+                
               </div>
             </div>
             <div className="pro-wishlist-2">
@@ -76,7 +104,7 @@ const ProductGridSingleTwo = ({ sliderClassName, spaceBottomClass }) => {
         </div>
       </div>
       {/* product modal */}
-      <ProductModal show={modalShow} onHide={() => setModalShow(false)} />
+      <ProductModal show={modalShow} product={product} onHide={() => setModalShow(false)} />
     </Fragment>
   )
 }

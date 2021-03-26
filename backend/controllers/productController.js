@@ -58,6 +58,14 @@ export const list = asyncHandle(async (req, res) => {
   const products = await Product.find()
     .populate('category', '_id name')
     .populate('subs')
+    .populate({
+      path: 'variation',
+      model: 'Variation',
+      populate: {
+        path: 'size',
+        model: 'Size',
+      },
+    })
     .sort([['createdAt', 'desc']])
     .limit(parseInt(req.params.count))
   if (products) {
@@ -68,10 +76,24 @@ export const list = asyncHandle(async (req, res) => {
   }
 })
 export const read = asyncHandle(async (req, res) => {
-  let product = await Product.findOne({ slug: req.params.slug }).populate(
-    'category',
-    '_id name',
-  ).populate('variation')
+  const product = await Product.findOne({ slug: req.params.slug })
+    .populate('category', '_id name')
+    .populate('variation')
+    .populate({
+      path: 'variation',
+      model: 'Variation',
+      populate: {
+        path: 'size',
+        model: 'Size',
+      },
+    })
+  if (product.variation.size) {
+    const sumStock = product.variation.size.reduce((acc, cur) => {
+      return acc + cur.stock
+    }, 0)
+    product.countInStock = sumStock
+    await product.save()
+  }
   res.json(product)
 })
 export const update = asyncHandle(async (req, res) => {
@@ -97,17 +119,33 @@ export const remove = asyncHandle(async (req, res) => {
     const deleted = await Product.findOneAndDelete({ slug: req.params.slug })
     res.json(deleted)
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(400)
     throw new Error('Product Delete failed.')
   }
 })
 export const getProductCurrent = asyncHandle(async (req, res) => {
   try {
-    const product = await Product.findOne({ variation: { $in: [req.params.variId] } });
-    res.json(product);
+    const product = await Product.findOne({
+      variation: { $in: [req.params.variId] },
+    })
+    res.json(product)
   } catch (error) {
-    console.log(error);
+    console.log(error)
+    res.status(400)
+    throw new Error('Product not found.')
+  }
+})
+export const getNewProducts = asyncHandle(async (req, res) => {
+  try {
+    const newProduct = await Product.find({ newLaunced: true })
+    if (!newProduct) {
+      res.status(400)
+      throw new Error('Product not found.')
+    }
+    res.json(newProduct)
+  } catch (error) {
+    console.log(error)
     res.status(400)
     throw new Error('Product not found.')
   }

@@ -97,6 +97,7 @@ const ListSub = ({ history }) => {
         loading={{ indicator: antIcon, spinning: loading }}
         columns={columns}
         dataSource={data}
+        pagination={{ pageSize: 4, current: (subs?.length - 1) }}
       />
     </>
   )

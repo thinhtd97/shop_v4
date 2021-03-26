@@ -1,17 +1,33 @@
 import PropTypes from 'prop-types'
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import ProductGridSingleTwo from '../../components/product/ProductGridSingleTwo'
-const ProductGridTwo = ({ sliderClassName, spaceBottomClass }) => {
+import { listNewProductAction } from '../../redux/actions/productActions'
+const ProductGridTwo = ({ sliderClassName, spaceBottomClass, category }) => {
+  const dispatch = useDispatch()
+  const { products } = useSelector((state) => state.listProduct)
+  useEffect(() => {
+    dispatch(listNewProductAction())
+  }, [dispatch])
+
   return (
     <Fragment>
-      <ProductGridSingleTwo
-        sliderClassName={sliderClassName}
-        spaceBottomClass={spaceBottomClass}
-      />
-       <ProductGridSingleTwo
-        sliderClassName={sliderClassName}
-        spaceBottomClass={spaceBottomClass}
-      />
+      {category === 'new' ? (
+        <>
+          {products &&
+            products.map((product, key) => (
+              <ProductGridSingleTwo
+                key={key}
+                sliderClassName={sliderClassName}
+                spaceBottomClass={spaceBottomClass}
+                product={product}
+                category={category}
+              />
+            ))}
+        </>
+      ) : (
+        ''
+      )}
     </Fragment>
   )
 }

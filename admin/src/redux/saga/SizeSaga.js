@@ -5,7 +5,7 @@ import * as variationConstant from '../constant/variationConstant.js'
 import { message } from 'antd'
 
 function* createSize(action) {
-  const { variationId, size, stock } = action
+  const { variationId, size, stock, slug } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -16,7 +16,7 @@ function* createSize(action) {
     }
     const { data } = yield call(() =>
       axios.post(
-        `${process.env.REACT_APP_API}/size/${variationId}`,
+        `${process.env.REACT_APP_API}/size/${slug}/${variationId}`,
         { size, stock },
         config,
       ),
@@ -45,7 +45,7 @@ function* createSize(action) {
 }
 
 function* deleteSize(action) {
-  const { variationId, sizeId } = action
+  const { variationId, sizeId, slug } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -56,12 +56,12 @@ function* deleteSize(action) {
     }
     yield call(() =>
       axios.delete(
-        `${process.env.REACT_APP_API}/size/${variationId}/${sizeId}`,
+        `${process.env.REACT_APP_API}/size/${slug}/${variationId}/${sizeId}`,
         config,
       ),
     )
     const { data } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/size/${sizeId}`, config),
+      axios.get(`${process.env.REACT_APP_API}/variation/${variationId}`, config),
     )
     yield put({ type: sizeConstant.SIZE_DELETE_SUCCESS })
     yield put({
@@ -120,7 +120,7 @@ function* detailSize(action) {
 // router.post('/size/:variationId', protect, admin, createSize)
 
 function* updateSize(action) {
-  const { sizeId, size, stock } = action
+  const { sizeId, size, stock, slug } = action
   try {
     const { adminInfo } = yield select((state) => state.adminLogin)
     const config = {
@@ -131,7 +131,7 @@ function* updateSize(action) {
     }
     const { data } = yield call(() =>
       axios.put(
-        `${process.env.REACT_APP_API}/size/${sizeId}`,
+        `${process.env.REACT_APP_API}/size/${slug}/${sizeId}`,
         { size, stock },
         config,
       ),

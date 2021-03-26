@@ -41,7 +41,7 @@ const ListSize = ({ history, match }) => {
           </Button>
           <Button
             type="danger"
-            onClick={() => handleRemove(variationId, value.key)}
+            onClick={() => handleRemove(variationId, value.key, slugProduct)}
           >
             <DeleteOutlined />
           </Button>
@@ -55,8 +55,8 @@ const ListSize = ({ history, match }) => {
     stock: row.stock,
     key: row._id,
   }))
-  const handleRemove = (variationId, sizeId) => {
-    dispatch(sizeDeleteAction(variationId, sizeId))
+  const handleRemove = (variationId, sizeId, slug) => {
+    dispatch(sizeDeleteAction(variationId, sizeId, slug))
   }
   const dispatch = useDispatch()
   useEffect(() => {
@@ -88,6 +88,7 @@ const ListSize = ({ history, match }) => {
         loading={{ indicator: antIcon, spinning: loading }}
         columns={columns}
         dataSource={data}
+        pagination={{ pageSize: 4, total: (variation?.size?.length - 1) }}
       />
     </>
   )

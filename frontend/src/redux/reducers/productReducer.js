@@ -1,18 +1,14 @@
-import { FETCH_PRODUCTS_SUCCESS } from "../actions/productActions";
+import * as product from '../constants/productConstant';
 
-const initState = {
-  products: []
-};
-
-const productReducer = (state = initState, action) => {
-  if (action.type === FETCH_PRODUCTS_SUCCESS) {
-    return {
-      ...state,
-      products: action.payload
-    };
+export const listNewProductReducer = (state = {}, action) => {
+  switch(action.type) {
+    case product.PRODUCT_LIST_NEW_REQUEST: 
+      return { loading: true }
+    case product.PRODUCT_LIST_NEW_SUCCESS: 
+      return { loading: false, products: action.payload }
+    case product.PRODUCT_LIST_NEW_FAILED: 
+      return { loading: false, error: action.payload }
+    default:
+      return state;
   }
-
-  return state;
-};
-
-export default productReducer;
+}

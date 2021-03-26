@@ -29,8 +29,8 @@ const UpdateSize = ({ history, match }) => {
   const [size, setSize] = useState('')
   const [stock, setStock] = useState('')
   const dispatch = useDispatch()
-  const onFinish = (sizeId, size, stock) => {
-    dispatch(sizeUpdateAction(sizeId, size, stock))
+  const onFinish = (sizeId, size, stock, slug) => {
+    dispatch(sizeUpdateAction(sizeId, size, stock, slug))
   }
   const antIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />
   useEffect(() => {
@@ -80,7 +80,7 @@ const UpdateSize = ({ history, match }) => {
         {loading ? (
           antIcon
         ) : (
-          <Form {...layout} onFinish={(e) => onFinish(sizeId, size, stock)}>
+          <Form {...layout} onFinish={(e) => onFinish(sizeId, size, stock, slug)}>
             <Form.Item label="Size">
               <Select
                 value={size}

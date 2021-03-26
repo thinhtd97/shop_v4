@@ -2,10 +2,23 @@ import React, { Fragment, useState, useEffect } from 'react'
 import Swiper from 'react-id-swiper'
 import { Modal } from 'react-bootstrap'
 import Rating from './sub-components/ProductRating'
+import { getDiscountPrice } from '../../helpers/product'
+
 function ProductModal(props) {
   const [gallerySwiper, getGallerySwiper] = useState(null)
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null)
-
+  const { product } = props
+  const discountedPrice = getDiscountPrice(product.price, product.discount)
+  const [selectedProductColor, setSelectedProductColor] = useState(
+    product.variation ? product.variation[0]?.color : '',
+  )
+  const [selectedProductSize, setSelectedProductSize] = useState(
+    product.variation ? product.variation[0]?.size[0]?.name : '',
+  )
+  const [productStock, setProductStock] = useState(
+    product.variation ? product.variation[0]?.size[0]?.stock : product.stock,
+  )
+  const [quantityCount, setQuantityCount] = useState(1)
   useEffect(() => {
     if (
       gallerySwiper !== null &&
@@ -64,103 +77,153 @@ function ProductModal(props) {
             <div className="col-md-5 col-sm-12 col-xs-12">
               <div className="product-large-image-wrapper">
                 <Swiper {...gallerySwiperParams}>
-                  <div>
-                    <div className="single-image">
-                      <img
-                        src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
+                  {product.image &&
+                    product.image.map((image, key) => {
+                      return (
+                        <div key={key}>
+                          <div className="single-image">
+                            <img src={image.url} className="img-fluid" alt="" />
+                          </div>
+                        </div>
+                      )
+                    })}
                 </Swiper>
               </div>
               <div className="product-small-image-wrapper mt-15">
                 <Swiper {...thumbnailSwiperParams}>
-                  <div>
-                    <div className="single-image">
-                      <img
-                        src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="single-image">
-                      <img
-                        src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="single-image">
-                      <img
-                        src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </div>
+                  {product.image &&
+                    product.image.map((image, key) => (
+                      <div key={key}>
+                        <div className="single-image">
+                          <img src={image.url} className="img-fluid" alt="" />
+                        </div>
+                      </div>
+                    ))}
                 </Swiper>
               </div>
             </div>
             <div className="col-md-7 col-sm-12 col-xs-12">
               <div className="product-details-content quickview-content">
-                <h2>Product 1</h2>
+                <h2>{product.name}</h2>
                 <div className="product-details-price">
-                  <Fragment>
-                    <span>$10</span> <span className="old">$15</span>
-                  </Fragment>
+                  {product.discount ? (
+                    <Fragment>
+                      <span>${discountedPrice.toFixed(2)}</span>{' '}
+                      <span className="old">${product.price.toFixed(2)}</span>
+                    </Fragment>
+                  ) : (
+                    <span>{product.price.toFixed(2)}</span>
+                  )}
                 </div>
                 <div className="pro-details-rating-wrap">
                   <div className="pro-details-rating">
-                    <Rating ratingValue={5} />
+                    <Rating />
                   </div>
                 </div>
 
                 <div className="pro-details-list">
-                  <p>
-                    Ut enim ad minima veniam, quis nostrum exercitationem ullam
-                    corporis suscipit laboriosam
-                  </p>
+                  <p>{product.description}</p>
                 </div>
-
-                <div className="pro-details-size-color">
-                  <div className="pro-details-color-wrap">
-                    <span>Color</span>
-                    <div className="pro-details-color-content">
-                      <label
-                        className={`pro-details-color-content--single blue`}
-                      >
-                        <input type="radio" name="product-color" />
-                        <span className="checkmark"></span>
-                      </label>
+                {product.variation ? (
+                  <div className="pro-details-size-color">
+                    <div className="pro-details-color-wrap">
+                      <span>Color</span>
+                      <div className="pro-details-color-content">
+                        {product.variation.map((single, key) => (
+                          <label
+                            key={key}
+                            className={`pro-details-color-content--single ${single.color}`}
+                          >
+                            <input
+                              checked={
+                                single.color === selectedProductColor
+                                  ? 'checked'
+                                  : ''
+                              }
+                              value={single.color}
+                              onChange={() => {
+                                setSelectedProductColor(single.color)
+                                setSelectedProductSize(single.size[0]?.name)
+                                setProductStock(single.size[0]?.stock)
+                              }}
+                              type="radio"
+                              name="product-color"
+                            />
+                            <span className="checkmark"></span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="pro-details-size">
+                      <span>Size</span>
+                      <div className="pro-details-size-content">
+                        {product.variation &&
+                          product.variation.map((single, key) => {
+                            return single.color === selectedProductColor
+                              ? single.size.map((singleSize, key) => (
+                                  <label
+                                    className={`pro-details-size-content--single`}
+                                    key={key}
+                                  >
+                                    <input
+                                      checked={
+                                        singleSize.size === selectedProductSize
+                                          ? 'checked'
+                                          : ''
+                                      }
+                                      onChange={() => {
+                                        setSelectedProductSize(singleSize.size)
+                                        setProductStock(single.size[0].stock)
+                                        setQuantityCount(1)
+                                      }}
+                                      type="radio"
+                                      name="size"
+                                      value={singleSize.size}
+                                    />
+                                    <span className="size-name">
+                                      {singleSize.size}
+                                    </span>
+                                  </label>
+                                ))
+                              : ''
+                          })}
+                      </div>
                     </div>
                   </div>
-                  <div className="pro-details-size">
-                    <span>Size</span>
-                    <div className="pro-details-size-content">
-                      <label className={`pro-details-size-content--single`}>
-                        <input type="radio" value="S" />
-                        <span className="size-name">S</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
+                ) : (
+                  ''
+                )}
 
                 <div className="pro-details-quality">
                   <div className="cart-plus-minus">
-                    <button className="dec qtybutton">-</button>
+                    <button
+                      onClick={() =>
+                        setQuantityCount(
+                          quantityCount > 1 ? quantityCount - 1 : 1,
+                        )
+                      }
+                      className="dec qtybutton"
+                    >
+                      -
+                    </button>
                     <input
                       className="cart-plus-minus-box"
                       type="text"
-                      // value={quantityCount}
+                      value={quantityCount}
                       readOnly
                     />
-                    <button className="inc qtybutton">+</button>
+                    <button
+                      onClick={() =>
+                        setQuantityCount(
+                          quantityCount < productStock
+                            ? quantityCount + 1
+                            : quantityCount,
+                        )
+                      }
+                      className="inc qtybutton"
+                    >
+                      +
+                    </button>
                   </div>
                   <div className="pro-details-cart btn-hover">
                     <button> Add To Cart </button>

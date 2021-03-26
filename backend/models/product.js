@@ -56,10 +56,12 @@ const productSchema = mongoose.Schema(
       trim: true,
       maxLength: 32,
     },
-    variation: [{
+    variation: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Variation'
-    }],
+        ref: 'Variation',
+      },
+    ],
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
@@ -101,6 +103,12 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
+    userAddedToCart: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   { timestamps: true },
 )

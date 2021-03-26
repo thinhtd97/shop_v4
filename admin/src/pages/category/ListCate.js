@@ -82,6 +82,7 @@ const ListCate = ({ history }) => {
         loading={{ indicator: antIcon, spinning: loading }}
         columns={columns}
         dataSource={data}
+        pagination={{ pageSize: 4, current: (categories?.length - 1) }}
       />
     </>
   )

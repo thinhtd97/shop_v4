@@ -18,7 +18,28 @@ const { Option } = Select
 
 const CreateVariation = ({ history, match }) => {
   const productId = match.params.id;
-  const colors = ['Black', 'Brown', 'Silver', 'White', 'Blue']
+  const colors = [
+    {
+      title: "Black",
+      value: "black"
+    },
+    {
+      title: "Brown",
+      value: "brown"
+    },
+    {
+      title: "Green",
+      value: "green"
+    },
+    {
+      title: "White",
+      value: "white"
+    },
+    {
+      title: "Blue",
+      value: "blue"
+    }
+  ]
   const dispatch = useDispatch()
   const [color, setColor] = useState('')
   const [product, setProduct] = useState('')
@@ -116,8 +137,8 @@ const CreateVariation = ({ history, match }) => {
             placeholder="Select A Color"
           >
             {colors?.map((color) => (
-              <Option key={color} value={color}>
-                {color}
+              <Option key={color.value} value={color.value}>
+                {color.title}
               </Option>
             ))}
           </Select>

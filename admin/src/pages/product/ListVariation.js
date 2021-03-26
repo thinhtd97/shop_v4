@@ -98,6 +98,9 @@ const ListVariation = ({ history, match }) => {
         loading={{ indicator: antIcon, spinning: loading }}
         columns={columns}
         dataSource={data}
+        pagination={{
+          pageSize: 4
+        }}
       />
     </>
   )

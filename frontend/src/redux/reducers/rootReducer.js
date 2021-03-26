@@ -1,6 +1,6 @@
 import currencyReducer from "./currencyReducer";
-import productReducer from "./productReducer";
 import cartReducer from "./cartReducer";
+import * as productReducer from './productReducer';
 import wishlistReducer from "./wishlistReducer";
 import compareReducer from "./compareReducer";
 import { combineReducers } from "redux";
@@ -17,7 +17,6 @@ import {
 const rootReducer = combineReducers({
   multilanguage: createMultilanguageReducer({ currentLanguageCode: "en" }),
   currencyData: currencyReducer,
-  productData: productReducer,
   cartData: cartReducer,
   wishlistData: wishlistReducer,
   compareData: compareReducer,
@@ -27,7 +26,8 @@ const rootReducer = combineReducers({
   newPassword: newPasswordReducer,
   userProfile: userProfileReducer,
   updateProfileReducer: userUpdateProfileReducer,
-  updatePasswordReducer: userUpdatePasswordReducer
+  updatePasswordReducer: userUpdatePasswordReducer,
+  listProduct: productReducer.listNewProductReducer
 });
 
 export default rootReducer;

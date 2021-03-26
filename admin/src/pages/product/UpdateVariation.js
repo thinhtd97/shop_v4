@@ -114,7 +114,7 @@ const UpdateVariation = ({ history, match }) => {
           <Link to="/product/list-products">List Product </Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to={`/product/list-variation/${productCurrent?.slug}`}>
+          <Link to={`/product/list-variation/${slugProduct}`}>
             List Variation
           </Link>
         </Breadcrumb.Item>

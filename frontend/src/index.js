@@ -31,9 +31,6 @@ const store = createStore(
 
 createSagaMiddleware.run(rootSaga);
 
-// fetch products from json file
-store.dispatch(fetchProducts(products));
-
 ReactDOM.render(
   <Provider store={store}>
     <App />

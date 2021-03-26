@@ -26,7 +26,7 @@ const HomeFashionThree = () => {
         {/* feature icon */}
         <FeatureIconTwo spaceTopClass="pt-100" spaceBottomClass="pb-60" />
         {/* product grid */}
-        <NewProductGrid limit={10} />
+        <NewProductGrid limit={10} category="new" />
         {/* blog featured */}
         <BlogFeatured spaceBottomClass="pb-55" />
       </LayoutOne>

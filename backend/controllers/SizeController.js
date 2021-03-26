@@ -1,11 +1,17 @@
 import Size from '../models/Size.js'
 import Variation from '../models/Variation.js'
+import Product from '../models/product.js';
 import asyncHandle from 'express-async-handler'
 
 export const createSize = asyncHandle(async (req, res) => {
-  const { stock, size } = req.body
+  let { stock, size } = req.body
   try {
     const variation = await Variation.findOne({ _id: req.params.variationId })
+    const updateProduct = await Product.findOne({ slug: req.params.slugProduct })
+    if(updateProduct) {
+      updateProduct.countInStock += Number(stock);
+      await updateProduct.save();
+    }
     if (variation) {
       const newSize = new Size({
         stock,
@@ -30,7 +36,12 @@ export const createSize = asyncHandle(async (req, res) => {
 })
 export const removeSize = asyncHandle(async (req, res) => {
   const size = await Size.findById(req.params.sizeId)
+  const productUpdate = await Product.findOne({ slug: req.params.slugProduct });
   try {
+    if(productUpdate) {
+        productUpdate.countInStock -= Number(size.stock);
+        await productUpdate.save();
+    }
     await Variation.updateOne(
       { _id: req.params.variationId },
       { $pull: { 'size': `${req.params.sizeId}` } },
@@ -64,13 +75,20 @@ export const detailSize = asyncHandle(async (req, res) => {
 export const updateSize = asyncHandle(async (req, res) => {
   const { size, stock } = req.body
   try {
+    const sizeOld = await Size.findOne({ _id: req.params.id });
+    const productUpdate = await Product.findOne({ slug: req.params.slugProduct });
+    if(productUpdate) {
+      productUpdate.countInStock -= Number(sizeOld.stock);
+      productUpdate.countInStock += Number(stock);
+      await productUpdate.save();
+    }
     const updated = await Size.findByIdAndUpdate(
       req.params.id,
       {
         size,
         stock,
       },
-      { new: true },
+      { new: true },  
     )
 
     res.json(updated)

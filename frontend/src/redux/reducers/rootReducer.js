@@ -2,6 +2,7 @@ import currencyReducer from "./currencyReducer";
 import cartReducer from "./cartReducer";
 import * as productReducer from './productReducer';
 import * as categoryReducer from './categoryReducer';
+import * as subReducer from './subReducer';
 import wishlistReducer from "./wishlistReducer";
 import compareReducer from "./compareReducer";
 import { combineReducers } from "redux";
@@ -31,7 +32,8 @@ const rootReducer = combineReducers({
   listNewProduct: productReducer.listNewProductReducer,
   detailProduct: productReducer.detailProductReducer,
   listProduct: productReducer.listProductReducer,
-  listCategories: categoryReducer.listCategories
+  listCategories: categoryReducer.listCategories,
+  listSub: subReducer.listSubs
 });
 
 export default rootReducer;

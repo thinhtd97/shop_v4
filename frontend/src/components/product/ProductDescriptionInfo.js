@@ -3,19 +3,15 @@ import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Rating from './sub-components/ProductRating'
 
-const ProductDescriptionInfo = ({
-  product,
-  discountedPrice,
-  subs
-}) => {
+const ProductDescriptionInfo = ({ product, discountedPrice, subs }) => {
   const [selectedProductColor, setSelectedProductColor] = useState(
     product.variation ? product.variation[0]?.color : '',
   )
   const [selectedProductSize, setSelectedProductSize] = useState(
-    product.variation ? product.variation[0]?.size[0].name : '',
+    product.variation ? product.variation[0]?.size[0]?.name : '',
   )
   const [productStock, setProductStock] = useState(
-    product.variation ? product.variation[0]?.size[0].stock : product.stock,
+    product.variation ? product.variation[0]?.size[0]?.stock : product.stock,
   )
   const [quantityCount, setQuantityCount] = useState(1)
 
@@ -25,11 +21,11 @@ const ProductDescriptionInfo = ({
       <div className="product-details-price">
         {discountedPrice !== null ? (
           <Fragment>
-            <span>{product.price.toFixed(2)}</span>{' '}
+            <span>${product.price.toFixed(2)}</span>{' '}
             <span className="old">${discountedPrice.toFixed(2)}</span>
           </Fragment>
         ) : (
-          <span>{product.price} </span>
+          <span>${product.price.toFixed(2)} </span>
         )}
       </div>
       {product.rating && product.rating > 0 ? (
@@ -65,8 +61,8 @@ const ProductDescriptionInfo = ({
                       }
                       onChange={() => {
                         setSelectedProductColor(single.color)
-                        setSelectedProductSize(single.size[0].name)
-                        setProductStock(single.size[0].stock)
+                        setSelectedProductSize(single.size[0]?.name)
+                        setProductStock(single.size[0]?.stock)
                         setQuantityCount(1)
                       }}
                     />
@@ -89,20 +85,21 @@ const ProductDescriptionInfo = ({
                             key={key}
                           >
                             <input
-                              type="radio"
-                              value={singleSize.name}
                               checked={
-                                singleSize.name === selectedProductSize
+                                singleSize.size === selectedProductSize
                                   ? 'checked'
                                   : ''
                               }
                               onChange={() => {
-                                setSelectedProductSize(singleSize.name)
-                                setProductStock(singleSize.stock)
+                                setSelectedProductSize(singleSize.size)
+                                setProductStock(single.size[0].stock)
                                 setQuantityCount(1)
                               }}
+                              type="radio"
+                              name="size"
+                              value={singleSize.size}
                             />
-                            <span className="size-name">{singleSize.name}</span>
+                            <span className="size-name">{singleSize.size}</span>
                           </label>
                         )
                       })
@@ -178,9 +175,7 @@ const ProductDescriptionInfo = ({
 
       <div className="pro-details-meta">
         <span>Categories :</span>
-        <ul>
-            {product.category.name}
-        </ul>
+        <ul>{product.category.name}</ul>
       </div>
       {product.subs ? (
         <div className="pro-details-meta">

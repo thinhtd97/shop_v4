@@ -5,14 +5,15 @@ import ProductGridListSingle from '../../components/product/ProductGridListSingl
 const ProductGrid = ({ sliderClassName, spaceBottomClass, products }) => {
   return (
     <Fragment>
-      {products && products.map((product, key) => (
-        <ProductGridListSingle
-          key={key}
-          product={product}
-          sliderClassName={sliderClassName}
-          spaceBottomClass={spaceBottomClass}
-        />
-      ))}
+      {products &&
+        products.map((product, key) => (
+          <ProductGridListSingle
+            key={key}
+            product={product}
+            sliderClassName={sliderClassName}
+            spaceBottomClass={spaceBottomClass}
+          />
+        ))}
     </Fragment>
   )
 }

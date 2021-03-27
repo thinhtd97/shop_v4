@@ -6,7 +6,7 @@ const ShopProducts = ({ layout, products }) => {
   return (
     <div className="shop-bottom-area mt-35">
       <div className={`row ${layout ? layout : ''}`}>
-        <ProductgridList products={products} spaceBottomClass="mb-25" />
+        <ProductgridList  products={products} spaceBottomClass="mb-25" />
       </div>
     </div>
   )

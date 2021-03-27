@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { setActiveSort } from '../../helpers/product'
 
-const ShopColor = ({ colors }) => {
+const ShopColor = ({ colors, getSortParams }) => {
   return (
     <div className="sidebar-widget mt-50">
       <h4 className="pro-sidebar-title">Color </h4>
@@ -13,6 +13,7 @@ const ShopColor = ({ colors }) => {
               <div className="sidebar-widget-list-left">
                 <button
                   onClick={(e) => {
+                    getSortParams("color", "")
                     setActiveSort(e)
                   }}
                 >
@@ -26,6 +27,7 @@ const ShopColor = ({ colors }) => {
                   <div className="sidebar-widget-list-left">
                     <button
                       onClick={(e) => {
+                        getSortParams("color", color)
                         setActiveSort(e)
                       }}
                     >

@@ -1,6 +1,6 @@
 import * as subConstant from '../constants/subConstant';
 
-export const listCategories = (state = {}, action) => {
+export const listSubs = (state = {}, action) => {
     switch(action.type) {
         case subConstant.SUB_LIST_REQUEST:
             return { loading: true }

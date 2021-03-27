@@ -4,13 +4,16 @@ import ShopTopAction from "../../components/product/ShopTopAction";
 
 const ShopTopbar = ({
   getLayout,
+  getFilterSortParams,
 }) => {
   return (
     <Fragment>
       {/* shop top action */}
       <ShopTopAction
+        getFilterSortParams={getFilterSortParams}
         getLayout={getLayout}
       />
+      
     </Fragment>
   );
 };

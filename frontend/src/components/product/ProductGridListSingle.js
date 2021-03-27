@@ -22,7 +22,7 @@ const ProductGridListSingle = ({
           className={`product-wrap ${spaceBottomClass ? spaceBottomClass : ''}`}
         >
           <div className="product-img">
-            <Link to="#">
+            <Link to={`/product/${product.slug}`}>
               <img className="default-img" src={product.image[0].url} alt="" />
               {product.image.length > 1 ? (
                 <img className="hover-img" src={product.image[1].url} alt="" />
@@ -70,7 +70,7 @@ const ProductGridListSingle = ({
           </div>
           <div className="product-content text-center">
             <h3>
-              <Link to="#">{product.name}</Link>
+              <Link to={`/product/${product.slug}`}>{product.name}</Link>
             </h3>
 
             <div className="product-rating">
@@ -80,7 +80,7 @@ const ProductGridListSingle = ({
             <div className="product-price">
               {product.discount !== 0 ? (
                 <Fragment>
-                  <span>${discountPrice}</span>{' '}
+                  <span>${discountPrice.toFixed(2)}</span>{' '}
                   <span className="old">${product.price.toFixed(2)}</span>
                 </Fragment>
               ) : (
@@ -108,7 +108,7 @@ const ProductGridListSingle = ({
                       alt=""
                     />
                   </Link>
-                  {product.newLaunced || product.discount ? (
+                  {product.newLaunced || product.discount !== 0 ? (
                     <div className="product-img-badges">
                       {product.discount && (
                         <span className="pink">
@@ -129,13 +129,13 @@ const ProductGridListSingle = ({
             <div className="col-xl-8 col-md-7 col-sm-6">
               <div className="shop-list-content">
                 <h3>
-                  <Link to="#">{product.name}</Link>
+                  <Link to={`/product/${product.slug}`}>{product.name}</Link>
                 </h3>
                 {product.newLaunced || product.discount ? (
                   <div className="product-list-price">
                     {product.discount && (
                       <Fragment>
-                        <span>${discountPrice.toFixed(2)}</span> <span className="old">${product.price}</span>
+                        <span>${discountPrice.toFixed(2)}</span> <span className="old">${product.price.toFixed(2)}</span>
                       </Fragment>
                     )}
                     {product.newLaunced && <span className="purple">New</span>}

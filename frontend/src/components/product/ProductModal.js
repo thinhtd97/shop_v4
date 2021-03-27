@@ -112,7 +112,7 @@ function ProductModal(props) {
                       <span className="old">${product.price.toFixed(2)}</span>
                     </Fragment>
                   ) : (
-                    <span>{product.price.toFixed(2)}</span>
+                    <span>${product.price.toFixed(2)}</span>
                   )}
                 </div>
                 <div className="pro-details-rating-wrap">

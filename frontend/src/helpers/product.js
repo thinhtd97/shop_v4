@@ -2,228 +2,264 @@
 export const getProducts = (products, category, type, limit) => {
   const finalProducts = category
     ? products.filter(
-        product => product.category.filter(single => single === category)[0]
+        (product) =>
+          product.category.filter((single) => single === category)[0],
       )
-    : products;
+    : products
 
-  if (type && type === "new") {
-    const newProducts = finalProducts.filter(single => single.new);
-    return newProducts.slice(0, limit ? limit : newProducts.length);
+  if (type && type === 'new') {
+    const newProducts = finalProducts.filter((single) => single.new)
+    return newProducts.slice(0, limit ? limit : newProducts.length)
   }
-  if (type && type === "bestSeller") {
+  if (type && type === 'bestSeller') {
     return finalProducts
       .sort((a, b) => {
-        return b.saleCount - a.saleCount;
+        return b.saleCount - a.saleCount
       })
-      .slice(0, limit ? limit : finalProducts.length);
+      .slice(0, limit ? limit : finalProducts.length)
   }
-  if (type && type === "saleItems") {
+  if (type && type === 'saleItems') {
     const saleItems = finalProducts.filter(
-      single => single.discount && single.discount > 0
-    );
-    return saleItems.slice(0, limit ? limit : saleItems.length);
+      (single) => single.discount && single.discount > 0,
+    )
+    return saleItems.slice(0, limit ? limit : saleItems.length)
   }
-  return finalProducts.slice(0, limit ? limit : finalProducts.length);
-};
+  return finalProducts.slice(0, limit ? limit : finalProducts.length)
+}
 
 // get product discount price
 export const getDiscountPrice = (price, discount) => {
-  return discount && discount > 0 ? price - price * (discount / 100) : null;
-};
+  return discount && discount > 0 ? price - price * (discount / 100) : null
+}
 
 // get product cart quantity
 export const getProductCartQty = (cartItems, product, color, size) => {
   let productInCart = cartItems.filter(
-    single =>
+    (single) =>
       single.id === product.id &&
       (single.selectedProductColor
         ? single.selectedProductColor === color
         : true) &&
-      (single.selectedProductSize ? single.selectedProductSize === size : true)
-  )[0];
+      (single.selectedProductSize ? single.selectedProductSize === size : true),
+  )[0]
   if (cartItems.length >= 1 && productInCart) {
     if (product.variation) {
       return cartItems.filter(
-        single =>
+        (single) =>
           single.id === product.id &&
           single.selectedProductColor === color &&
-          single.selectedProductSize === size
-      )[0].quantity;
+          single.selectedProductSize === size,
+      )[0].quantity
     } else {
-      return cartItems.filter(single => product.id === single.id)[0].quantity;
+      return cartItems.filter((single) => product.id === single.id)[0].quantity
     }
   } else {
-    return 0;
+    return 0
   }
-};
+}
 
 //get products based on category
 export const getSortedProducts = (products, sortType, sortValue) => {
   if (products && sortType && sortValue) {
-    if (sortType === "category") {
+    if (sortType === 'category') {
       return products.filter(
-        product => product.category.filter(single => single === sortValue)[0]
-      );
+        // product => product.filter(single => single.name === sortValue)[0]
+        (product) => product.category.name === sortValue,
+      )
     }
-    if (sortType === "tag") {
+    if (sortType === 'tag') {
       return products.filter(
-        product => product.tag.filter(single => single === sortValue)[0]
-      );
+        (product) =>
+          product.subs.filter((single) => single.name === sortValue)[0],
+      )
     }
-    if (sortType === "color") {
+    if (sortType === 'color') {
       return products.filter(
-        product =>
+        (product) =>
           product.variation &&
-          product.variation.filter(single => single.color === sortValue)[0]
-      );
+          product.variation.filter((single) => single.color === sortValue)[0],
+      )
     }
-    if (sortType === "size") {
+    if (sortType === 'size') {
       return products.filter(
-        product =>
+        (product) =>
           product.variation &&
           product.variation.filter(
-            single => single.size.filter(single => single.name === sortValue)[0]
-          )[0]
-      );
+            (single) =>
+              single.size.filter((single) => single.size === sortValue)[0],
+          )[0],
+      )
     }
-    if (sortType === "filterSort") {
-      let sortProducts = [...products];
-      if (sortValue === "default") {
-        return sortProducts;
+    if (sortType === 'filterSort') {
+      let sortProducts = [...products]
+      if (sortValue === 'default') {
+        return sortProducts
       }
-      if (sortValue === "priceHighToLow") {
+      if (sortValue === 'priceHighToLow') {
         return sortProducts.sort((a, b) => {
-          return b.price - a.price;
-        });
+          return b.price - a.price
+        })
       }
-      if (sortValue === "priceLowToHigh") {
+      if (sortValue === 'priceLowToHigh') {
         return sortProducts.sort((a, b) => {
-          return a.price - b.price;
-        });
+          return a.price - b.price
+        })
       }
+    }
+    if (sortType === 'filterPrice') {
+      let sortProduct = [...products]
+      if (sortValue === '0to200') {
+        return sortProduct.filter(
+          (product) => product.price > 0 && product.price <= 200,
+        )
+      }
+      if (sortValue === '201to400') {
+        return sortProduct.filter(
+          (product) => product.price > 200 && product.price <= 400,
+        )
+      }
+      if (sortValue === '401to800') {
+        return sortProduct.filter(
+          (product) => product.price > 400 && product.price <= 800,
+        )
+      }
+      if (sortValue === '800tomax') {
+        return sortProduct.filter((product) => product.price > 800)
+      }
+    }
+
+    if (sortType === 'brand') {
+      let sortProduct = [...products]
+      return sortProduct.filter(
+        // product => product.filter(single => single.name === sortValue)[0]
+        (product) => product.brand === sortValue,
+      )
+    }
+    if(sortType === 'searchQuery') {
+        return products.filter(product => {
+            let productName = product.name.toLowerCase()
+            return productName.includes(sortValue.toLowerCase())
+        })
     }
   }
-  return products;
-};
+  return products
+}
 
 // get unique element
-const getUniqueElemArray = array => {
-  let uniqueElemArray = array.filter(function(v, i, self) {
-    return i === self.indexOf(v);
-  });
-  return uniqueElemArray;
-};
+const getUniqueElemArray = (array) => {
+  let uniqueElemArray = array.filter(function (v, i, self) {
+    return i === self.indexOf(v)
+  })
+  return uniqueElemArray
+}
 
 // get unique categories
-export const getUniqueCategories = products => {
-  let productCategories = [];
+export const getUniqueCategories = (products) => {
+  let productCategories = []
   products &&
-    products.map(product => {
+    products.map((product) => {
       return (
         product.category &&
-        product.category.map(single => {
-          return productCategories.push(single);
+        product.category.map((single) => {
+          return productCategories.push(single)
         })
-      );
-    });
-  const uniqueProductCategories = getUniqueElemArray(productCategories);
-  return uniqueProductCategories;
-};
+      )
+    })
+  const uniqueProductCategories = getUniqueElemArray(productCategories)
+  return uniqueProductCategories
+}
 
 // get unique tags
-export const getUniqueTags = products => {
-  let productTags = [];
+export const getUniqueTags = (products) => {
+  let productTags = []
   products &&
-    products.map(product => {
+    products.map((product) => {
       return (
-        product.tag &&
-        product.tag.map(single => {
-          return productTags.push(single);
+        product.subs &&
+        product.subs.map((single) => {
+          return productTags.push(single)
         })
-      );
-    });
-  const uniqueProductTags = getUniqueElemArray(productTags);
-  return uniqueProductTags;
-};
+      )
+    })
+  const uniqueProductTags = getUniqueElemArray(productTags)
+  return uniqueProductTags
+}
 
 // get unique colors
-export const getUniqueColors = products => {
-  let productColors = [];
+export const getUniqueColors = (products) => {
+  let productColors = []
   products &&
-    products.map(product => {
+    products.map((product) => {
       return (
         product.variation &&
-        product.variation.map(single => {
-          return productColors.push(single.color);
+        product.variation.map((single) => {
+          return productColors.push(single)
         })
-      );
-    });
-  const uniqueProductColors = getUniqueElemArray(productColors);
-  return uniqueProductColors;
-};
+      )
+    })
+  const uniqueProductColors = getUniqueElemArray(productColors)
+  return uniqueProductColors
+}
 
 // get unique sizes
-export const getProductsUniqueSizes = products => {
-  let productSizes = [];
+export const getProductsUniqueSizes = (products) => {
+  let productSizes = []
   products &&
-    products.map(product => {
+    products.map((product) => {
       return (
         product.variation &&
-        product.variation.map(single => {
-          return single.size.map(single => {
-            return productSizes.push(single.name);
-          });
+        product.variation.map((single) => {
+          return single.size.map((single) => {
+            return productSizes.push(single)
+          })
         })
-      );
-    });
-  const uniqueProductSizes = getUniqueElemArray(productSizes);
-  return uniqueProductSizes;
-};
+      )
+    })
+  const uniqueProductSizes = getUniqueElemArray(productSizes)
+  return uniqueProductSizes
+}
 
 // get product unique sizes
-export const getUniqueSizes = product => {
-  let productSizes = [];
+export const getUniqueSizes = (product) => {
+  let productSizes = []
   product.variation &&
-    product.variation.map(singleVariation => {
+    product.variation.map((singleVariation) => {
       return (
         singleVariation.size &&
-        singleVariation.size.map(singleSize => {
-          return productSizes.push(singleSize.name);
+        singleVariation.size.map((singleSize) => {
+          return productSizes.push(singleSize)
         })
-      );
-    });
-  const uniqueProductSizes = getUniqueElemArray(productSizes);
-  return uniqueProductSizes;
-};
+      )
+    })
+  const uniqueProductSizes = getUniqueElemArray(productSizes)
+  return uniqueProductSizes
+}
 
-export const setActiveSort = e => {
+export const setActiveSort = (e) => {
   const filterButtons = document.querySelectorAll(
-    ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
-  );
-  filterButtons.forEach(elem => {
-    elem.classList.remove("active");
-  });
-  e.currentTarget.classList.add("active");
-};
+    '.sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button',
+  )
+  filterButtons.forEach((elem) => {
+    elem.classList.remove('active')
+  })
+  e.currentTarget.classList.add('active')
+}
 
-export const setActiveLayout = e => {
-  const gridSwitchBtn = document.querySelectorAll(".shop-tab button");
-  gridSwitchBtn.forEach(elem => {
-    elem.classList.remove("active");
-  });
-  e.currentTarget.classList.add("active");
-};
+export const setActiveLayout = (e) => {
+  const gridSwitchBtn = document.querySelectorAll('.shop-tab button')
+  gridSwitchBtn.forEach((elem) => {
+    elem.classList.remove('active')
+  })
+  e.currentTarget.classList.add('active')
+}
 
-export const toggleShopTopFilter = e => {
-  const shopTopFilterWrapper = document.querySelector(
-    "#product-filter-wrapper"
-  );
-  shopTopFilterWrapper.classList.toggle("active");
+export const toggleShopTopFilter = (e) => {
+  const shopTopFilterWrapper = document.querySelector('#product-filter-wrapper')
+  shopTopFilterWrapper.classList.toggle('active')
   if (shopTopFilterWrapper.style.height) {
-    shopTopFilterWrapper.style.height = null;
+    shopTopFilterWrapper.style.height = null
   } else {
-    shopTopFilterWrapper.style.height =
-      shopTopFilterWrapper.scrollHeight + "px";
+    shopTopFilterWrapper.style.height = shopTopFilterWrapper.scrollHeight + 'px'
   }
-  e.currentTarget.classList.toggle("active");
-};
+  e.currentTarget.classList.toggle('active')
+}

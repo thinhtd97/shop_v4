@@ -75,7 +75,7 @@ const App = (props) => {
                   />
                   {/* Shop product pages */}
                   <Route
-                    path={process.env.PUBLIC_URL + '/product/:id'}
+                    path={process.env.PUBLIC_URL + '/product/:slug'}
                     component={ProductTabLeft}
                   />
                   {/* Blog pages */}

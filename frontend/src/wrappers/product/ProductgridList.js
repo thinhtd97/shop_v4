@@ -2,13 +2,17 @@ import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
 import ProductGridListSingle from '../../components/product/ProductGridListSingle'
 
-const ProductGrid = ({ sliderClassName, spaceBottomClass }) => {
+const ProductGrid = ({ sliderClassName, spaceBottomClass, products }) => {
   return (
     <Fragment>
-      <ProductGridListSingle
-        sliderClassName={sliderClassName}
-        spaceBottomClass={spaceBottomClass}
-      />
+      {products && products.map((product, key) => (
+        <ProductGridListSingle
+          key={key}
+          product={product}
+          sliderClassName={sliderClassName}
+          spaceBottomClass={spaceBottomClass}
+        />
+      ))}
     </Fragment>
   )
 }

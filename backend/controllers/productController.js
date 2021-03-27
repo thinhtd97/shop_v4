@@ -79,6 +79,7 @@ export const read = asyncHandle(async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug })
     .populate('category', '_id name')
     .populate('variation')
+    .populate('subs', '_id name')
     .populate({
       path: 'variation',
       model: 'Variation',
@@ -87,13 +88,6 @@ export const read = asyncHandle(async (req, res) => {
         model: 'Size',
       },
     })
-  if (product.variation.size) {
-    const sumStock = product.variation.size.reduce((acc, cur) => {
-      return acc + cur.stock
-    }, 0)
-    product.countInStock = sumStock
-    await product.save()
-  }
   res.json(product)
 })
 export const update = asyncHandle(async (req, res) => {

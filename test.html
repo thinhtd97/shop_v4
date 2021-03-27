@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    var data = [
+      {
+        variation: {
+          color: 'Sliver',
+          size: [
+            {
+              size: 'S',
+              stock: 5,
+            },
+            {
+              size: 'M',
+              stock: 3,
+            },
+          ],
+        },
+      },
+      {
+        variation: {
+          color: 'Sliver',
+          size: [
+            {
+              size: 'S',
+              stock: 5,
+            },
+            {
+              size: 'M',
+              stock: 9,
+            },
+          ],
+        },
+      },
+    ]
+    var sum = 0
+    for(var i = 0; i <= data.length; i++) {
+        for(let j = 0; j <= data[i].variation.size.length; j++) {
+           console.log(data[i].variation.size[j].stock) 
+        }
+    }
+    // const sum = data[1].variation.size.reduce((acc, cur) => {
+    //   return acc + cur.stock
+    // }, 0)
+    console.log(sum)
+  </script>
+</html>

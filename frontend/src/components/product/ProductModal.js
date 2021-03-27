@@ -127,7 +127,7 @@ function ProductModal(props) {
                 {product.variation ? (
                   <div className="pro-details-size-color">
                     <div className="pro-details-color-wrap">
-                      <span>Color</span>
+                      {product.variation.length > 0 && <span>Color</span>}   
                       <div className="pro-details-color-content">
                         {product.variation.map((single, key) => (
                           <label
@@ -155,7 +155,7 @@ function ProductModal(props) {
                       </div>
                     </div>
                     <div className="pro-details-size">
-                      <span>Size</span>
+                      {product.variation.length > 0 && <span>Size</span>}
                       <div className="pro-details-size-content">
                         {product.variation &&
                           product.variation.map((single, key) => {
@@ -227,6 +227,7 @@ function ProductModal(props) {
                   </div>
                   <div className="pro-details-cart btn-hover">
                     <button> Add To Cart </button>
+                    
                     {/* <button disabled>Out of Stock</button> */}
                   </div>
                   <div className="pro-details-wishlist">

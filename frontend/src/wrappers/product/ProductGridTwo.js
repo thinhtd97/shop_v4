@@ -5,7 +5,7 @@ import ProductGridSingleTwo from '../../components/product/ProductGridSingleTwo'
 import { listNewProductAction } from '../../redux/actions/productActions'
 const ProductGridTwo = ({ sliderClassName, spaceBottomClass, category }) => {
   const dispatch = useDispatch()
-  const { products } = useSelector((state) => state.listProduct)
+  const { products } = useSelector((state) => state.listNewProduct)
   useEffect(() => {
     dispatch(listNewProductAction())
   }, [dispatch])

@@ -7,7 +7,7 @@ import thunk from "redux-thunk";
 import sagaMiddleware from "redux-saga";
 import { save, load } from "redux-localstorage-simple";
 import { Provider } from "react-redux";
-import { fetchProducts } from "./redux/actions/productActions";
+import { listProductAction } from "./redux/actions/productActions";
 import rootReducer from "./redux/reducers/rootReducer";
 import products from "./data/products.json";
 import App from "./App";
@@ -28,6 +28,8 @@ const store = createStore(
   load(),
   composeWithDevTools(applyMiddleware(...middleware, save()))
 );
+
+store.dispatch(listProductAction())
 
 createSagaMiddleware.run(rootSaga);
 

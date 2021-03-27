@@ -2,9 +2,9 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { setActiveSort } from '../../helpers/product'
 
-const ShopCategories = ({ getSortParams }) => {
+const ShopCategories = ({ getSortParams, categories }) => {
   const text = () => {
-    console.log('test');
+    console.log('test')
   }
   return (
     <div className="sidebar-widget">
@@ -22,43 +22,20 @@ const ShopCategories = ({ getSortParams }) => {
               </button>
             </div>
           </li>
-
-          <li>
-            <div className="sidebar-widget-list-left">
-              <button
-                onClick={(e) => {
-                  setActiveSort(e)
-                }}
-              >
-                {' '}
-                <span className="checkmark" /> Men{' '}
-              </button>
-            </div>
-          </li>
-          <li>
-            <div className="sidebar-widget-list-left">
-              <button
-                onClick={(e) => {
-                  setActiveSort(e)
-                }}
-              >
-                {' '}
-                <span className="checkmark" /> Kids{' '}
-              </button>
-            </div>
-          </li>
-          <li>
-            <div className="sidebar-widget-list-left">
-              <button
-                onClick={(e) => {
-                  setActiveSort(e)
-                }}
-              >
-                {' '}
-                <span className="checkmark" /> Women{' '}
-              </button>
-            </div>
-          </li>
+          {categories?.map((single, key) => (
+            <li key={key}>
+              <div className="sidebar-widget-list-left">
+                <button
+                  onClick={(e) => {
+                    setActiveSort(e)
+                  }}
+                >
+                  {' '}
+                  <span className="checkmark" /> {single.name}{' '}
+                </button>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

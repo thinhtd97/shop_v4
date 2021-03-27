@@ -2,10 +2,15 @@ import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Rating from './sub-components/ProductRating'
 import ProductModal from './ProductModal'
+import { getDiscountPrice } from '../../helpers/product.js'
 
-const ProductGridListSingle = ({ sliderClassName, spaceBottomClass }) => {
+const ProductGridListSingle = ({
+  sliderClassName,
+  spaceBottomClass,
+  product,
+}) => {
   const [modalShow, setModalShow] = useState(false)
-
+  const discountPrice = getDiscountPrice(product.price, product.discount)
   return (
     <Fragment>
       <div
@@ -18,23 +23,25 @@ const ProductGridListSingle = ({ sliderClassName, spaceBottomClass }) => {
         >
           <div className="product-img">
             <Link to="#">
-              <img
-                className="default-img"
-                src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                alt=""
-              />
-
-              <img
-                className="hover-img"
-                src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                alt=""
-              />
+              <img className="default-img" src={product.image[0].url} alt="" />
+              {product.image.length > 1 ? (
+                <img className="hover-img" src={product.image[1].url} alt="" />
+              ) : (
+                ''
+              )}
             </Link>
-            <div className="product-img-badges">
-              <span className="pink">-10%</span>
+            {product.discount || product.newLaunced ? (
+              <div className="product-img-badges">
+                {product.discount && (
+                  <span className="pink">-{product.discount}%</span>
+                )}
 
-              <span className="purple">New</span>
-            </div>
+                {product.newLaunced && <span className="purple">New</span>}
+              </div>
+            ) : (
+              ''
+            )}
+
             <div className="product-action">
               <div className="pro-same-action pro-wishlist">
                 <button title="Add to wishlist">
@@ -42,7 +49,10 @@ const ProductGridListSingle = ({ sliderClassName, spaceBottomClass }) => {
                 </button>
               </div>
               <div className="pro-same-action pro-cart">
-                <button title="Add to cart">
+                <button
+                  title="Add to cart"
+                  disabled={product.countInStock === 0}
+                >
                   {' '}
                   <i className="pe-7s-cart"></i> Add to cart
                 </button>
@@ -60,7 +70,7 @@ const ProductGridListSingle = ({ sliderClassName, spaceBottomClass }) => {
           </div>
           <div className="product-content text-center">
             <h3>
-              <Link to="#">Product 1</Link>
+              <Link to="#">{product.name}</Link>
             </h3>
 
             <div className="product-rating">
@@ -68,9 +78,14 @@ const ProductGridListSingle = ({ sliderClassName, spaceBottomClass }) => {
             </div>
 
             <div className="product-price">
-              <Fragment>
-                <span>$10</span> <span className="old">$20</span>
-              </Fragment>
+              {product.discount !== 0 ? (
+                <Fragment>
+                  <span>${discountPrice}</span>{' '}
+                  <span className="old">${product.price.toFixed(2)}</span>
+                </Fragment>
+              ) : (
+                <span>${product.price.toFixed(2)}</span>
+              )}
             </div>
           </div>
         </div>
@@ -79,36 +94,55 @@ const ProductGridListSingle = ({ sliderClassName, spaceBottomClass }) => {
             <div className="col-xl-4 col-md-5 col-sm-6">
               <div className="product-list-image-wrap">
                 <div className="product-img">
-                  <Link to="#">
+                  <Link
+                    to={process.env.PUBLIC_URL + '/product/' + product.slug}
+                  >
                     <img
                       className="default-img img-fluid"
-                      src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
+                      src={product.image[0].url}
                       alt=""
                     />
                     <img
                       className="hover-img img-fluid"
-                      src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
+                      src={product.image[1].url}
                       alt=""
                     />
                   </Link>
-                  <div className="product-img-badges">
-                    <span className="pink">-10%</span>
+                  {product.newLaunced || product.discount ? (
+                    <div className="product-img-badges">
+                      {product.discount && (
+                        <span className="pink">
+                          -{product.discount.toFixed(2)}%
+                        </span>
+                      )}
 
-                    <span className="purple">New</span>
-                  </div>
+                      {product.newLaunced && (
+                        <span className="purple">New</span>
+                      )}
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>
             <div className="col-xl-8 col-md-7 col-sm-6">
               <div className="shop-list-content">
                 <h3>
-                  <Link to="#">Product 1</Link>
+                  <Link to="#">{product.name}</Link>
                 </h3>
-                <div className="product-list-price">
-                  <Fragment>
-                    <span>$10</span> <span className="old">$16</span>
-                  </Fragment>
-                </div>
+                {product.newLaunced || product.discount ? (
+                  <div className="product-list-price">
+                    {product.discount && (
+                      <Fragment>
+                        <span>${discountPrice.toFixed(2)}</span> <span className="old">${product.price}</span>
+                      </Fragment>
+                    )}
+                    {product.newLaunced && <span className="purple">New</span>}
+                  </div>
+                ) : (
+                  ''
+                )}
 
                 <div className="rating-review">
                   <div className="product-list-rating">
@@ -116,13 +150,7 @@ const ProductGridListSingle = ({ sliderClassName, spaceBottomClass }) => {
                   </div>
                 </div>
 
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
-                </p>
+                <p>{product.description}</p>
 
                 <div className="shop-list-actions d-flex align-items-center">
                   <div className="shop-list-btn btn-hover">
@@ -149,7 +177,7 @@ const ProductGridListSingle = ({ sliderClassName, spaceBottomClass }) => {
         </div>
       </div>
       {/* product modal */}
-      <ProductModal show={modalShow} onHide={() => setModalShow(false)} />
+      <ProductModal product={product} show={modalShow} onHide={() => setModalShow(false)} />
     </Fragment>
   )
 }

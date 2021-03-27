@@ -6,17 +6,17 @@ import ShopColor from '../../components/product/ShopColor'
 import ShopSize from '../../components/product/ShopSize'
 import ShopTag from '../../components/product/ShopTag'
 
-const ShopSidebar = ({ sideSpaceClass }) => {
+const ShopSidebar = ({ sideSpaceClass, colors, categories }) => {
   return (
     <div className={`sidebar-style ${sideSpaceClass ? sideSpaceClass : ''}`}>
       {/* shop search */}
       <ShopSearch />
 
       {/* filter by categories */}
-      <ShopCategories />
+      <ShopCategories categories={categories} />
 
       {/* filter by color */}
-      <ShopColor />
+      <ShopColor colors={colors} />
 
       {/* filter by size */}
       <ShopSize />

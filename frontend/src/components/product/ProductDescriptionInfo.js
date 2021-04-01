@@ -25,7 +25,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice, subs }) => {
             <span className="old">${discountedPrice.toFixed(2)}</span>
           </Fragment>
         ) : (
-          <span>${product.price.toFixed(2)} </span>
+          <span>${product.price?.toFixed(2)} </span>
         )}
       </div>
       {product.rating && product.rating > 0 ? (
@@ -175,7 +175,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice, subs }) => {
 
       <div className="pro-details-meta">
         <span>Categories :</span>
-        <ul>{product.category.name}</ul>
+        <ul>{product.category?.name}</ul>
       </div>
       {product.subs ? (
         <div className="pro-details-meta">

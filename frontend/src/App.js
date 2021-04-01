@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic'
 
 // home pages
-const HomeFashion = lazy(() => import('./pages/home/HomeFashionThree'))
+const HomeFashion = lazy(() => import('./pages/home/HomeFashionFour'))
 
 // shop pages
 const ShopGridTwoColumn = lazy(() => import('./pages/shop/ShopGridTwoColumn'))

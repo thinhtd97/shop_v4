@@ -1,55 +1,76 @@
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-const MenuCart = () => {
+const MenuCart = ({ cartItems, removeFromCart }) => {
+  let cartToTalPrice = 0
+
   return (
     <div className="shopping-cart-content">
       <Fragment>
         <ul>
-          <li className="single-shopping-cart">
-            <div className="shopping-cart-img">
-              <Link to="#">
-                <img
-                  alt=""
-                  src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616672666/pt1ofj5xtbz6itbmhwet.jpg"
-                  className="img-fluid"
-                />
+          {cartItems &&
+            cartItems.map((item, key) => {
+              item.priceDiscount !== 0
+                ? (cartToTalPrice += item.priceDiscount * item.qty)
+                : (cartToTalPrice += item.price * item.qty)
+              return (
+                <li key={key} className="single-shopping-cart">
+                  <div className="shopping-cart-img">
+                    <Link to="#">
+                      <img alt="" src={item.image} className="img-fluid" />
+                    </Link>
+                  </div>
+                  <div className="shopping-cart-title">
+                    <h4>
+                      <Link to="#"> {item.name}</Link>
+                    </h4>
+                    <h6>Qty: {item.qty}</h6>
+                    <span>
+                      $
+                      {item.priceDiscount !== 0
+                        ? item.priceDiscount.toFixed(2)
+                        : item.price.toFixed(2)}
+                    </span>
+                    {item.color !== '' ||
+                      (item.size !== '' && (
+                        <div className="cart-item-variation">
+                          {item.color && <span>Color: {item.color}</span>}
+
+                          {item.size && <span>Size: {item.size}</span>}
+                        </div>
+                      ))}
+                  </div>
+                  <div className="shopping-cart-delete">
+                    <button onClick={() => removeFromCart(item)}>
+                      <i className="fa fa-times-circle" />
+                    </button>
+                  </div>
+                </li>
+              )
+            })}
+        </ul>
+
+        {cartItems.length === 0 ? (
+          <p style={{marginTop: '-20px'}} className="text-center">No items added to cart</p>
+        ) : (
+          <>
+            <div className="shopping-cart-total">
+              <h4>
+                Total :{' '}
+                <span className="shop-total">${cartToTalPrice.toFixed(2)}</span>
+              </h4>
+            </div>
+            <div className="shopping-cart-btn btn-hover text-center">
+              <Link className="default-btn" to="/cart">
+                view cart
+              </Link>
+              <Link className="default-btn" to="#">
+                checkout
               </Link>
             </div>
-            <div className="shopping-cart-title">
-              <h4>
-                <Link to="#"> Product 1</Link>
-              </h4>
-              <h6>Qty: 1</h6>
-              <span>$23</span>
-
-              <div className="cart-item-variation">
-                <span>Color: red</span>
-                <span>Size: S</span>
-              </div>
-            </div>
-            <div className="shopping-cart-delete">
-              <button>
-                <i className="fa fa-times-circle" />
-              </button>
-            </div>
-          </li>
-        </ul>
-        <div className="shopping-cart-total">
-          <h4>
-            Total : <span className="shop-total">$20</span>
-          </h4>
-        </div>
-        <div className="shopping-cart-btn btn-hover text-center">
-          <Link className="default-btn" to="#">
-            view cart
-          </Link>
-          <Link className="default-btn" to="#">
-            checkout
-          </Link>
-        </div>
+          </>
+        )}
       </Fragment>
-      {/* <p className="text-center">No items added to cart</p> */}
     </div>
   )
 }

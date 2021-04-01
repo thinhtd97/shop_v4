@@ -3,13 +3,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import MenuCart from './sub-components/MenuCart'
-import { removeFromCart } from '../../redux/actions/cartActions'
+import { removeItem } from '../../redux/actions/cartActions'
 import { useSelector } from 'react-redux'
-import { logoutAction } from '../../redux/actions/userActions';
+import { logoutAction } from '../../redux/actions/userActions'
 
-const IconGroup = ({
-  iconWhiteClass,
-}) => {
+const IconGroup = ({ iconWhiteClass }) => {
   const { userInfo } = useSelector((state) => state.userLogin)
   const dispatch = useDispatch()
   const handleClick = (e) => {
@@ -26,33 +24,21 @@ const IconGroup = ({
     dispatch(logoutAction())
   }
 
-  const removeItemFromCart = (item, addToast) => {
-      dispatch(removeFromCart(item, addToast))
+  const { cartItems } = useSelector((state) => state.cart)
+
+  const removeCartItem = (item) => {
+    dispatch(removeItem(item))
   }
 
   const currency = useSelector((state) => state.currencyData)
   const cartData = useSelector((state) => state.cartData)
   const wishlistData = useSelector((state) => state.wishlistData)
-  const compareData = useSelector((state) => state.compareData)
 
   return (
     <div
       className={`header-right-wrap ${iconWhiteClass ? iconWhiteClass : ''}`}
     >
-      <div className="same-style header-search d-none d-lg-block">
-        <button className="search-active" onClick={(e) => handleClick(e)}>
-          <i className="pe-7s-search" />
-        </button>
-        <div className="search-content">
-          <form action="#">
-            <input type="text" placeholder="Search" />
-            <button className="button-search">
-              <i className="pe-7s-search" />
-            </button>
-          </form>
-        </div>
-      </div>
-      {userInfo && (
+      {userInfo ? (
         <>
           <div
             style={{ margin: '0' }}
@@ -88,29 +74,38 @@ const IconGroup = ({
             </Link>
           </div>
         </>
+      ) : (
+        <div className="same-style account-setting d-none d-lg-block">
+          <button
+            className="account-setting-active"
+            onClick={(e) => handleClick(e)}
+          >
+            <i className="pe-7s-user-female" />
+          </button>
+          <div className="account-dropdown">
+            <ul>
+              <li>
+                <Link to={process.env.PUBLIC_URL + '/login-register'}>
+                  Login/Register
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
       )}
-
-      <div className="same-style header-compare">
-        <Link to={process.env.PUBLIC_URL + '/compare'}>
-          <i className="pe-7s-shuffle" />
-          <span className="count-style">
-            {compareData && compareData.length ? compareData.length : 0}
-          </span>
-        </Link>
-      </div>
 
       <div className="same-style cart-wrap d-none d-lg-block">
         <button className="icon-cart" onClick={(e) => handleClick(e)}>
           <i className="pe-7s-shopbag" />
           <span className="count-style">
-            {cartData && cartData.length ? cartData.length : 0}
+            {cartItems && cartItems.length ? cartItems.length : 0}
           </span>
         </button>
         {/* menu cart */}
         <MenuCart
-          cartData={cartData}
+          cartItems={cartItems}
           currency={currency}
-          removeFromCart={removeItemFromCart}
+          removeFromCart={removeCartItem}
         />
       </div>
       <div className="same-style cart-wrap d-block d-lg-none">

@@ -13,7 +13,7 @@ import { detailProductAction } from '../../redux/actions/productActions'
 const ProductTabLeft = ({ location, match }) => {
   const { pathname } = location
   const slug = match.params.slug
-  const { product } = useSelector((state) => state.detailProduct)
+  const { product, loading } = useSelector((state) => state.detailProduct)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(detailProductAction(slug))
@@ -36,28 +36,43 @@ const ProductTabLeft = ({ location, match }) => {
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
         <Breadcrumb />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {loading ? (
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          ) : (
+            <>
+              {product && (
+                <ProductImageDescription
+                  spaceTopClass="pt-100"
+                  spaceBottomClass="pb-100"
+                  product={product}
+                  galleryType="leftThumb"
+                />
+              )}
 
-        {/* product description with image */}
-        {product && (
-          <ProductImageDescription
-            spaceTopClass="pt-100"
-            spaceBottomClass="pb-100"
-            product={product}
-            galleryType="leftThumb"
-          />
-        )}
+              {/* product description tab */}
+              <ProductDescriptionTab
+                spaceBottomClass="pb-90"
+                productFullDesc={product?.description}
+              />
+              {/* related product slider */}
+              {/* <RelatedProductSlider
+spaceBottomClass="pb-95"
+category={product.category[0]}
+/> */}
+            </>
+          )}
 
-        {/* product description tab */}
-        <ProductDescriptionTab
-          spaceBottomClass="pb-90"
-          productFullDesc={product?.description}
-        />
-
-        {/* related product slider */}
-        {/* <RelatedProductSlider
-          spaceBottomClass="pb-95"
-          category={product.category[0]}
-        /> */}
+          {/* product description with image */}
+        </div>
       </LayoutOne>
     </Fragment>
   )

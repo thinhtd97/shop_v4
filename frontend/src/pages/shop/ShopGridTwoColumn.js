@@ -9,7 +9,7 @@ import ShopSidebar from '../../wrappers/product/ShopSidebar'
 import ShopTopbar from '../../wrappers/product/ShopTopbar'
 import ShopProducts from '../../wrappers/product/ShopProducts'
 import { useSelector } from 'react-redux'
-import { getSortedProducts } from '../../helpers/product'
+import { getSortedProducts, getUniqueTags } from '../../helpers/product'
 
 const ShopGridTwoColumn = ({ location }) => {
   const [layout, setLayout] = useState('grid two-column')
@@ -30,7 +30,7 @@ const ShopGridTwoColumn = ({ location }) => {
 
   const { pathname } = location
 
-  const { products } = useSelector((state) => state.listProduct)
+  const { products, loading } = useSelector((state) => state.listProduct)
   const { categories } = useSelector((state) => state.listCategories)
   const { subs } = useSelector((state) => state.listSub)
 
@@ -114,7 +114,13 @@ const ShopGridTwoColumn = ({ location }) => {
                 />
 
                 {/* shop page content default */}
-                <ShopProducts products={currentData} layout={layout} />
+                {loading ? (
+                  <div className="spinner-border" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  <ShopProducts products={currentData} layout={layout} />
+                )}
 
                 {/* shop product pagination */}
                 <div className="pro-pagination-style text-center mt-30">

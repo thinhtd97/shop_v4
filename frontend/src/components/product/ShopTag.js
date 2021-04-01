@@ -3,20 +3,28 @@ import React from 'react'
 import { setActiveSort } from '../../helpers/product'
 
 const ShopTag = ({ subs, getSortParams }) => {
+  const filters = []
+  subs && subs.filter((el) => {
+    if(filters.indexOf(el.name) === -1) {
+      filters.push(el.name);
+      return true;
+    }
+    return false
+  })
   return (
     <div className="sidebar-widget mt-50">
-      <h4 className="pro-sidebar-title">Tag </h4>
+      <h4 className="pro-sidebar-title">Tag</h4>
       <div className="sidebar-widget-tag mt-25">
         <ul>
-          {subs?.map((single, key) => (
+          {filters?.map((single, key) => (
             <li key={key}>
               <button
                 onClick={(e) => {
-                  getSortParams("tag", single.name)
+                  getSortParams('tag', single)
                   setActiveSort(e)
                 }}
               >
-                {single.name}
+                {single}
               </button>
             </li>
           ))}

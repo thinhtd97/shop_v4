@@ -14,6 +14,7 @@ const ProductGrid = ({ sliderClassName, spaceBottomClass, products }) => {
             spaceBottomClass={spaceBottomClass}
           />
         ))}
+        {products && products.length === 0 && (<p style={{marginLeft: '1em'}}>Product Not Found</p>)}
     </Fragment>
   )
 }

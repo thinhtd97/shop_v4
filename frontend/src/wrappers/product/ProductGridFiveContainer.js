@@ -5,7 +5,8 @@ import ProductGridFive from "./ProductGridFive";
 const ProductGridFiveContainer = ({
   spaceTopClass,
   spaceBottomClass,
-  category
+  category,
+  products
 }) => {
   return (
     <div
@@ -18,6 +19,7 @@ const ProductGridFiveContainer = ({
           <ProductGridFive
             category={category}
             limit={12}
+            products={products}
             spaceBottomClass="mb-20"
           />
         </div>

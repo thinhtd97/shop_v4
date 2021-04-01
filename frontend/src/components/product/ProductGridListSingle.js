@@ -10,7 +10,11 @@ const ProductGridListSingle = ({
   product,
 }) => {
   const [modalShow, setModalShow] = useState(false)
-  const discountPrice = getDiscountPrice(product.price, product.discount)
+  const discountPrice = getDiscountPrice(product.price, product.discount);
+  const addToCart = (e) => {
+    e.preventDefault();
+    
+  }
   return (
     <Fragment>
       <div
@@ -49,13 +53,17 @@ const ProductGridListSingle = ({
                 </button>
               </div>
               <div className="pro-same-action pro-cart">
-                <button
-                  title="Add to cart"
-                  disabled={product.countInStock === 0}
-                >
-                  {' '}
-                  <i className="pe-7s-cart"></i> Add to cart
-                </button>
+                {product.countInStock === 0 ? (
+                  <button disabled className="active">
+                    Out of Stock
+                  </button>
+                ) : (
+                  <button onClick={(e) => addToCart(e)} title="Add to cart">
+                    {' '}
+                    <i className="pe-7s-cart"></i> Add to cart
+                  </button>
+                )}
+
                 {/* 
                 <button disabled className="active">
                   Out of Stock
@@ -135,7 +143,8 @@ const ProductGridListSingle = ({
                   <div className="product-list-price">
                     {product.discount && (
                       <Fragment>
-                        <span>${discountPrice.toFixed(2)}</span> <span className="old">${product.price.toFixed(2)}</span>
+                        <span>${discountPrice.toFixed(2)}</span>{' '}
+                        <span className="old">${product.price.toFixed(2)}</span>
                       </Fragment>
                     )}
                     {product.newLaunced && <span className="purple">New</span>}
@@ -154,10 +163,17 @@ const ProductGridListSingle = ({
 
                 <div className="shop-list-actions d-flex align-items-center">
                   <div className="shop-list-btn btn-hover">
-                    <button title="Add to cart">
-                      {' '}
-                      <i className="pe-7s-cart"></i> Add to cart
-                    </button>
+                    {product.countInStock === 0 ? (
+                      <button title="Add to cart">
+                        {' '}
+                        <i className="pe-7s-cart"></i> Add to cart
+                      </button>
+                    ) : (
+                      <button disabled title="Out of stock">
+                        {' '}
+                        <i className="pe-7s-cart"></i> Add to cart
+                      </button>
+                    )}
                   </div>
 
                   <div className="shop-list-wishlist ml-10">
@@ -177,7 +193,11 @@ const ProductGridListSingle = ({
         </div>
       </div>
       {/* product modal */}
-      <ProductModal product={product} show={modalShow} onHide={() => setModalShow(false)} />
+      <ProductModal
+        product={product}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
     </Fragment>
   )
 }

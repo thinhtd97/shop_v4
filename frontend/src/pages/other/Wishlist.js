@@ -11,7 +11,6 @@ import {
   removeFromWishlist,
   removeAllFromWishlist
 } from "../../redux/actions/wishlistActions";
-import { addToCart } from "../../redux/actions/cartActions";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 
@@ -19,7 +18,6 @@ const Wishlist = ({
   location,
   cartItems,
   currency,
-  addToCart,
   wishlistItems,
   removeFromWishlist,
   removeAllFromWishlist
@@ -151,9 +149,7 @@ const Wishlist = ({
                                   ) : wishlistItem.stock &&
                                     wishlistItem.stock > 0 ? (
                                     <button
-                                      onClick={() =>
-                                        addToCart(wishlistItem, addToast)
-                                      }
+                                      
                                       className={
                                         cartItem !== undefined &&
                                         cartItem.quantity > 0
@@ -244,7 +240,6 @@ const Wishlist = ({
 };
 
 Wishlist.propTypes = {
-  addToCart: PropTypes.func,
   cartItems: PropTypes.array,
   currency: PropTypes.object,
   location: PropTypes.object,
@@ -263,9 +258,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addToCart: (item, addToast, quantityCount) => {
-      dispatch(addToCart(item, addToast, quantityCount));
-    },
+  
     addToWishlist: (item, addToast, quantityCount) => {
       dispatch(addToWishlist(item, addToast, quantityCount));
     },

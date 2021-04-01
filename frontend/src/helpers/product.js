@@ -126,6 +126,7 @@ export const getSortedProducts = (products, sortType, sortValue) => {
       if (sortValue === '800tomax') {
         return sortProduct.filter((product) => product.price > 800)
       }
+      return sortProduct;
     }
 
     if (sortType === 'brand') {

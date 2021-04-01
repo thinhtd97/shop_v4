@@ -19,6 +19,7 @@ function* login(action) {
       ),
     )
     yield put({ type: userConstant.USER_LOGIN_SUCCESS, payload: data })
+    localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
     yield put({
       type: userConstant.USER_LOGIN_FAILED,
@@ -55,6 +56,7 @@ function* register(action) {
     yield put({ type: userConstant.USER_REGISTER_SUCCESS })
 
     yield put({ type: userConstant.USER_LOGIN_SUCCESS, payload: data })
+    localStorage.setItem('userInfo', JSON.stringify(data));
 
     addToast('Signup successfully!', {
       appearance: 'success',

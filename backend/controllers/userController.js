@@ -70,7 +70,7 @@ export const changePassword = asyncHandler(async (req, res) => {
   const passwordUser = await user.matchPassword(oldPassword)
   if (passwordUser) {
     user.password = password
-    user.save()
+    await user.save()
     res.status(200).json({
       message: 'Change password success.',
     })
@@ -84,9 +84,10 @@ export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email })
   if (
-    user &&
-    (await user.matchPassword(password)) &&
-    user.role === 'subscriber'
+    (user &&
+      (await user.matchPassword(password)) &&
+      user.role === 'subscriber') ||
+    user.role === 'admin'
   ) {
     res.json({
       _id: user._id,
@@ -270,3 +271,4 @@ export const updateUserByID = asyncHandler(async (req, res) => {
     throw new Error('User Not Found')
   }
 })
+

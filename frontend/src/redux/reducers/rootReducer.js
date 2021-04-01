@@ -19,7 +19,6 @@ import {
 const rootReducer = combineReducers({
   multilanguage: createMultilanguageReducer({ currentLanguageCode: "en" }),
   currencyData: currencyReducer,
-  cartData: cartReducer,
   wishlistData: wishlistReducer,
   compareData: compareReducer,
   userLogin: loginReducer,
@@ -33,7 +32,8 @@ const rootReducer = combineReducers({
   detailProduct: productReducer.detailProductReducer,
   listProduct: productReducer.listProductReducer,
   listCategories: categoryReducer.listCategories,
-  listSub: subReducer.listSubs
+  listSub: subReducer.listSubs,
+  cart: cartReducer
 });
 
 export default rootReducer;

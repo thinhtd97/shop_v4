@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
+import { useToasts } from 'react-toast-notifications'
 const MenuCart = ({ cartItems, removeFromCart }) => {
   let cartToTalPrice = 0
-
+  const { addToast } = useToasts()
   return (
     <div className="shopping-cart-content">
       <Fragment>
@@ -28,9 +29,9 @@ const MenuCart = ({ cartItems, removeFromCart }) => {
                     <span>
                       $
                       {item.priceDiscount !== 0
-                        ? item.priceDiscount.toFixed(2)
-                        : item.price.toFixed(2)}
-                    </span>
+                        ? (item.priceDiscount)?.toFixed(2)
+                        : (item.price)?.toFixed(2)}
+                    </span> 
                     {item.color !== '' ||
                       (item.size !== '' && (
                         <div className="cart-item-variation">
@@ -41,7 +42,7 @@ const MenuCart = ({ cartItems, removeFromCart }) => {
                       ))}
                   </div>
                   <div className="shopping-cart-delete">
-                    <button onClick={() => removeFromCart(item)}>
+                    <button onClick={() => removeFromCart(item, addToast)}>
                       <i className="fa fa-times-circle" />
                     </button>
                   </div>
@@ -51,7 +52,9 @@ const MenuCart = ({ cartItems, removeFromCart }) => {
         </ul>
 
         {cartItems.length === 0 ? (
-          <p style={{marginTop: '-20px'}} className="text-center">No items added to cart</p>
+          <p style={{ marginTop: '-20px' }} className="text-center">
+            No items added to cart
+          </p>
         ) : (
           <>
             <div className="shopping-cart-total">

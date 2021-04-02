@@ -3,14 +3,16 @@ import mongoose from 'mongoose'
 const CartSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
+    slug: String,
     image: { type: Object },
-    price: { type: String },
-    description: { type: String },
+    price: { type: Number },
+    priceDiscount: { type: Number },
     color: { type: String },
-    stock: { type: Number },
     size: { type: String },
     qty: Number,
-    orderdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    stock: Number,
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    orderedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   },
   { timestamps: true },
 )

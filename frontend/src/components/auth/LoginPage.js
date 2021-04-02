@@ -7,7 +7,7 @@ import { loginActionRequest } from '../../redux/actions/userActions'
 const LoginPage = () => {
   const { addToast } = useToasts();
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('');
   const dispatch = useDispatch()
   const loginSubmit = (e) => {
     e.preventDefault();

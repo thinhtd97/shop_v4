@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types'
 import React, { Fragment, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { getDiscountPrice } from '../../helpers/product'
-import { addToCartAction } from '../../redux/actions/cartActions'
+import {
+  addToCartAction,
+  cartAddToDatabase,
+} from '../../redux/actions/cartActions'
 import ProductModal from './ProductModal'
 
 const ProductGridSingleFive = ({
@@ -13,6 +16,7 @@ const ProductGridSingleFive = ({
   sliderClassName,
   spaceBottomClass,
 }) => {
+  const { userInfo } = useSelector((state) => state.userLogin)
   const [modalShow, setModalShow] = useState(false)
   const { addToast } = useToasts()
   const dispatch = useDispatch()
@@ -54,7 +58,35 @@ const ProductGridSingleFive = ({
       ),
     )
   }
-
+  const addToCartDatabase = (
+    product,
+    slug,
+    name,
+    image,
+    price,
+    countInStock,
+    quantity,
+    size,
+    color,
+    discountedPrice,
+    addToast,
+  ) => {
+    dispatch(
+      cartAddToDatabase(
+        product,
+        slug,
+        name,
+        image,
+        price,
+        countInStock,
+        quantity,
+        size,
+        color,
+        discountedPrice,
+        addToast,
+      ),
+    )
+  }
   return (
     <Fragment>
       <div
@@ -102,7 +134,7 @@ const ProductGridSingleFive = ({
                   </h3>
                 </div>
                 <div className="price-3">
-                  {discountedPrice !== null ? (
+                  {discountedPrice !== 0 ? (
                     <Fragment>
                       <span>${product.price.toFixed(2)}</span>{' '}
                       <span className="old">${discountedPrice.toFixed(2)}</span>
@@ -136,28 +168,54 @@ const ProductGridSingleFive = ({
                         <i className="fa fa-cog"></i>
                       </Link>
                     ) : product.countInStock && product.countInStock > 0 ? (
-                      <button
-                        onClick={(e) =>
-                          addToCart(
-                            e,
-                            product._id,
-                            product.slug,
-                            product.name,
-                            product.image[0].url,
-                            product.price,
-                            product.countInStock,
-                            quantity,
-                            size,
-                            color,
-                            discountedPrice,
-                            addToast,
-                          )
-                        }
-                        title="Add To Cart"
-                      >
-                        {' '}
-                        <i className="fa fa-shopping-cart"></i>{' '}
-                      </button>
+                      <>
+                        {userInfo ? (
+                          <button
+                            onClick={(e) =>
+                              addToCartDatabase(
+                                product._id,
+                                product.slug,
+                                product.name,
+                                product.image[0].url,
+                                product.price,
+                                product.countInStock,
+                                quantity,
+                                size,
+                                color,
+                                discountedPrice,
+                                addToast,
+                              )
+                            }
+                            title="Add To Cart"
+                          >
+                            {' '}
+                            <i className="fa fa-shopping-cart"></i>{' '}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) =>
+                              addToCart(
+                                e,
+                                product._id,
+                                product.slug,
+                                product.name,
+                                product.image[0].url,
+                                product.price,
+                                product.countInStock,
+                                quantity,
+                                size,
+                                color,
+                                discountedPrice,
+                                addToast,
+                              )
+                            }
+                            title="Add To Cart"
+                          >
+                            {' '}
+                            <i className="fa fa-shopping-cart"></i>{' '}
+                          </button>
+                        )}
+                      </>
                     ) : (
                       <button disabled className="active" title="Out of stock">
                         <i className="fa fa-shopping-cart"></i>
@@ -182,6 +240,7 @@ const ProductGridSingleFive = ({
       {/* product modal */}
       <ProductModal
         show={modalShow}
+        userInfo={userInfo}
         onHide={() => setModalShow(false)}
         product={product}
         currency={currency}

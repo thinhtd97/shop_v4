@@ -2,8 +2,16 @@ import PropTypes from 'prop-types'
 import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Rating from './sub-components/ProductRating'
+import {
+  addToCartAction,
+  cartAddToDatabase,
+} from '../../redux/actions/cartActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { useToasts } from 'react-toast-notifications'
 
-const ProductDescriptionInfo = ({ product, discountedPrice, subs }) => {
+const ProductDescriptionInfo = ({ product, discountedPrice }) => {
+  const dispatch = useDispatch()
+  const { addToast } = useToasts()
   const [selectedProductColor, setSelectedProductColor] = useState(
     product.variation ? product.variation[0]?.color : '',
   )
@@ -14,6 +22,69 @@ const ProductDescriptionInfo = ({ product, discountedPrice, subs }) => {
     product.variation ? product.variation[0]?.size[0]?.stock : product.stock,
   )
   const [quantityCount, setQuantityCount] = useState(1)
+
+  const { userInfo } = useSelector((state) => state.userLogin)
+
+  const addToCart = (
+    e,
+    product,
+    slug,
+    name,
+    image,
+    price,
+    countInStock,
+    quantity,
+    size,
+    color,
+    discountedPrice,
+  ) => {
+    e.preventDefault()
+    let cartId = `${Date.now()}`
+    dispatch(
+      addToCartAction(
+        product,
+        slug,
+        name,
+        image,
+        price,
+        countInStock,
+        quantity,
+        size,
+        color,
+        discountedPrice,
+        addToast,
+      ),
+    )
+  }
+  const addToCartDatabase = (
+    product,
+    slug,
+    name,
+    image,
+    price,
+    countInStock,
+    quantity,
+    size,
+    color,
+    discountedPrice,
+    addToast,
+  ) => {
+    dispatch(
+      cartAddToDatabase(
+        product,
+        slug,
+        name,
+        image,
+        price,
+        countInStock,
+        quantity,
+        size,
+        color,
+        discountedPrice,
+        addToast,
+      ),
+    )
+  }
 
   return (
     <div className="product-details-content ml-70">
@@ -61,7 +132,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice, subs }) => {
                       }
                       onChange={() => {
                         setSelectedProductColor(single.color)
-                        setSelectedProductSize(single.size[0]?.name)
+                        setSelectedProductSize(single.size[0]?.size)
                         setProductStock(single.size[0]?.stock)
                         setQuantityCount(1)
                       }}
@@ -155,7 +226,51 @@ const ProductDescriptionInfo = ({ product, discountedPrice, subs }) => {
           </div>
           <div className="pro-details-cart btn-hover">
             {productStock && productStock > 0 ? (
-              <button> Add To Cart </button>
+              <>
+                {userInfo ? (
+                  <button
+                    onClick={(e) =>
+                      addToCartDatabase(
+                        product._id,
+                        product.slug,
+                        product.name,
+                        product.image[0].url,
+                        product.price,
+                        product.countInStock,
+                        quantityCount,
+                        selectedProductSize,
+                        selectedProductColor,
+                        discountedPrice,
+                        addToast,
+                      )
+                    }
+                  >
+                    {' '}
+                    Add To Cart{' '}
+                  </button>
+                ) : (
+                  <button
+                    onClick={(e) =>
+                      addToCart(
+                        product._id,
+                        product.slug,
+                        product.name,
+                        product.image[0].url,
+                        product.price,
+                        product.countInStock,
+                        quantityCount,
+                        selectedProductSize,
+                        selectedProductColor,
+                        discountedPrice,
+                        addToast,
+                      )
+                    }
+                  >
+                    {' '}
+                    Add To Cart{' '}
+                  </button>
+                )}
+              </>
             ) : (
               <button disabled>Out of Stock</button>
             )}

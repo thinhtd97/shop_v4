@@ -84,10 +84,9 @@ export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email })
   if (
-    (user &&
-      (await user.matchPassword(password)) &&
-      user.role === 'subscriber') ||
-    user.role === 'admin'
+    user &&
+    (await user.matchPassword(password)) &&
+    user.role === 'subscriber'
   ) {
     res.json({
       _id: user._id,
@@ -95,6 +94,7 @@ export const authUser = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       address: user.address,
+      cart: user.cart,
       role: user.role,
       token: generateToken(user._id),
     })
@@ -113,18 +113,11 @@ export const authAdmin = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       address: user.address,
+      cart: user.cart,
       role: user.role,
       token: generateToken(user._id),
     })
   } else {
-    if (
-      user &&
-      (await user.matchPassword(password)) &&
-      user.role === 'subscriber'
-    ) {
-      res.status(400)
-      throw new Error('Access Denied.')
-    }
     res.status(400)
     throw new Error('Invalid email or password')
   }
@@ -271,4 +264,3 @@ export const updateUserByID = asyncHandler(async (req, res) => {
     throw new Error('User Not Found')
   }
 })
-

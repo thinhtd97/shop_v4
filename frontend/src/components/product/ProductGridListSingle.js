@@ -3,17 +3,87 @@ import { Link } from 'react-router-dom'
 import Rating from './sub-components/ProductRating'
 import ProductModal from './ProductModal'
 import { getDiscountPrice } from '../../helpers/product.js'
+import {
+  addToCartAction,
+  cartAddToDatabase,
+} from '../../redux/actions/cartActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { useToasts } from 'react-toast-notifications'
 
 const ProductGridListSingle = ({
   sliderClassName,
   spaceBottomClass,
   product,
 }) => {
+  const { addToast } = useToasts();
+  const dispatch = useDispatch()
   const [modalShow, setModalShow] = useState(false)
-  const discountPrice = getDiscountPrice(product.price, product.discount);
-  const addToCart = (e) => {
-    e.preventDefault();
-    
+  const [quantityCount] = useState(1);
+  const [size] = useState('');
+  const [color] = useState('');
+  const discountPrice = product.discount
+    ? getDiscountPrice(product.price, product.discount)
+    : 0
+  const { userInfo } = useSelector((state) => state.userLogin)
+  const addToCart = (
+    product,
+    slug,
+    name,
+    image,
+    price,
+    countInStock,
+    quantity,
+    size,
+    color,
+    discountedPrice,
+    addToast,
+  ) => {
+    let cartId = `${Date.now()}`
+    dispatch(
+      addToCartAction(
+        product,
+        cartId,
+        slug,
+        name,
+        image,
+        price,
+        countInStock,
+        quantity,
+        size,
+        color,
+        discountedPrice,
+        addToast,
+      ),
+    )
+  }
+  const addToCartDatabase = (
+    product,
+    slug,
+    name,
+    image,
+    price,
+    countInStock,
+    quantity,
+    size,
+    color,
+    discountedPrice,
+    addToast,
+  ) => {
+    dispatch(
+      cartAddToDatabase(
+        product,
+        slug,
+        name,
+        image,
+        price,
+        countInStock,
+        quantity,
+        size,
+        color,
+        discountedPrice,
+        addToast,
+      ),
+    )
   }
   return (
     <Fragment>
@@ -58,10 +128,61 @@ const ProductGridListSingle = ({
                     Out of Stock
                   </button>
                 ) : (
-                  <button onClick={(e) => addToCart(e)} title="Add to cart">
-                    {' '}
-                    <i className="pe-7s-cart"></i> Add to cart
-                  </button>
+                  <>
+                    {product.variation && product.variation.length >= 1 ? (
+                      <Link
+                        to={`${process.env.PUBLIC_URL}/product/${product.slug}`}
+                      >
+                        <i className="fa fa-cog"></i> Select options
+                      </Link>
+                    ) : (
+                      <>
+                        {userInfo ? (
+                          <button
+                            onClick={(e) =>
+                              addToCartDatabase(
+                                product._id,
+                                product.slug,
+                                product.name,
+                                product.image[0].url,
+                                product.price,
+                                product.countInStock,
+                                quantityCount,
+                                size,
+                                color,
+                                discountPrice,
+                                addToast,
+                              )
+                            }
+                          >
+                            {' '}
+                            Add To Cart{' '}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) =>
+                              addToCart(
+                                product._id,
+                                product.slug,
+                                product.name,
+                                product.image[0].url,
+                                product.price,
+                                product.countInStock,
+                                quantityCount,
+                                size,
+                                color,
+                                discountPrice,
+                                addToast,
+                              )
+                            }
+                          >
+                            {' '}
+                            Add To Cart{' '}
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </>
                 )}
 
                 {/* 

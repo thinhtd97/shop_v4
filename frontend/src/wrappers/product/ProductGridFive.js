@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
-import { useSelector } from 'react-redux'
 import ProductGridSingleFive from '../../components/product/ProductGridSingleFive'
 const ProductGridFive = ({
   currency,

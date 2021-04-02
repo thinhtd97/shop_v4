@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import { logoutAction } from '../../redux/actions/userActions'
 
 const IconGroup = ({ iconWhiteClass }) => {
+
   const { userInfo } = useSelector((state) => state.userLogin)
   const dispatch = useDispatch()
   const handleClick = (e) => {
@@ -26,14 +27,15 @@ const IconGroup = ({ iconWhiteClass }) => {
 
   const { cartItems } = useSelector((state) => state.cart)
 
-  const removeCartItem = (item) => {
-    dispatch(removeItem(item))
+  const removeCartItem = (item, addToast) => {
+    dispatch(removeItem(item, addToast))
   }
 
   const currency = useSelector((state) => state.currencyData)
-  const cartData = useSelector((state) => state.cartData)
   const wishlistData = useSelector((state) => state.wishlistData)
 
+  const { cartItems: cartItemsUser } = useSelector((state) => state.listCart);
+  const finalCartItems = userInfo ? cartItemsUser : cartItems; 
   return (
     <div
       className={`header-right-wrap ${iconWhiteClass ? iconWhiteClass : ''}`}
@@ -54,7 +56,7 @@ const IconGroup = ({ iconWhiteClass }) => {
               <ul>
                 <li>
                   <Link to={process.env.PUBLIC_URL + '/my-account'}>
-                    my account
+                    My account
                   </Link>
                 </li>
                 <li>
@@ -98,12 +100,12 @@ const IconGroup = ({ iconWhiteClass }) => {
         <button className="icon-cart" onClick={(e) => handleClick(e)}>
           <i className="pe-7s-shopbag" />
           <span className="count-style">
-            {cartItems && cartItems.length ? cartItems.length : 0}
+            {finalCartItems && finalCartItems.length ? finalCartItems.length : 0}
           </span>
         </button>
         {/* menu cart */}
         <MenuCart
-          cartItems={cartItems}
+          cartItems={finalCartItems}
           currency={currency}
           removeFromCart={removeCartItem}
         />
@@ -112,7 +114,7 @@ const IconGroup = ({ iconWhiteClass }) => {
         <Link className="icon-cart" to={process.env.PUBLIC_URL + '/cart'}>
           <i className="pe-7s-shopbag" />
           <span className="count-style">
-            {cartData && cartData.length ? cartData.length : 0}
+            {finalCartItems && finalCartItems.length ? finalCartItems.length : 0}
           </span>
         </Link>
       </div>

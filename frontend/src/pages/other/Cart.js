@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import MetaTags from 'react-meta-tags'
@@ -20,15 +20,18 @@ const Cart = ({ location }) => {
   const dispatch = useDispatch()
 
   const { cart } = useSelector((state) => state)
+  const { userInfo } = useSelector((state) => state.userLogin)
+  const { cartItems: cartItemsUser } = useSelector((state) => state.listCart)
   const { cartItems } = cart
+  const finalCartItems = userInfo ? cartItemsUser : cartItems
   const handleDecrement = (item) => {
     dispatch(decrementQuantity(item))
   }
   const handleIncrement = (item) => {
     dispatch(incrementQuantity(item))
   }
-  const removeCartItem = (item) => {
-    dispatch(removeItem(item))
+  const removeCartItem = (item, addToast) => {
+    dispatch(removeItem(item, addToast))
   }
   const clearCart = () => {
     dispatch(removeAllItem())
@@ -57,118 +60,132 @@ const Cart = ({ location }) => {
               <h3 className="cart-page-title">Your cart items</h3>
               <div className="row">
                 <div className="col-12">
-                    <div
-                      className="table-content table-responsive cart-table-content"
-                      style={{ display: 'flex', justifyContent: 'center' }}
-                    >
-                      {cartItems && cartItems.length > 0 ? (
-                        <table>
-                          <thead>
-                            <tr>
-                              <th>Image</th>
-                              <th>Product Name</th>
-                              <th>Unit Price</th>
-                              <th>Qty</th>
-                              <th>Subtotal</th>
-                              <th>action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {cartItems.map((item, index) => (
-                              <tr key={index}>
-                                <td className="product-thumbnail">
-                                  <Link
-                                    to={
-                                      process.env.PUBLIC_URL +
-                                      '/product/' +
-                                      '01'
-                                    }
-                                  >
-                                    <img
-                                      src={item.image}
-                                      className="img-fluid"
-                                      alt=""
-                                    />
-                                  </Link>
-                                </td>
+                  <div
+                    className="table-content table-responsive cart-table-content"
+                    style={{ display: 'flex', justifyContent: 'center' }}
+                  >
+                    {finalCartItems && finalCartItems.length > 0 ? (
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Unit Price</th>
+                            <th>Qty</th>
+                            <th>Subtotal</th>
+                            <th>action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {finalCartItems.map((item, index) => (
+                            <tr key={index}>
+                              <td className="product-thumbnail">
+                                <Link
+                                  to={
+                                    process.env.PUBLIC_URL +
+                                    '/product/' +
+                                    item.slug
+                                  }
+                                >
+                                  <img
+                                    src={item.image}
+                                    className="img-fluid"
+                                    alt=""
+                                  />
+                                </Link>
+                              </td>
 
-                                <td className="product-name">
-                                  <Link
-                                    to={process.env.PUBLIC_URL + '/product/'}
-                                  >
-                                    {item.name}
-                                  </Link>
-                                  {item.size !== '' ||
-                                    (item.color !== '' ? (
-                                      <div className="cart-item-variation">
-                                        <span>Color: {item.color}</span>
-                                        <span>Size: {item.size}</span>
-                                      </div>
-                                    ) : (
-                                      ''
-                                    ))}
-                                </td>
+                              <td className="product-name">
+                                <Link
+                                  to={
+                                    process.env.PUBLIC_URL +
+                                    '/product/' +
+                                    item.slug
+                                  }
+                                >
+                                  {item.name}
+                                </Link>
+                                
+                                <div className="cart-item-variation">
+                                  {item.color && item.color !== '' && <span>Color: {item.color}</span>}
+                                  {item.size && item.size !== '' && <span>Size: {item.size}</span>}
+                                </div>
+                              </td>
 
-                                <td className="product-price-cart">
-                                  {item.priceDiscount !== 0 ? (
-                                    <Fragment>
-                                      <span className="amount old">
-                                        ${item.price.toFixed(2)}
-                                      </span>
-                                      <span className="amount">
-                                        ${item.priceDiscount.toFixed(2)}
-                                      </span>
-                                    </Fragment>
-                                  ) : (
-                                    <span className="amount">
+                              <td className="product-price-cart">
+                                {item.priceDiscount !== 0 ? (
+                                  <Fragment>
+                                    <span className="amount old">
                                       ${item.price.toFixed(2)}
                                     </span>
-                                  )}
-                                </td>
+                                    <span className="amount">
+                                      ${item.priceDiscount.toFixed(2)}
+                                    </span>
+                                  </Fragment>
+                                ) : (
+                                  <span className="amount">
+                                    ${item.price.toFixed(2)}
+                                  </span>
+                                )}
+                              </td>
 
-                                <td className="product-quantity">
-                                  <div className="cart-plus-minus">
-                                    <button
-                                      className="dec qtybutton"
-                                      onClick={(e) => handleDecrement(item)}
-                                    >
-                                      -
-                                    </button>
-                                    <input
-                                      className="cart-plus-minus-box"
-                                      value={item.qty}
-                                      readOnly
-                                    />
-                                    <button
-                                      className="inc qtybutton"
-                                      disabled={item.qty === item.stock}
-                                      onClick={(e) => handleIncrement(item)}
-                                    >
-                                      +
-                                    </button>
-                                  </div>
-                                </td>
-                                <td className="product-subtotal">
-                                  {item.priceDiscount
-                                    ? `$${(
-                                        item.priceDiscount * item.qty
-                                      ).toFixed(2)}`
-                                    : `$${(item.price * item.qty).toFixed(2)}`}
-                                </td>
+                              <td className="product-quantity">
+                                <div className="cart-plus-minus">
+                                  <button
+                                    className="dec qtybutton"
+                                    onClick={(e) => handleDecrement(item)}
+                                  >
+                                    -
+                                  </button>
+                                  <input
+                                    className="cart-plus-minus-box"
+                                    value={item.qty}
+                                    readOnly
+                                  />
+                                  <button
+                                    className="inc qtybutton"
+                                    disabled={item.qty === item.stock}
+                                    onClick={(e) => handleIncrement(item)}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </td>
+                              <td className="product-subtotal">
+                                {item.priceDiscount
+                                  ? `$${(item.priceDiscount * item.qty).toFixed(
+                                      2,
+                                    )}`
+                                  : `$${(item.price * item.qty).toFixed(2)}`}
+                              </td>
 
-                                <td className="product-remove">
-                                  <button onClick={(e) => removeCartItem(item)}>
+                              <td className="product-remove">
+                                {userInfo ? (
+                                  <button
+                                    onClick={(e) =>
+                                      removeCartItem(item, addToast)
+                                    }
+                                  >
                                     <i className="fa fa-times"></i>
                                   </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      ) : (
-                        <img src={emptyCart} width="600" alt="" />
-                      )}
-                    </div>
+                                ) : (
+                                  <button
+                                    onClick={(e) =>
+                                      removeCartItem(item, addToast)
+                                    }
+                                  >
+                                    <i className="fa fa-times"></i>
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <img src={emptyCart} width="600" alt="" />
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="row">

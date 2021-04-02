@@ -9,7 +9,7 @@ import ShopSidebar from '../../wrappers/product/ShopSidebar'
 import ShopTopbar from '../../wrappers/product/ShopTopbar'
 import ShopProducts from '../../wrappers/product/ShopProducts'
 import { useSelector } from 'react-redux'
-import { getSortedProducts, getUniqueTags } from '../../helpers/product'
+import { getSortedProducts } from '../../helpers/product'
 
 const ShopGridTwoColumn = ({ location }) => {
   const [layout, setLayout] = useState('grid two-column')

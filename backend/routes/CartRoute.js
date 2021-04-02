@@ -2,10 +2,15 @@ import express from 'express'
 import { protect } from '../middleware/middlewares.js'
 import {
   addToCart,
-  removeCartItemFromUser,
+  listCart,
+  removeAllCartItem,
+  removeCartItem,
+  updateQuantity,
 } from '../controllers/CartController.js'
 const router = express.Router()
 
-router.post('/cart/:slugProduct', protect, addToCart)
-router.delete('/cart/delete/:cartId', protect, removeCartItemFromUser)
+router.route('/cart/:slug').post(protect, addToCart).delete(protect, removeCartItem);
+router.route('/cart').get(protect, listCart).delete(protect, removeAllCartItem)
+router.put('/cart/:slug/:qty', protect, updateQuantity)
+
 export default router

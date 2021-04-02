@@ -22,17 +22,6 @@ import { listSub } from './redux/actions/subActions'
 const createSagaMiddleware = sagaMiddleware()
 const middleware = [createSagaMiddleware, thunk]
 
-const getUserInfoFromStorage = localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo'))
-  : null
-const getCartItemsFromStorage = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('cartItems'))
-  : []
-const initialState = {
-  userLogin: { userInfo: getUserInfoFromStorage },
-  cart: { cartItems: getCartItemsFromStorage },
-}
-
 const store = createStore(
   rootReducer,
   load(),

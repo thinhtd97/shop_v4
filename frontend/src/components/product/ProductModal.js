@@ -3,12 +3,22 @@ import Swiper from 'react-id-swiper'
 import { Modal } from 'react-bootstrap'
 import Rating from './sub-components/ProductRating'
 import { getDiscountPrice } from '../../helpers/product'
+import {
+  addToCartAction,
+  cartAddToDatabase,
+} from '../../redux/actions/cartActions'
+import { useToasts } from 'react-toast-notifications'
+import { useDispatch } from 'react-redux'
 
 function ProductModal(props) {
+  const { addToast } = useToasts()
+  const dispatch = useDispatch()
   const [gallerySwiper, getGallerySwiper] = useState(null)
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null)
-  const { product } = props
-  const discountedPrice = getDiscountPrice(product.price, product.discount)
+  const { product, userInfo } = props
+  const discountedPrice = product.discount
+    ? getDiscountPrice(product.price, product.discount)
+    : 0
   const [selectedProductColor, setSelectedProductColor] = useState(
     product.variation ? product.variation[0]?.color : '',
   )
@@ -16,7 +26,9 @@ function ProductModal(props) {
     product.variation ? product.variation[0]?.size[0]?.name : '',
   )
   const [productStock, setProductStock] = useState(
-    product.variation ? product.variation[0]?.size[0]?.stock : product.stock,
+    product.variation
+      ? product.variation[0]?.size[0]?.stock
+      : product.countInStock,
   )
   const [quantityCount, setQuantityCount] = useState(1)
   useEffect(() => {
@@ -61,6 +73,68 @@ function ProductModal(props) {
         <i className="pe-7s-angle-right" />
       </button>
     ),
+  }
+
+  const addToCart = (
+    e,
+    product,
+    slug,
+    name,
+    image,
+    price,
+    countInStock,
+    quantity,
+    size,
+    color,
+    discountedPrice,
+  ) => {
+    e.preventDefault()
+    let cartId = `${Date.now()}`
+    dispatch(
+      addToCartAction(
+        product,
+        cartId,
+        slug,
+        name,
+        image,
+        price,
+        countInStock,
+        quantity,
+        size,
+        color,
+        discountedPrice,
+        addToast,
+      ),
+    )
+  }
+  const addToCartDatabase = (
+    product,
+    slug,
+    name,
+    image,
+    price,
+    countInStock,
+    quantity,
+    size,
+    color,
+    discountedPrice,
+    addToast,
+  ) => {
+    dispatch(
+      cartAddToDatabase(
+        product,
+        slug,
+        name,
+        image,
+        price,
+        countInStock,
+        quantity,
+        size,
+        color,
+        discountedPrice,
+        addToast,
+      ),
+    )
   }
 
   return (
@@ -229,7 +303,52 @@ function ProductModal(props) {
                     {product.countInStock === 0 ? (
                       <button disabled>Out of Stock</button>
                     ) : (
-                      <button> Add To Cart </button>
+                      <>
+                        {userInfo ? (
+                          <button
+                            onClick={(e) =>
+                              addToCartDatabase(
+                                product._id,
+                                product.slug,
+                                product.name,
+                                product.image[0].url,
+                                product.price,
+                                product.countInStock,
+                                quantityCount,
+                                selectedProductSize,
+                                selectedProductColor,
+                                discountedPrice,
+                                addToast,
+                              )
+                            }
+                          >
+                            {' '}
+                            Add To Cart{' '}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) =>
+                              addToCart(
+                                e,
+                                product._id,
+                                product.slug,
+                                product.name,
+                                product.image[0].url,
+                                product.price,
+                                product.countInStock,
+                                quantityCount,
+                                selectedProductSize,
+                                selectedProductColor,
+                                discountedPrice,
+                                addToast,
+                              )
+                            }
+                          >
+                            {' '}
+                            Add To Cart{' '}
+                          </button>
+                        )}
+                      </>
                     )}
 
                     {/* <button disabled>Out of Stock</button> */}

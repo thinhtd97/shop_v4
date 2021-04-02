@@ -16,8 +16,8 @@ import {
 } from '../controllers/userController.js'
 const router = express.Router()
 
-router.post('/user/login', authUser)
 router.post('/user/login-admin', authAdmin)
+router.post('/user/login', authUser)
 router.post('/user/reset-password', resetPassword)
 router.post('/user/new-password', NewPassword)
 router.post('/user/register', registerUser)

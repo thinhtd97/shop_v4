@@ -1,9 +1,11 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects'
 import axios from 'axios'
 import * as userConstant from '../constants/userConstants'
+import * as cartConstant from '../constants/cartConstant'
 
 function* login(action) {
   const { email, password, addToast } = action
+  const { cartItems } = yield select((state) => state.cart)
   try {
     const config = {
       headers: {
@@ -18,8 +20,42 @@ function* login(action) {
         config,
       ),
     )
+
+    const configListCart = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${data.token}`,
+      },
+    }
+
+    if (cartItems.length >= 1) {
+      yield cartItems.map(async (item) =>
+        await axios.post(
+          `${process.env.REACT_APP_API}/cart/${item.slug}`,
+          {
+            name: item.name,
+            image: item.image,
+            size: item.size,
+            price: item.price,
+            qty: item.qty,
+            color: item.color,
+            stock: item.stock,
+            product: item.product,
+            priceDiscount: item.priceDiscount,
+          },
+          configListCart,
+        ),
+      )
+      const { data: dataCart } = yield call(() =>
+        axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
+      )
+
+      yield put({ type: cartConstant.LIST_CART_SUCCESS, payload: dataCart })
+    }
+
     yield put({ type: userConstant.USER_LOGIN_SUCCESS, payload: data })
-    localStorage.setItem('userInfo', JSON.stringify(data));
+
+    localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (error) {
     yield put({
       type: userConstant.USER_LOGIN_FAILED,
@@ -56,7 +92,7 @@ function* register(action) {
     yield put({ type: userConstant.USER_REGISTER_SUCCESS })
 
     yield put({ type: userConstant.USER_LOGIN_SUCCESS, payload: data })
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    localStorage.setItem('userInfo', JSON.stringify(data))
 
     addToast('Signup successfully!', {
       appearance: 'success',
@@ -87,6 +123,7 @@ function* register(action) {
 function* logout() {
   yield put({ type: userConstant.LOGOUT_SUCCESS })
   yield put({ type: userConstant.USER_PROFILE_RESET })
+  yield put({ type: cartConstant.LIST_CART_RESET })
 }
 function* sendMail(action) {
   const { email, addToast } = action

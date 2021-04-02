@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
+
 const userSchema = mongoose.Schema(
   {
     firstName: String,
@@ -30,7 +31,6 @@ const userSchema = mongoose.Schema(
     image: {
       type: String,
     },
-    cart: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cart' }],
     address: String,
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
   },

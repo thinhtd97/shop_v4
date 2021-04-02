@@ -1,68 +1,86 @@
-import Product from '../models/product.js'
 import Cart from '../models/Cart.js'
-import User from '../models/user.js'
+import asyncHandler from 'express-async-handler'
+import slugify from 'slugify'
 
 export const addToCart = asyncHandler(async (req, res) => {
-    let {
-      product,
-      name,
-      image,
-      price,
-      description,
-      stock,
-      size,
-      qty,
-      color,
-    } = req.body
-  
-    const user = await User.findById(req.user.id)
-    const productCurrent = await Product.findOne({ slug: req.params.slugProduct })
-    const cartExist = await Cart.findOne({ orderdBy: req.user.id }, { name })
-    try {
-      if (!cartExist) {
-        const cartItems = new Cart({
-          product,
-          name,
-          image,
-          price: Number(price),
-          description,
-          stock: Number(stock),
-          size,
-          color,
-          qty: Number(qty),
-          orderedBy: req.user.id,
-        })
-        
-        productCurrent.userAddedToCart.push(req.user.id)
-        await productCurrent.save()
-  
-        const cartCreated = await cartItems.save()
-        if (cartCreated) {
-          user.cart.push(cartCreated._id)
-          await user.save()
-        }
-      } else {
-        cartExist.qty += qty
-        await cartExist.save()
-      }
-    } catch (error) {
-      res.status(400)
-      throw new Error('Add To Cart Failed.')
-    }
+  const {
+    name,
+    image,
+    size,
+    price,
+    qty,
+    color,
+    product,
+    priceDiscount,
+    stock,
+  } = req.body
+  const cartExist = await Cart.findOne({
+    slug: req.params.slug,
+    orderedBy: req.user.id,
   })
-  export const removeCartItemFromUser = asyncHandler((req, res) => {
-    try {
-      User.updateOne(
-        { _id: req.user.id },
-        { $pull: { cart: `${req.params.cartId}` } },
-      )
-      res.json({
-        message: 'Delete From Cart Success.',
-      })
-    } catch (error) {
-      console.log(error)
-      res.status(400)
-      throw new Error('Delete From Cart Success.')
-    }
+  if (cartExist) {
+    await cartExist.remove()
+  }
+  const newCart = new Cart({
+    name,
+    slug: slugify(name).toLowerCase(),
+    image,
+    size,
+    price: Number(price),
+    priceDiscount,
+    qty: Number(qty),
+    color,
+    stock: Number(stock),
+    product,
+    orderedBy: req.user.id,
   })
-  
+  await newCart.save()
+  res.json(newCart)
+})
+
+export const listCart = asyncHandler(async (req, res) => {
+  try {
+    const cart = await Cart.find({ orderedBy: req.user.id })
+    if (cart) {
+      res.json(cart)
+    } else {
+      res.status(404)
+      throw new Error('Cart Not Found')
+    }
+  } catch (error) {
+    res.status(400)
+    throw new Error('Error: ' + error)
+  }
+})
+
+export const updateQuantity = asyncHandler(async (req, res) => {
+  const cart = await Cart.findOne({
+    slug: req.params.slug,
+    orderedBy: req.user.id,
+  })
+  if (cart) {
+    cart.qty = req.params.qty
+    await cart.save()
+  }
+  res.json(cart)
+})
+
+export const removeCartItem = asyncHandler(async (req, res) => {
+  const cart = await Cart.findOne({
+    slug: req.params.slug,
+    orderedBy: req.user.id,
+  })
+  if (cart) {
+    await cart.remove()
+  }
+  res.json(cart)
+})
+export const removeAllCartItem = asyncHandler(async (req, res) => {
+  const cart = await Cart.deleteMany({ orderedBy: req.user.id });
+  if (cart) {
+    res.json({
+      message: "Delete All Cart Success."
+    })
+  }
+  res.send('ok');
+})

@@ -88,7 +88,7 @@ const ProductDescriptionInfoSlider = ({
                       }
                       onChange={() => {
                         setSelectedProductColor(single.color);
-                        setSelectedProductSize(single.size[0].name);
+                        setSelectedProductSize(single.size[0].size);
                         setProductStock(single.size[0].stock);
                         setQuantityCount(1);
                       }}
@@ -120,7 +120,7 @@ const ProductDescriptionInfoSlider = ({
                                   : ""
                               }
                               onChange={() => {
-                                setSelectedProductSize(singleSize.name);
+                                setSelectedProductSize(singleSize.size);
                                 setProductStock(singleSize.stock);
                                 setQuantityCount(1);
                               }}

@@ -1,22 +1,60 @@
-import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import PropTypes from 'prop-types'
+import React, { Fragment } from 'react'
 
-const ProductRating = ({ ratingValue }) => {
-  let rating = [];
-
-  for (let i = 0; i < 5; i++) {
-    rating.push(<i className="fa fa-star-o" key={i}></i>);
-  }
-  if (ratingValue && ratingValue > 0) {
-    for (let i = 0; i <= ratingValue - 1; i++) {
-      rating[i] = <i className="fa fa-star-o yellow" key={i}></i>;
-    }
-  }
-  return <Fragment>{rating}</Fragment>;
-};
+const ProductRating = ({ value }) => {
+  return (
+    <Fragment>
+      <i
+        className={
+          value >= 1
+            ? 'fa fa-star yellow'
+            : value >= 0.5
+            ? 'fa fa-star-half-o yellow'
+            : 'fa fa-star-o yellow'
+        }
+      ></i>
+      <i
+        className={
+          value >= 2
+            ? 'fa fa-star yellow'
+            : value >= 1.5
+            ? 'fa fa-star-half-o yellow'
+            : 'fa fa-star-o yellow'
+        }
+      ></i>
+      <i
+        className={
+          value >= 3
+            ? 'fa fa-star yellow'
+            : value >= 2.5
+            ? 'fa fa-star-half-o yellow'
+            : 'fa fa-star-o yellow'
+        }
+      ></i>
+      <i
+        className={
+          value >= 4
+            ? 'fa fa-star yellow'
+            : value >= 3.5
+            ? 'fa fa-star-half-o yellow'
+            : 'fa fa-star-o yellow'
+        }
+      ></i>
+      <i
+        className={
+          value >= 5
+            ? 'fa fa-star yellow'
+            : value >= 4.5
+            ? 'fa fa-star-half-o yellow'
+            : 'fa fa-star-o yellow'
+        }
+      ></i>
+    </Fragment>
+  )
+}
 
 ProductRating.propTypes = {
-  ratingValue: PropTypes.number
-};
+  value: PropTypes.number,
+}
 
-export default ProductRating;
+export default ProductRating

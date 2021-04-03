@@ -62,38 +62,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
     },
     [dispatch, addToast],
   )
-  // const addToCart = (
-  //   e,
-  //   product,
-  //   slug,
-  //   name,
-  //   image,
-  //   price,
-  //   countInStock,
-  //   quantity,
-  //   size,
-  //   color,
-  //   discountedPrice,
-  // ) => {
-  //   e.preventDefault()
-  //   let cartId = `${Date.now()}`
-  //   dispatch(
-  //     addToCartAction(
-  //       product,
-  //       cartId,
-  //       slug,
-  //       name,
-  //       image,
-  //       price,
-  //       countInStock,
-  //       quantity,
-  //       size,
-  //       color,
-  //       discountedPrice,
-  //       addToast,
-  //     ),
-  //   )
-  // }
+
   const addToCartDatabase = (
     product,
     slug,
@@ -137,15 +106,15 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
           <span>${product.price?.toFixed(2)} </span>
         )}
       </div>
-      {product.rating && product.rating > 0 ? (
+      {/* {product.rating && product.rating > 0 ? ( */}
         <div className="pro-details-rating-wrap">
           <div className="pro-details-rating">
-            <Rating ratingValue={product.rating} />
+            <Rating value={2.8} />
           </div>
         </div>
-      ) : (
+      {/* ) : (
         ''
-      )}
+      )} */}
       <div className="pro-details-list">
         <p>{product.description}</p>
       </div>

@@ -79,6 +79,7 @@ export const read = asyncHandle(async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug })
     .populate('category', '_id name')
     .populate('variation')
+    .populate('review')
     .populate('subs', '_id name')
     .populate({
       path: 'variation',

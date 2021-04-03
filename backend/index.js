@@ -1,39 +1,37 @@
-import express from 'express';
+import express from 'express'
 import path from 'path'
-import dotenv from 'dotenv';
-import { errorHandler, notFound } from './middleware/middlewares.js';
-import connectDB from './config/db.js';
-import userRoute from './routes/userRoute.js';
-import cateRoute from './routes/cateRoute.js';
-import subRoute from './routes/subRoute.js';
-import productRoute from './routes/productRoute.js';
-import cloundinaryRoute from './routes/cloundinary.js';
-import variationRoute from './routes/Variation.js';
-import sizeRoute from './routes/SizeRoute.js';
-import cartRoute from './routes/CartRoute.js';
-import cors from 'cors';
+import dotenv from 'dotenv'
+import { errorHandler, notFound } from './middleware/middlewares.js'
+import connectDB from './config/db.js'
+import userRoute from './routes/userRoute.js'
+import cateRoute from './routes/cateRoute.js'
+import subRoute from './routes/subRoute.js'
+import productRoute from './routes/productRoute.js'
+import cloundinaryRoute from './routes/cloundinary.js'
+import variationRoute from './routes/Variation.js'
+import sizeRoute from './routes/SizeRoute.js'
+import cartRoute from './routes/CartRoute.js'
+import reviewRoute from './routes/ReviewRoute.js'
+import cors from 'cors'
 
-dotenv.config();
-const app = express();
+dotenv.config()
+const app = express()
 
-connectDB();
+connectDB()
 
-app.use(cors());
+app.use(cors())
 
-app.use(express.json());
+app.use(express.json())
 
-const __dirname = path.resolve()
-app.use('/public', express.static('public'));
-
-
-app.use('/api', userRoute);
-app.use('/api', cateRoute);
-app.use('/api', subRoute);
-app.use('/api', productRoute);
-app.use('/api', cloundinaryRoute);
-app.use('/api', variationRoute);
-app.use('/api', sizeRoute);
-app.use('/api', cartRoute);
+app.use('/api', userRoute)
+app.use('/api', cateRoute)
+app.use('/api', subRoute)
+app.use('/api', productRoute)
+app.use('/api', cloundinaryRoute)
+app.use('/api', variationRoute)
+app.use('/api', sizeRoute)
+app.use('/api', cartRoute)
+app.use('/api', reviewRoute)
 
 app.use(notFound)
 

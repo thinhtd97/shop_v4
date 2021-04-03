@@ -203,7 +203,7 @@ function ProductModal(props) {
                 </div>
                 <div className="pro-details-rating-wrap">
                   <div className="pro-details-rating">
-                    <Rating />
+                    <Rating value={2.8} />
                   </div>
                 </div>
 

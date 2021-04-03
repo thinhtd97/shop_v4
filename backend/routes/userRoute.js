@@ -2,6 +2,7 @@ import express from 'express'
 import { protect } from '../middleware/middlewares.js'
 import { admin } from '../middleware/authMiddleware.js'
 import {
+  addWishlist,
   authAdmin,
   authUser,
   changePassword,
@@ -10,6 +11,7 @@ import {
   getUserByID,
   NewPassword,
   registerUser,
+  removeWishlist,
   resetPassword,
   updateProfileUser,
   updateUserByID,
@@ -31,4 +33,8 @@ router
   .get(protect, admin, getUserByID)
   .delete(protect, admin, deleteUserByID)
   .put(protect, admin, updateUserByID)
+router
+  .route('/user/wishlist/:slugProduct')
+  .post(protect, addWishlist)
+  .delete(protect, removeWishlist)
 export default router

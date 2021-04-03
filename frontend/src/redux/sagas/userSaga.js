@@ -1,4 +1,4 @@
-import { call, put, takeEvery, select } from 'redux-saga/effects'
+import { call, put, takeEvery, select, all } from 'redux-saga/effects'
 import axios from 'axios'
 import * as userConstant from '../constants/userConstants'
 import * as cartConstant from '../constants/cartConstant'
@@ -22,34 +22,38 @@ function* login(action) {
       ),
     )
 
-    const configListCart = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${data.token}`,
-      },
-    }
-
     if (cartItems.length >= 1) {
-      cartItems.map(
-        async (item) =>
-          await axios.post(
-            `${process.env.REACT_APP_API}/cart/${item.slug}`,
-            {
-              name: item.name,
-              image: item.image,
-              size: item.size,
-              price: item.price,
-              qty: item.qty,
-              color: item.color,
-              stock: item.stock,
-              product: item.product,
-              priceDiscount: item.priceDiscount,
-            },
-            configListCart,
+      const configListCart = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.token}`,
+        },
+      }
+      yield all(
+        cartItems.map((item) =>
+          call(() =>
+            axios.post(
+              `${process.env.REACT_APP_API}/cart/${item.slug}`,
+              {
+                name: item.name,
+                image: item.image,
+                size: item.size,
+                price: item.price,
+                qty: item.qty,
+                color: item.color,
+                stock: item.stock,
+                product: item.product,
+                priceDiscount: item.priceDiscount,
+              },
+              configListCart,
+            ),
           ),
+        ),
       )
-      const { data: dataCart } = yield call(() =>
-        axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
+
+      const { data: dataCart } = yield call(
+        async () =>
+          await axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
       )
       yield put({ type: cartConstant.LIST_CART_SUCCESS, payload: dataCart })
     }

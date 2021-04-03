@@ -18,13 +18,6 @@ function* addToCart(action) {
     addToast,
   } = action
   try {
-    const { userInfo } = yield select((state) => state.userLogin)
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
     yield put({
       type: cartConstants.CART_ADD_ITEM,
       payload: {
@@ -137,7 +130,6 @@ function* addCartDatabase(action) {
 function* handleDecrementQuantity(action) {
   const { item } = action
   const { userInfo } = yield select((state) => state.userLogin)
-
   if (userInfo) {
     const config = {
       headers: {

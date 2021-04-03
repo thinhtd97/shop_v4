@@ -150,17 +150,6 @@ export const listCart = (state = { cartItems: [] }, action) => {
   }
 }
 
-export const cartAddDatabaseReducer = (state = {}, action) => {
-  switch (action.type) {
-    case cartConstant.CART_ADD_DATABASE_REQUEST:
-      return { loading: true }
-    case cartConstant.CART_ADD_DATABASE_SUCCESS:
-      return { loading: false, success: true }
-    case cartConstant.CART_ADD_DATABASE_FAILED:
-      return { loading: false, error: action.payload }
-    default:
-      return state
-  }
-}
+
 
 export default cartReducer

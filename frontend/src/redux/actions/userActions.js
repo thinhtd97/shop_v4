@@ -47,3 +47,13 @@ export const userChangePasswordAction = (addToast, password, oldPassword) => ({
     password,
     oldPassword
 })
+export const addWishlist = (addToast, slug) => ({
+    type: userConstants.USER_ADD_WISHLIST_REQUEST,
+    addToast,
+    slug
+})
+export const removeWishlist = (addToast, slug) => ({
+    type: userConstants.USER_REMOVE_WISHLIST_REQUEST,
+    addToast,
+    slug
+})

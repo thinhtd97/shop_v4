@@ -36,7 +36,6 @@ const rootReducer = combineReducers({
   listSub: subReducer.listSubs,
   cart: cartReducer,
   listCart: listCart,
-  addCartDatabase: cartAddDatabaseReducer,
 })
 
 export default rootReducer

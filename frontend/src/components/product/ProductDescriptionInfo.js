@@ -60,7 +60,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
         ),
       )
     },
-    [dispatch],
+    [dispatch, addToast],
   )
   // const addToCart = (
   //   e,

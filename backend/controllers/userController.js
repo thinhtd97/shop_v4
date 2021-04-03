@@ -4,6 +4,7 @@ import User from '../models/user.js'
 import nodemailer from 'nodemailer'
 import sendGridTransport from 'nodemailer-sendgrid-transport'
 import crypto from 'crypto'
+import Product from '../models/product.js'
 
 const transport = nodemailer.createTransport(
   sendGridTransport({
@@ -82,7 +83,7 @@ export const changePassword = asyncHandler(async (req, res) => {
 
 export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email }).populate('wishlist')
   if (
     user &&
     (await user.matchPassword(password)) &&
@@ -94,6 +95,7 @@ export const authUser = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       address: user.address,
+      wishlist: user.wishlist,
       cart: user.cart,
       role: user.role,
       token: generateToken(user._id),
@@ -114,6 +116,7 @@ export const authAdmin = asyncHandler(async (req, res) => {
       email: user.email,
       address: user.address,
       cart: user.cart,
+      wishlist: user.wishlist,
       role: user.role,
       token: generateToken(user._id),
     })
@@ -123,7 +126,7 @@ export const authAdmin = asyncHandler(async (req, res) => {
   }
 })
 export const getProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id)
+  const user = await User.findById(req.user.id).populate('wishlist')
   if (user) {
     res.json({
       _id: user._id,
@@ -132,6 +135,7 @@ export const getProfile = asyncHandler(async (req, res) => {
       email: user.email,
       phone: user.phone,
       address: user.address,
+      wishlist: user.wishlist,
       role: user.role,
     })
   } else {
@@ -150,7 +154,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     address,
     phone,
   } = req.body
-  const user = await User.findOne({ email, username })
+  const user = await User.findOne({ email, username }).populate('wishlist')
 
   if (user) {
     res.status(400)
@@ -172,6 +176,7 @@ export const registerUser = asyncHandler(async (req, res) => {
         email: userCreated.email,
         phone: userCreated.phone,
         address: userCreated.address,
+        wishlist: userCreated.wishlist,
         role: userCreated.role,
         token: generateToken(userCreated._id),
       })
@@ -262,5 +267,36 @@ export const updateUserByID = asyncHandler(async (req, res) => {
   } else {
     res.status(404)
     throw new Error('User Not Found')
+  }
+})
+export const addWishlist = asyncHandler(async (req, res) => {
+  const product = await Product.findOne({ slug: req.params.slugProduct })
+  const user = await User.findById(req.user.id)
+  if (!product) {
+    res.status(404)
+    throw new Error('Product Not Found')
+  }
+  user.wishlist.push(product._id)
+  await user.save()
+  res.json({
+    message: 'Add Wishlist Success.',
+  })
+})
+export const removeWishlist = asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.findOne({ slug: req.params.slugProduct })
+    const updated = await User.updateOne(
+      { _id: req.user.id },
+      { $pull: { wishlist: { $in: `${product._id}` } } },
+    )
+    if (updated) {
+      res.json({
+        message: 'Remove wishlist success',
+      })
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404)
+    throw new Error('Remove wishlist failed.')
   }
 })

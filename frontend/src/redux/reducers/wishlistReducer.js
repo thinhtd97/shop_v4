@@ -10,11 +10,16 @@ export const listWishlistReducer = (state = { wishlist: [] }, action) => {
     case wishlistConstant.LIST_WISHLIST_FAILED:
       return { loading: false, error: action.payload }
     case wishlistConstant.REMOVE_WISHLIST:
-        const removeItem = state.wishlist.filter((el) => el._id !== item._id);
-        return {
-            ...state,
-            wishlist: removeItem
-        }
+      const removeItem = state.wishlist.filter((el) => el._id !== item._id)
+      return {
+        ...state,
+        wishlist: removeItem,
+      }
+    case wishlistConstant.REMOVE_WISHLIST_ALL:
+      return {
+        ...state,
+        wishlist: [],
+      }
     default:
       return state
   }
@@ -26,18 +31,6 @@ export const addWishlistReducer = (state = {}, action) => {
     case wishlistConstant.ADD_WISHLIST_SUCCESS:
       return { loading: false, success: true }
     case wishlistConstant.ADD_WISHLIST_FAILED:
-      return { loading: false, error: action.payload }
-    default:
-      return state
-  }
-}
-export const removeWishlistReducer = (state = {}, action) => {
-  switch (action.type) {
-    case wishlistConstant.REMOVE_WISHLIST_REQUEST:
-      return { loading: true }
-    case wishlistConstant.REMOVE_WISHLIST_SUCCESS:
-      return { loading: false, success: true }
-    case wishlistConstant.REMOVE_WISHLIST_FAILED:
       return { loading: false, error: action.payload }
     default:
       return state

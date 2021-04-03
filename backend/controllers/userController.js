@@ -301,11 +301,32 @@ export const removeWishlist = asyncHandler(async (req, res) => {
   }
 })
 export const listWishlist = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id).populate('wishlist')
+  const user = await User.findById(req.user.id).populate({
+    path: 'wishlist',
+    model: 'Product',
+    populate: {
+      path: 'variation',
+      model: 'Variation',
+      populate: {
+        path: 'size',
+        model: 'Size',
+      },
+    },
+  })
   if (!user) {
     res.status(404)
     throw new Error('User not found')
   }
   const list = user.wishlist
   res.json(list)
+})
+export const removeAllWishlist = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id)
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+  user.wishlist = []
+  const updated = await user.save()
+  res.json(updated)
 })

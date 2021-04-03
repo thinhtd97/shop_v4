@@ -4,23 +4,39 @@ import { Link } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import MetaTags from 'react-meta-tags'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getDiscountPrice } from '../../helpers/product'
 
 import LayoutOne from '../../layouts/LayoutOne'
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb'
+import {
+  removeAllWishlistAction,
+  removeWishlistItem,
+} from '../../redux/actions/wishlistActions'
 
 const Wishlist = ({
   location,
-  cartItems,
   currency,
   // wishlistItems,
   // removeFromWishlist,
   // removeAllFromWishlist
 }) => {
   const { addToast } = useToasts()
+  const dispatch = useDispatch()
   const { pathname } = location
-
+  const { userInfo } = useSelector((state) => state.userLogin)
+  const { wishlist } = useSelector((state) => state.wishListData)
+  const { cartItems } = useSelector((state) => state.cart)
+  const { cartItems: cartItemsDatabase } = useSelector(
+    (state) => state.listCart,
+  )
+  const finalCartItems = userInfo ? cartItemsDatabase : cartItems
+  const remove = (addToast, item) => {
+    dispatch(removeWishlistItem(addToast, item))
+  }
+  const removeWishListAll = (addToast) => {
+    dispatch(removeAllWishlistAction(addToast))
+  }
   return (
     <Fragment>
       <MetaTags>
@@ -41,96 +57,151 @@ const Wishlist = ({
         <Breadcrumb />
         <div className="cart-main-area pt-90 pb-100">
           <div className="container">
-            <Fragment>
-              <h3 className="cart-page-title">Your wishlist items</h3>
-              <div className="row">
-                <div className="col-12">
-                  <div className="table-content table-responsive cart-table-content">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Image</th>
-                          <th>Product Name</th>
-                          <th>Unit Price</th>
-                          <th>Add To Cart</th>
-                          <th>action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className="product-thumbnail">
-                            <Link to={process.env.PUBLIC_URL + '/product/'}>
-                              <img
-                                className="img-fluid"
-                                src="https://res.cloudinary.com/ducthinh2109/image/upload/v1616726836/cjjbymkqdroeo37xv4lc.jpg"
-                                alt=""
-                              />
-                            </Link>
-                          </td>
+            {wishlist && wishlist.length > 0 ? (
+              <Fragment>
+                <h3 className="cart-page-title">Your wishlist items</h3>
+                <div className="row">
+                  <div className="col-12">
+                    <div className="table-content table-responsive cart-table-content">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Unit Price</th>
+                            <th>Add To Cart</th>
+                            <th>action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {wishlist &&
+                            wishlist.map((item, key) => {
+                              const discountedPrice =
+                                item.discount !== 0 &&
+                                getDiscountPrice(item.price, item.discount)
+                              const cartItem = finalCartItems.filter(
+                                (el) => el.product === item._id,
+                              )[0]
+                              return (
+                                <tr key={key}>
+                                  <td className="product-thumbnail">
+                                    <Link
+                                      to={
+                                        process.env.PUBLIC_URL +
+                                        '/product/' +
+                                        item.slug
+                                      }
+                                    >
+                                      <img
+                                        className="img-fluid"
+                                        src={item.image[0].url}
+                                        alt=""
+                                      />
+                                    </Link>
+                                  </td>
 
-                          <td className="product-name text-center">
-                            <Link to="#">Dummy TExt</Link>
-                          </td>
+                                  <td className="product-name text-center">
+                                    <Link
+                                      to={`${process.env.PUBLIC_URL}/product/${item.slug}`}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  </td>
 
-                          <td className="product-price-cart">
-                            <Fragment>
-                              <span className="amount old">$10</span>
-                              <span className="amount">$10</span>
-                            </Fragment>
-                          </td>
+                                  <td className="product-price-cart">
+                                    {item.discount !== 0 ? (
+                                      <Fragment>
+                                        <span className="amount old">
+                                          ${item.price.toFixed(2)}
+                                        </span>
+                                        <span className="amount">
+                                          ${discountedPrice.toFixed(2)}
+                                        </span>
+                                      </Fragment>
+                                    ) : (
+                                      <span className="amount">
+                                        ${item.price.toFixed(2)}
+                                      </span>
+                                    )}
+                                  </td>
 
-                          <td className="product-wishlist-cart">
-                            {/* <Link to={`${process.env.PUBLIC_URL}/product/`}>
-                              Select option
-                            </Link> */}
-                            <button title="Add to cart">Add to cart</button>
-                            {/* <button disabled className="active">
-                              Out of stock
-                            </button> */}
-                          </td>
+                                  <td className="product-wishlist-cart">
+                                    {item.variation &&
+                                    item.variation.length > 0 ? (
+                                      <Link
+                                        to={`${process.env.PUBLIC_URL}/product/${item.slug}`}
+                                      >
+                                        Select option
+                                      </Link>
+                                    ) : (
+                                      <Fragment>
+                                        {cartItem ? (
+                                          <button disabled>
+                                            Added To Cart
+                                          </button>
+                                        ) : (
+                                          <button title="Add to cart">
+                                            Add to cart
+                                          </button>
+                                        )}
+                                      </Fragment>
+                                    )}
 
-                          <td className="product-remove">
-                            <button>
-                              <i className="fa fa-times"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                                    {/* <button disabled className="active">
+                       Out of stock
+                     </button> */}
+                                  </td>
+
+                                  <td className="product-remove">
+                                    <button
+                                      onClick={() => remove(addToast, item)}
+                                    >
+                                      <i className="fa fa-times"></i>
+                                    </button>
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-              </div>
 
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="cart-shiping-update-wrapper">
+                      <div className="cart-shiping-update">
+                        <Link to={process.env.PUBLIC_URL + '/shop'}>
+                          Continue Shopping
+                        </Link>
+                      </div>
+                      <div className="cart-clear">
+                        <button onClick={() => removeWishListAll(addToast)}>
+                          Clear Wishlist
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Fragment>
+            ) : (
               <div className="row">
                 <div className="col-lg-12">
-                  <div className="cart-shiping-update-wrapper">
-                    <div className="cart-shiping-update">
-                      <Link to={process.env.PUBLIC_URL + '/shop-grid-standard'}>
-                        Continue Shopping
+                  <div className="item-empty-area text-center">
+                    <div className="item-empty-area__icon mb-30">
+                      <i className="pe-7s-like"></i>
+                    </div>
+                    <div className="item-empty-area__text">
+                      No items found in wishlist <br />{' '}
+                      <Link to={process.env.PUBLIC_URL + '/shop'}>
+                        Add Items
                       </Link>
                     </div>
-                    <div className="cart-clear">
-                      <button>Clear Wishlist</button>
-                    </div>
                   </div>
                 </div>
               </div>
-            </Fragment>
-            <div className="row">
-              <div className="col-lg-12">
-                <div className="item-empty-area text-center">
-                  <div className="item-empty-area__icon mb-30">
-                    <i className="pe-7s-like"></i>
-                  </div>
-                  <div className="item-empty-area__text">
-                    No items found in wishlist <br />{' '}
-                    <Link to={process.env.PUBLIC_URL + '/shop-grid-standard'}>
-                      Add Items
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </LayoutOne>

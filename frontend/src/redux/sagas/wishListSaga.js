@@ -13,12 +13,16 @@ function* addToWishlist(action) {
       },
     }
     yield call(() =>
-      axios.post(`${process.env.REACT_APP_API}/user/wishlist/${slug}`, {}, config),
+      axios.post(
+        `${process.env.REACT_APP_API}/user/wishlist/${slug}`,
+        {},
+        config,
+      ),
     )
     const { data } = yield call(() =>
       axios.get(`${process.env.REACT_APP_API}/user/wishlist`, config),
     )
-
+    addToast('Added To Wishlist', { appearance: 'success', autoDismiss: true })
     yield put({
       type: wishlistConstant.ADD_WISHLIST_SUCCESS,
     })
@@ -27,7 +31,6 @@ function* addToWishlist(action) {
       type: wishlistConstant.LIST_WISHLIST_SUCCESS,
       payload: data,
     })
-    addToast('Added To Wishlist', { appearance: 'success', autoDismiss: true })
   } catch (error) {
     yield put({
       type: wishlistConstant.ADD_WISHLIST_FAILED,
@@ -52,6 +55,7 @@ function* addToWishlist(action) {
 function* removeItem(action) {
   const { item, addToast } = action
   const { userInfo } = yield select((state) => state.userLogin)
+  addToast('Removed Item', { appearance: 'success', autoDismiss: true })
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -64,7 +68,7 @@ function* removeItem(action) {
       config,
     ),
   )
-  addToast('Removed Item', { appearance: 'success', autoDismiss: true })
+
 }
 function* listWishlist(action) {
   const { addToast } = action
@@ -104,9 +108,26 @@ function* listWishlist(action) {
     )
   }
 }
+
+function* removeAllWishlist(action) {
+  const { addToast } = action
+  addToast('Removed All Item', { appearance: 'success', autoDismiss: true })
+  const { userInfo } = yield select((state) => state.userLogin)
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+  yield call(() =>
+    axios.delete(`${process.env.REACT_APP_API}/user/wishlist`, config),
+  )
+}
+
 function* wishlistSaga() {
   yield takeEvery(wishlistConstant.ADD_WISHLIST_REQUEST, addToWishlist)
   yield takeEvery(wishlistConstant.REMOVE_WISHLIST, removeItem)
   yield takeEvery(wishlistConstant.LIST_WISHLIST_REQUEST, listWishlist)
+  yield takeEvery(wishlistConstant.REMOVE_WISHLIST_ALL, removeAllWishlist)
 }
 export default wishlistSaga

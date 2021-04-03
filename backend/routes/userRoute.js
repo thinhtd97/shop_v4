@@ -12,6 +12,7 @@ import {
   listWishlist,
   NewPassword,
   registerUser,
+  removeAllWishlist,
   removeWishlist,
   resetPassword,
   updateProfileUser,
@@ -29,7 +30,10 @@ router
   .route('/user/profile')
   .get(protect, getProfile)
   .put(protect, updateProfileUser)
-router.get('/user/wishlist', protect, listWishlist)
+router
+  .route('/user/wishlist')
+  .get(protect, listWishlist)
+  .delete(protect, removeAllWishlist)
 router
   .route('/user/:id')
   .get(protect, admin, getUserByID)

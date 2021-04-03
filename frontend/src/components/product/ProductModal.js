@@ -9,13 +9,14 @@ import {
 } from '../../redux/actions/cartActions'
 import { useToasts } from 'react-toast-notifications'
 import { useDispatch } from 'react-redux'
+import { addWishlistAction } from '../../redux/actions/wishlistActions'
 
 function ProductModal(props) {
   const { addToast } = useToasts()
   const dispatch = useDispatch()
   const [gallerySwiper, getGallerySwiper] = useState(null)
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null)
-  const { product, userInfo, cartItem } = props
+  const { product, userInfo, cartItem, wishlistItem } = props
   const discountedPrice = product.discount
     ? getDiscountPrice(product.price, product.discount)
     : 0
@@ -73,6 +74,17 @@ function ProductModal(props) {
         <i className="pe-7s-angle-right" />
       </button>
     ),
+  }
+
+  const handleAddToWishlist = (addToast, slug) => {
+    if (!userInfo) {
+      return addToast('Please login to add', {
+        appearance: 'error',
+        autoDismiss: true,
+      })
+    } else {
+      dispatch(addWishlistAction(addToast, slug))
+    }
   }
 
   const addToCart = (
@@ -306,50 +318,59 @@ function ProductModal(props) {
                       <>
                         {userInfo ? (
                           <Fragment>
-                            
-                            <button
-                              onClick={() =>
-                                addToCartDatabase(
-                                  product._id,
-                                  product.slug,
-                                  product.name,
-                                  product.image[0].url,
-                                  product.price,
-                                  product.countInStock,
-                                  quantityCount,
-                                  selectedProductSize,
-                                  selectedProductColor,
-                                  discountedPrice,
-                                  addToast,
-                                )
-                              }
-                            >
-                              {' '}
-                              Add To Cart{' '}
-                            </button>
+                            {cartItem ? (
+                              <button disabled>Added To Cart</button>
+                            ) : (
+                              <button
+                                onClick={() =>
+                                  addToCartDatabase(
+                                    product._id,
+                                    product.slug,
+                                    product.name,
+                                    product.image[0].url,
+                                    product.price,
+                                    product.countInStock,
+                                    quantityCount,
+                                    selectedProductSize,
+                                    selectedProductColor,
+                                    discountedPrice,
+                                    addToast,
+                                  )
+                                }
+                              >
+                                {' '}
+                                Add To Cart{' '}
+                              </button>
+                            )}
                           </Fragment>
                         ) : (
-                          <button
-                            onClick={(e) =>
-                              addToCart(
-                                e,
-                                product._id,
-                                product.slug,
-                                product.name,
-                                product.image[0].url,
-                                product.price,
-                                product.countInStock,
-                                quantityCount,
-                                selectedProductSize,
-                                selectedProductColor,
-                                discountedPrice,
-                                addToast,
-                              )
-                            }
-                          >
-                            {' '}
-                            Add To Cart{' '}
-                          </button>
+                          <Fragment>
+                            {cartItem ? (
+                              <button disabled>Added To Cart</button>
+                            ) : (
+                              <button
+                                onClick={(e) =>
+                                  addToCart(
+                                    e,
+                                    product._id,
+                                    product.slug,
+                                    product.name,
+                                    product.image[0].url,
+                                    product.price,
+                                    product.countInStock,
+                                    quantityCount,
+                                    selectedProductSize,
+                                    selectedProductColor,
+                                    discountedPrice,
+                                    addToast,
+                                  )
+                                }
+                              >
+                                {' '}
+                                Add To Cart{' '}
+                              </button>
+                            )}
+                          </Fragment>
                         )}
                       </>
                     )}
@@ -357,14 +378,20 @@ function ProductModal(props) {
                     {/* <button disabled>Out of Stock</button> */}
                   </div>
                   <div className="pro-details-wishlist">
-                    <button title="Add to wishlist">
-                      <i className="pe-7s-like" />
-                    </button>
-                  </div>
-                  <div className="pro-details-compare">
-                    <button title={`Add to compare`}>
-                      <i className="pe-7s-shuffle" />
-                    </button>
+                    {wishlistItem ? (
+                      <button disabled style={{cursor: 'not-allowed'}}>
+                        <i className="pe-7s-like" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          handleAddToWishlist(addToast, product.slug)
+                        }
+                        title="Add to wishlist"
+                      >
+                        <i className="pe-7s-like" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

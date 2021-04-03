@@ -32,7 +32,7 @@ const IconGroup = ({ iconWhiteClass }) => {
   }
 
   const currency = useSelector((state) => state.currencyData)
-  const wishlistData = useSelector((state) => state.wishlistData)
+  const { wishlist } = useSelector((state) => state.wishListData)
 
   const { cartItems: cartItemsUser } = useSelector((state) => state.listCart);
   const finalCartItems = userInfo ? cartItemsUser : cartItems; 
@@ -71,7 +71,7 @@ const IconGroup = ({ iconWhiteClass }) => {
             <Link to={process.env.PUBLIC_URL + '/wishlist'}>
               <i className="pe-7s-like" />
               <span className="count-style">
-                {wishlistData && wishlistData.length ? wishlistData.length : 0}
+                {wishlist && wishlist.length ? wishlist.length : 0}
               </span>
             </Link>
           </div>

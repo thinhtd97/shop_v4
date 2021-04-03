@@ -8,6 +8,7 @@ import {
   addToCartAction,
   cartAddToDatabase,
 } from '../../redux/actions/cartActions'
+import { addWishlistAction } from '../../redux/actions/wishlistActions'
 import ProductModal from './ProductModal'
 
 const ProductGridSingleFive = ({
@@ -15,8 +16,10 @@ const ProductGridSingleFive = ({
   currency,
   sliderClassName,
   spaceBottomClass,
+  userInfo,
+  cartItem,
+  wishlistItem
 }) => {
-  const { userInfo } = useSelector((state) => state.userLogin)
   const [modalShow, setModalShow] = useState(false)
   const { addToast } = useToasts()
   const dispatch = useDispatch()
@@ -87,6 +90,16 @@ const ProductGridSingleFive = ({
       ),
     )
   }
+  const handleAddToWishlist = (addToast, slug) => {
+    if (!userInfo) {
+      return addToast('Please login to add', {
+        appearance: 'error',
+        autoDismiss: true,
+      })
+    } else {
+      dispatch(addWishlistAction(addToast, slug))
+    }
+  }
   return (
     <Fragment>
       <div
@@ -145,9 +158,17 @@ const ProductGridSingleFive = ({
                 </div>
                 <div className="product-action-3">
                   <div className="pro-same-action pro-wishlist">
-                    <button title={`Add to wishlist`}>
+                    {wishlistItem ? (<button disabled>
+                      <i class="fa fa-heart"></i>
+                    </button>) : ( <button
+                      onClick={() =>
+                        handleAddToWishlist(addToast, product.slug)
+                      }
+                      title={`Add to wishlist`}
+                    >
                       <i class="fa fa-heart-o"></i>
-                    </button>
+                    </button>)}
+                   
                   </div>
                   <div className="pro-same-action pro-cart">
                     {product.affiliateLink ? (
@@ -170,50 +191,64 @@ const ProductGridSingleFive = ({
                     ) : product.countInStock && product.countInStock > 0 ? (
                       <>
                         {userInfo ? (
-                          <button
-                            onClick={(e) =>
-                              addToCartDatabase(
-                                product._id,
-                                product.slug,
-                                product.name,
-                                product.image[0].url,
-                                product.price,
-                                product.countInStock,
-                                quantity,
-                                size,
-                                color,
-                                discountedPrice,
-                                addToast,
-                              )
-                            }
-                            title="Add To Cart"
-                          >
-                            {' '}
-                            <i className="fa fa-shopping-cart"></i>{' '}
-                          </button>
+                          <Fragment>
+                            {cartItem ? (
+                              <button disabled>Added To Cart</button>
+                            ) : (
+                              <button
+                                onClick={(e) =>
+                                  addToCartDatabase(
+                                    product._id,
+                                    product.slug,
+                                    product.name,
+                                    product.image[0].url,
+                                    product.price,
+                                    product.countInStock,
+                                    quantity,
+                                    size,
+                                    color,
+                                    discountedPrice,
+                                    addToast,
+                                  )
+                                }
+                                title="Add To Cart"
+                              >
+                                {' '}
+                                <i className="fa fa-shopping-cart"></i>{' '}
+                              </button>
+                            )}
+                          </Fragment>
                         ) : (
-                          <button
-                            onClick={(e) =>
-                              addToCart(
-                                e,
-                                product._id,
-                                product.slug,
-                                product.name,
-                                product.image[0].url,
-                                product.price,
-                                product.countInStock,
-                                quantity,
-                                size,
-                                color,
-                                discountedPrice,
-                                addToast,
-                              )
-                            }
-                            title="Add To Cart"
-                          >
-                            {' '}
-                            <i className="fa fa-shopping-cart"></i>{' '}
-                          </button>
+                          <Fragment>
+                            {cartItem ? (
+                              <button disabled>
+                                <i className="fa fa-shopping-cart"></i>
+                              </button>
+                            ) : (
+                              <button
+                                onClick={(e) =>
+                                  addToCart(
+                                    e,
+                                    product._id,
+                                    product.slug,
+                                    product.name,
+                                    product.image[0].url,
+                                    product.price,
+                                    product.countInStock,
+                                    quantity,
+                                    size,
+                                    color,
+                                    discountedPrice,
+                                    addToast,
+                                  )
+                                }
+                                title="Add To Cart"
+                              >
+                                {' '}
+                                <i className="fa fa-shopping-cart"></i>{' '}
+                              </button>
+                            )}
+                          </Fragment>
                         )}
                       </>
                     ) : (
@@ -246,6 +281,8 @@ const ProductGridSingleFive = ({
         currency={currency}
         discountedprice={discountedPrice}
         addtoast={addToast}
+        cartItem={cartItem}
+        wishlistItem={wishlistItem}
       />
     </Fragment>
   )

@@ -89,7 +89,14 @@ const ProductGridListSingle = ({
     )
   }
   const handleAddToWishlist = (addToast, slug) => {
-    dispatch(addWishlistAction(addToast, slug))
+    if (!userInfo) {
+      return addToast('Please login to add', {
+        appearance: 'error',
+        autoDismiss: true,
+      })
+    } else {
+      dispatch(addWishlistAction(addToast, slug))
+    }
   }
   return (
     <Fragment>
@@ -124,12 +131,18 @@ const ProductGridListSingle = ({
 
             <div className="product-action">
               <div className="pro-same-action pro-wishlist">
-                <button
-                  onClick={() => handleAddToWishlist(addToast, product.slug)}
-                  title="Add to wishlist"
-                >
-                  <i className="pe-7s-like" />
-                </button>
+                {wishlistItem ? (
+                  <button disabled style={{cursor: 'not-allowed'}}>
+                    <i className="pe-7s-like" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleAddToWishlist(addToast, product.slug)}
+                    title="Add to wishlist"
+                  >
+                    <i className="pe-7s-like" />
+                  </button>
+                )}
               </div>
               <div className="pro-same-action pro-cart">
                 {product.countInStock === 0 ? (
@@ -176,9 +189,7 @@ const ProductGridListSingle = ({
                         ) : (
                           <>
                             {cartItem ? (
-                              <button disabled>
-                                Added To Cart
-                              </button>
+                              <button disabled>Added To Cart</button>
                             ) : (
                               <button
                                 onClick={(e) =>
@@ -308,32 +319,39 @@ const ProductGridListSingle = ({
                 <div className="shop-list-actions d-flex align-items-center">
                   <div className="shop-list-btn btn-hover">
                     {product.countInStock === 0 ? (
-                      <button title="Add to cart">
-                        {' '}
-                        <i className="pe-7s-cart"></i> Add to cart
-                      </button>
+                      <Fragment>
+                        {cartItem ? (
+                          <button disabled>Added To Cart</button>
+                        ) : (
+                          <button title="Add to cart">
+                            {' '}
+                            <i className="pe-7s-cart"></i> Add to cart
+                          </button>
+                        )}
+                      </Fragment>
                     ) : (
                       <button disabled title="Out of stock">
                         {' '}
-                        <i className="pe-7s-cart"></i> Add to cart
+                        <i className="pe-7s-cart"></i> Out of stock
                       </button>
                     )}
                   </div>
 
                   <div className="shop-list-wishlist ml-10">
-                    <button
-                      onClick={(e) =>
-                        handleAddToWishlist(addToast, product.slug)
-                      }
-                      title="Add to wishlist"
-                    >
-                      <i className="pe-7s-like" />
-                    </button>
-                  </div>
-                  <div className="shop-list-compare ml-10">
-                    <button title="Add to compare">
-                      <i className="pe-7s-shuffle" />
-                    </button>
+                    {wishlistItem ? (
+                      <button disabled>
+                        <i className="pe-7s-like" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={(e) =>
+                          handleAddToWishlist(addToast, product.slug)
+                        }
+                        title="Add to wishlist"
+                      >
+                        <i className="pe-7s-like" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -349,6 +367,7 @@ const ProductGridListSingle = ({
         product={product}
         addtoast={addToast}
         cartItem={cartItem}
+        wishlistItem={wishlistItem}
       />
     </Fragment>
   )

@@ -10,15 +10,16 @@ export const addWishlistAction = (addToast, slug) => ({
   addToast,
   slug,
 })
-export const removeWishlistAction = (addToast, slug) => ({
-  type: wishlistConstant.REMOVE_WISHLIST_REQUEST,
-  addToast,
-  slug,
-})
+
 export const removeWishlistItem = (addToast, item) => ({
   type: wishlistConstant.REMOVE_WISHLIST,
   addToast,
-  item
+  item,
+})
+
+export const removeAllWishlistAction = (addToast) => ({
+  type: wishlistConstant.REMOVE_WISHLIST_ALL,
+  addToast,
 })
 // export const addWishlistAction = (addToast, item) => ({
 //   type: wishlistConstant.ADD_WISHLIST,
@@ -27,5 +28,5 @@ export const removeWishlistItem = (addToast, item) => ({
 export const listWishlist = (addToast, item) => ({
   type: wishlistConstant.LIST_WISHLIST_REQUEST,
   item,
-  addToast
+  addToast,
 })

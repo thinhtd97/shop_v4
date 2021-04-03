@@ -315,9 +315,11 @@ const ProductGridListSingle = ({
       </div>
       {/* product modal */}
       <ProductModal
-        product={product}
-        show={modalShow}
-        onHide={() => setModalShow(false)}
+       show={modalShow}
+       userInfo={userInfo}
+       onHide={() => setModalShow(false)}
+       product={product}
+       addtoast={addToast}
       />
     </Fragment>
   )

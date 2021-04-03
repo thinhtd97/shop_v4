@@ -8,6 +8,7 @@ import {
 } from '../../redux/actions/cartActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useToasts } from 'react-toast-notifications'
+import { useCallback } from 'react'
 
 const ProductDescriptionInfo = ({ product, discountedPrice }) => {
   const dispatch = useDispatch()
@@ -19,43 +20,80 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
     product.variation ? product.variation[0]?.size[0]?.name : '',
   )
   const [productStock, setProductStock] = useState(
-    product.variation ? product.variation[0]?.size[0]?.stock : product.stock,
+    product.variation
+      ? product.variation[0]?.size[0]?.stock
+      : product.countInStock,
   )
   const [quantityCount, setQuantityCount] = useState(1)
 
   const { userInfo } = useSelector((state) => state.userLogin)
-
-  const addToCart = (
-    e,
-    product,
-    slug,
-    name,
-    image,
-    price,
-    countInStock,
-    quantity,
-    size,
-    color,
-    discountedPrice,
-  ) => {
-    e.preventDefault()
-    let cartId = `${Date.now()}`
-    dispatch(
-      addToCartAction(
-        product,
-        slug,
-        name,
-        image,
-        price,
-        countInStock,
-        quantity,
-        size,
-        color,
-        discountedPrice,
-        addToast,
-      ),
-    )
-  }
+  const addToCart = useCallback(
+    (
+      e,
+      product,
+      slug,
+      name,
+      image,
+      price,
+      countInStock,
+      quantity,
+      size,
+      color,
+      discountedPrice,
+    ) => {
+      e.preventDefault()
+      let cartId = `${Date.now()}`
+      dispatch(
+        addToCartAction(
+          product,
+          cartId,
+          slug,
+          name,
+          image,
+          price,
+          countInStock,
+          quantity,
+          size,
+          color,
+          discountedPrice,
+          addToast,
+        ),
+      )
+    },
+    [dispatch],
+  )
+  // const addToCart = (
+  //   e,
+  //   product,
+  //   slug,
+  //   name,
+  //   image,
+  //   price,
+  //   countInStock,
+  //   quantity,
+  //   size,
+  //   color,
+  //   discountedPrice,
+  // ) => {
+  //   e.preventDefault()
+  //   let cartId = `${Date.now()}`
+  //   dispatch(
+  //     addToCartAction(
+  //       product,
+  //       cartId,
+  //       slug,
+  //       name,
+  //       image,
+  //       price,
+  //       countInStock,
+  //       quantity,
+  //       size,
+  //       color,
+  //       discountedPrice,
+  //       addToast,
+  //     ),
+  //   )
+  // }
   const addToCartDatabase = (
     product,
     slug,
@@ -132,9 +170,8 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
                       }
                       onChange={() => {
                         setSelectedProductColor(single.color)
-                        setSelectedProductSize(single.size[0]?.size)
+                        setSelectedProductSize(single.size[0]?.name)
                         setProductStock(single.size[0]?.stock)
-                        setQuantityCount(1)
                       }}
                     />
                     <span className="checkmark"></span>
@@ -164,7 +201,6 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
                               onChange={() => {
                                 setSelectedProductSize(singleSize.size)
                                 setProductStock(single.size[0].stock)
-                                setQuantityCount(1)
                               }}
                               type="radio"
                               name="size"
@@ -229,7 +265,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
               <>
                 {userInfo ? (
                   <button
-                    onClick={(e) =>
+                    onClick={() =>
                       addToCartDatabase(
                         product._id,
                         product.slug,
@@ -252,6 +288,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
                   <button
                     onClick={(e) =>
                       addToCart(
+                        e,
                         product._id,
                         product.slug,
                         product.name,

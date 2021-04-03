@@ -16,7 +16,7 @@ const ProductImageDescription = ({
 
   const { addToast } = useToasts();
 
-  const discountedPrice = getDiscountPrice(product.price, product.discount);
+  const discountedPrice = product.discount ? getDiscountPrice(product.price, product.discount) : 0;
 
   return (
     <div

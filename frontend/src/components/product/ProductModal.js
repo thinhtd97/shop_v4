@@ -306,7 +306,7 @@ function ProductModal(props) {
                       <>
                         {userInfo ? (
                           <button
-                            onClick={(e) =>
+                            onClick={() =>
                               addToCartDatabase(
                                 product._id,
                                 product.slug,

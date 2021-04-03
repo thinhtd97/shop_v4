@@ -18,6 +18,13 @@ function* addToCart(action) {
     addToast,
   } = action
   try {
+    const { userInfo } = yield select((state) => state.userLogin)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
     yield put({
       type: cartConstants.CART_ADD_ITEM,
       payload: {
@@ -130,6 +137,7 @@ function* addCartDatabase(action) {
 function* handleDecrementQuantity(action) {
   const { item } = action
   const { userInfo } = yield select((state) => state.userLogin)
+
   if (userInfo) {
     const config = {
       headers: {
@@ -193,6 +201,7 @@ function* deleteAllItems() {
     yield call(() => axios.delete(`${process.env.REACT_APP_API}/cart`, config))
   }
 }
+
 function* cartSaga() {
   yield takeEvery(cartConstants.CART_ADD_REQUEST, addToCart)
   yield takeEvery(cartConstants.CART_ADD_DATABASE_REQUEST, addCartDatabase)

@@ -85,11 +85,13 @@ export const listCart = (state = { cartItems: [] }, action) => {
       return { loading: true }
     case cartConstant.LIST_CART_SUCCESS:
       return {
+        ...state,
         loading: false,
         cartItems: action.payload,
       }
     case cartConstant.LIST_CART_FAILED:
       return {
+        ...state,
         loading: false,
         error: action.payload,
       }

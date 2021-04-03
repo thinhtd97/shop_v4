@@ -5,7 +5,8 @@ import * as cartConstant from '../constants/cartConstant'
 
 function* login(action) {
   const { email, password, addToast } = action
-  const { cartItems } = yield select((state) => state.cart)
+  const { cart } = yield select((state) => ({ ...state }))
+  const { cartItems } = cart
   try {
     const config = {
       headers: {
@@ -29,27 +30,27 @@ function* login(action) {
     }
 
     if (cartItems.length >= 1) {
-      yield cartItems.map(async (item) =>
-        await axios.post(
-          `${process.env.REACT_APP_API}/cart/${item.slug}`,
-          {
-            name: item.name,
-            image: item.image,
-            size: item.size,
-            price: item.price,
-            qty: item.qty,
-            color: item.color,
-            stock: item.stock,
-            product: item.product,
-            priceDiscount: item.priceDiscount,
-          },
-          configListCart,
-        ),
+      cartItems.map(
+        async (item) =>
+          await axios.post(
+            `${process.env.REACT_APP_API}/cart/${item.slug}`,
+            {
+              name: item.name,
+              image: item.image,
+              size: item.size,
+              price: item.price,
+              qty: item.qty,
+              color: item.color,
+              stock: item.stock,
+              product: item.product,
+              priceDiscount: item.priceDiscount,
+            },
+            configListCart,
+          ),
       )
       const { data: dataCart } = yield call(() =>
         axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
       )
-
       yield put({ type: cartConstant.LIST_CART_SUCCESS, payload: dataCart })
     }
 

@@ -133,6 +133,7 @@ const Cart = ({ location }) => {
                                 <div className="cart-plus-minus">
                                   <button
                                     className="dec qtybutton"
+                                    disabled={item.qty === 1}
                                     onClick={(e) => handleDecrement(item)}
                                   >
                                     -

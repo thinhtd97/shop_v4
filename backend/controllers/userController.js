@@ -295,8 +295,17 @@ export const removeWishlist = asyncHandler(async (req, res) => {
       })
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(404)
     throw new Error('Remove wishlist failed.')
   }
+})
+export const listWishlist = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id).populate('wishlist')
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+  const list = user.wishlist
+  res.json(list)
 })

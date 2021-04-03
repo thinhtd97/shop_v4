@@ -7,9 +7,9 @@ const cartReducer = (state = { cartItems: [] }, action) => {
       return { ...state, loading: true }
     case cartConstant.CART_ADD_ITEM:
       let item = action.payload
-      if (state.cartItems === undefined) {
-        state.cartItems = []
-      }
+        if (state.cartItems === undefined) {
+          state.cartItems = []
+        }
       const existItem = state.cartItems.find((p) => p.product === item.product)
       if (existItem) {
         item.qty += existItem.qty

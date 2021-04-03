@@ -15,7 +15,7 @@ function ProductModal(props) {
   const dispatch = useDispatch()
   const [gallerySwiper, getGallerySwiper] = useState(null)
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null)
-  const { product, userInfo } = props
+  const { product, userInfo, cartItem } = props
   const discountedPrice = product.discount
     ? getDiscountPrice(product.price, product.discount)
     : 0
@@ -305,26 +305,29 @@ function ProductModal(props) {
                     ) : (
                       <>
                         {userInfo ? (
-                          <button
-                            onClick={() =>
-                              addToCartDatabase(
-                                product._id,
-                                product.slug,
-                                product.name,
-                                product.image[0].url,
-                                product.price,
-                                product.countInStock,
-                                quantityCount,
-                                selectedProductSize,
-                                selectedProductColor,
-                                discountedPrice,
-                                addToast,
-                              )
-                            }
-                          >
-                            {' '}
-                            Add To Cart{' '}
-                          </button>
+                          <Fragment>
+                            
+                            <button
+                              onClick={() =>
+                                addToCartDatabase(
+                                  product._id,
+                                  product.slug,
+                                  product.name,
+                                  product.image[0].url,
+                                  product.price,
+                                  product.countInStock,
+                                  quantityCount,
+                                  selectedProductSize,
+                                  selectedProductColor,
+                                  discountedPrice,
+                                  addToast,
+                                )
+                              }
+                            >
+                              {' '}
+                              Add To Cart{' '}
+                            </button>
+                          </Fragment>
                         ) : (
                           <button
                             onClick={(e) =>

@@ -9,18 +9,21 @@ import {
 } from '../../redux/actions/cartActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useToasts } from 'react-toast-notifications'
+import { addWishlistAction } from '../../redux/actions/wishlistActions'
 
 const ProductGridListSingle = ({
   sliderClassName,
   spaceBottomClass,
   product,
+  cartItem,
+  wishlistItem,
 }) => {
-  const { addToast } = useToasts();
+  const { addToast } = useToasts()
   const dispatch = useDispatch()
   const [modalShow, setModalShow] = useState(false)
-  const [quantityCount] = useState(1);
-  const [size] = useState('');
-  const [color] = useState('');
+  const [quantityCount] = useState(1)
+  const [size] = useState('')
+  const [color] = useState('')
   const discountPrice = product.discount
     ? getDiscountPrice(product.price, product.discount)
     : 0
@@ -85,6 +88,9 @@ const ProductGridListSingle = ({
       ),
     )
   }
+  const handleAddToWishlist = (addToast, slug) => {
+    dispatch(addWishlistAction(addToast, slug))
+  }
   return (
     <Fragment>
       <div
@@ -118,7 +124,10 @@ const ProductGridListSingle = ({
 
             <div className="product-action">
               <div className="pro-same-action pro-wishlist">
-                <button title="Add to wishlist">
+                <button
+                  onClick={() => handleAddToWishlist(addToast, product.slug)}
+                  title="Add to wishlist"
+                >
                   <i className="pe-7s-like" />
                 </button>
               </div>
@@ -138,47 +147,61 @@ const ProductGridListSingle = ({
                     ) : (
                       <>
                         {userInfo ? (
-                          <button
-                            onClick={(e) =>
-                              addToCartDatabase(
-                                product._id,
-                                product.slug,
-                                product.name,
-                                product.image[0].url,
-                                product.price,
-                                product.countInStock,
-                                quantityCount,
-                                size,
-                                color,
-                                discountPrice,
-                                addToast,
-                              )
-                            }
-                          >
-                            {' '}
-                            Add To Cart{' '}
-                          </button>
+                          <>
+                            {cartItem ? (
+                              <button disabled> Added To Cart </button>
+                            ) : (
+                              <button
+                                onClick={(e) =>
+                                  addToCartDatabase(
+                                    product._id,
+                                    product.slug,
+                                    product.name,
+                                    product.image[0].url,
+                                    product.price,
+                                    product.countInStock,
+                                    quantityCount,
+                                    size,
+                                    color,
+                                    discountPrice,
+                                    addToast,
+                                  )
+                                }
+                              >
+                                {' '}
+                                Add To Cart{' '}
+                              </button>
+                            )}
+                          </>
                         ) : (
-                          <button
-                            onClick={(e) =>
-                              addToCart(
-                                product._id,
-                                product.slug,
-                                product.name,
-                                product.image[0].url,
-                                product.price,
-                                product.countInStock,
-                                quantityCount,
-                                size,
-                                color,
-                                discountPrice,
-                                addToast,
-                              )
-                            }
-                          >
-                            {' '}
-                            Add To Cart{' '}
-                          </button>
+                          <>
+                            {cartItem ? (
+                              <button disabled>
+                                Added To Cart
+                              </button>
+                            ) : (
+                              <button
+                                onClick={(e) =>
+                                  addToCart(
+                                    product._id,
+                                    product.slug,
+                                    product.name,
+                                    product.image[0].url,
+                                    product.price,
+                                    product.countInStock,
+                                    quantityCount,
+                                    size,
+                                    color,
+                                    discountPrice,
+                                    addToast,
+                                  )
+                                }
+                              >
+                                {' '}
+                                Add To Cart{' '}
+                              </button>
+                            )}
+                          </>
                         )}
                       </>
                     )}
@@ -298,7 +321,12 @@ const ProductGridListSingle = ({
                   </div>
 
                   <div className="shop-list-wishlist ml-10">
-                    <button title="Add to wishlist">
+                    <button
+                      onClick={(e) =>
+                        handleAddToWishlist(addToast, product.slug)
+                      }
+                      title="Add to wishlist"
+                    >
                       <i className="pe-7s-like" />
                     </button>
                   </div>
@@ -315,11 +343,12 @@ const ProductGridListSingle = ({
       </div>
       {/* product modal */}
       <ProductModal
-       show={modalShow}
-       userInfo={userInfo}
-       onHide={() => setModalShow(false)}
-       product={product}
-       addtoast={addToast}
+        show={modalShow}
+        userInfo={userInfo}
+        onHide={() => setModalShow(false)}
+        product={product}
+        addtoast={addToast}
+        cartItem={cartItem}
       />
     </Fragment>
   )

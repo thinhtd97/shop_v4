@@ -1,42 +1,31 @@
-export const ADD_TO_WISHLIST = "ADD_TO_WISHLIST";
-export const DELETE_FROM_WISHLIST = "DELETE_FROM_WISHLIST";
-export const DELETE_ALL_FROM_WISHLIST = "DELETE_ALL_FROM_WISHLIST";
+import * as wishlistConstant from '../constants/wishlistConstant'
 
-// add to wishlist
-export const addToWishlist = (item, addToast) => {
-  return dispatch => {
-    if (addToast) {
-      addToast("Added To Wishlist", {
-        appearance: "success",
-        autoDismiss: true
-      });
-    }
-    dispatch({ type: ADD_TO_WISHLIST, payload: item });
-  };
-};
-
-// remove from wishlist
-export const removeFromWishlist = (item, addToast) => {
-  return dispatch => {
-    if (addToast) {
-      addToast("Removed From Wishlist", {
-        appearance: "error",
-        autoDismiss: true
-      });
-    }
-    dispatch({ type: DELETE_FROM_WISHLIST, payload: item });
-  };
-};
-
-//remove all from wishlist
-export const removeAllFromWishlist = addToast => {
-  return dispatch => {
-    if (addToast) {
-      addToast("Removed All From Wishlist", {
-        appearance: "error",
-        autoDismiss: true
-      });
-    }
-    dispatch({ type: DELETE_ALL_FROM_WISHLIST });
-  };
-};
+// export const addWishlistAction = (addToast, slug) => ({
+//   type: wishlistConstant.ADD_WISHLIST_REQUEST,
+//   addToast,
+//   slug,
+// })
+export const addWishlistAction = (addToast, slug) => ({
+  type: wishlistConstant.ADD_WISHLIST_REQUEST,
+  addToast,
+  slug,
+})
+export const removeWishlistAction = (addToast, slug) => ({
+  type: wishlistConstant.REMOVE_WISHLIST_REQUEST,
+  addToast,
+  slug,
+})
+export const removeWishlistItem = (addToast, item) => ({
+  type: wishlistConstant.REMOVE_WISHLIST,
+  addToast,
+  item
+})
+// export const addWishlistAction = (addToast, item) => ({
+//   type: wishlistConstant.ADD_WISHLIST,
+//   item
+// })
+export const listWishlist = (addToast, item) => ({
+  type: wishlistConstant.LIST_WISHLIST_REQUEST,
+  item,
+  addToast
+})

@@ -9,6 +9,7 @@ import {
   deleteUserByID,
   getProfile,
   getUserByID,
+  listWishlist,
   NewPassword,
   registerUser,
   removeWishlist,
@@ -28,13 +29,16 @@ router
   .route('/user/profile')
   .get(protect, getProfile)
   .put(protect, updateProfileUser)
+router.get('/user/wishlist', protect, listWishlist)
 router
   .route('/user/:id')
   .get(protect, admin, getUserByID)
   .delete(protect, admin, deleteUserByID)
   .put(protect, admin, updateUserByID)
+
 router
   .route('/user/wishlist/:slugProduct')
   .post(protect, addWishlist)
   .delete(protect, removeWishlist)
+
 export default router

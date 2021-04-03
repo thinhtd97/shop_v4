@@ -1,39 +1,45 @@
-import {
-  ADD_TO_WISHLIST,
-  DELETE_FROM_WISHLIST,
-  DELETE_ALL_FROM_WISHLIST
-} from "../actions/wishlistActions";
+import * as wishlistConstant from '../constants/wishlistConstant'
 
-const initState = [];
-
-const wishlistReducer = (state = initState, action) => {
-  const wishlistItems = state,
-    product = action.payload;
-
-  if (action.type === ADD_TO_WISHLIST) {
-    const wishlistItem = wishlistItems.filter(
-      item => item.id === product.id
-    )[0];
-    if (wishlistItem === undefined) {
-      return [...wishlistItems, product];
-    } else {
-      return wishlistItems;
-    }
+export const listWishlistReducer = (state = { wishlist: [] }, action) => {
+  let item = action.item
+  switch (action.type) {
+    case wishlistConstant.LIST_WISHLIST_REQUEST:
+      return { loading: true }
+    case wishlistConstant.LIST_WISHLIST_SUCCESS:
+      return { loading: false, wishlist: action.payload }
+    case wishlistConstant.LIST_WISHLIST_FAILED:
+      return { loading: false, error: action.payload }
+    case wishlistConstant.REMOVE_WISHLIST:
+        const removeItem = state.wishlist.filter((el) => el._id !== item._id);
+        return {
+            ...state,
+            wishlist: removeItem
+        }
+    default:
+      return state
   }
-
-  if (action.type === DELETE_FROM_WISHLIST) {
-    const remainingItems = (wishlistItems, product) =>
-      wishlistItems.filter(wishlistItem => wishlistItem.id !== product.id);
-    return remainingItems(wishlistItems, product);
+}
+export const addWishlistReducer = (state = {}, action) => {
+  switch (action.type) {
+    case wishlistConstant.ADD_WISHLIST_REQUEST:
+      return { loading: true }
+    case wishlistConstant.ADD_WISHLIST_SUCCESS:
+      return { loading: false, success: true }
+    case wishlistConstant.ADD_WISHLIST_FAILED:
+      return { loading: false, error: action.payload }
+    default:
+      return state
   }
-
-  if (action.type === DELETE_ALL_FROM_WISHLIST) {
-    return wishlistItems.filter(item => {
-      return false;
-    });
+}
+export const removeWishlistReducer = (state = {}, action) => {
+  switch (action.type) {
+    case wishlistConstant.REMOVE_WISHLIST_REQUEST:
+      return { loading: true }
+    case wishlistConstant.REMOVE_WISHLIST_SUCCESS:
+      return { loading: false, success: true }
+    case wishlistConstant.REMOVE_WISHLIST_FAILED:
+      return { loading: false, error: action.payload }
+    default:
+      return state
   }
-
-  return wishlistItems;
-};
-
-export default wishlistReducer;
+}

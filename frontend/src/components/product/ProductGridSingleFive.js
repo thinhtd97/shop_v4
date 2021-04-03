@@ -146,7 +146,7 @@ const ProductGridSingleFive = ({
                 <div className="product-action-3">
                   <div className="pro-same-action pro-wishlist">
                     <button title={`Add to wishlist`}>
-                      <i className="fa fa-heart-o" />
+                      <i class="fa fa-heart-o"></i>
                     </button>
                   </div>
                   <div className="pro-same-action pro-cart">

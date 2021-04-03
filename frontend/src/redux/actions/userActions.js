@@ -1,59 +1,49 @@
-import * as userConstants from '../constants/userConstants.js';
+import * as userConstants from '../constants/userConstants.js'
 
 export const loginActionRequest = (email, password, addToast) => ({
-    type: userConstants.USER_LOGIN_REQUEST,
-    email,
-    password,
-    addToast
+  type: userConstants.USER_LOGIN_REQUEST,
+  email,
+  password,
+  addToast,
 })
 
 export const registerActionRequest = (user, addToast) => ({
-    type: userConstants.USER_REGISTER_REQUEST,
-    user,
-    addToast
+  type: userConstants.USER_REGISTER_REQUEST,
+  user,
+  addToast,
 })
 
 export const logoutAction = () => ({
-    type: userConstants.LOGOUT_REQUEST,
+  type: userConstants.LOGOUT_REQUEST,
 })
 
 export const sendMailAction = (email, addToast) => ({
-    type: userConstants.USER_SENDMAIL_REQUEST,
-    email,
-    addToast
+  type: userConstants.USER_SENDMAIL_REQUEST,
+  email,
+  addToast,
 })
 export const newPasswordAction = (password, token, history, addToast) => ({
-    type: userConstants.USER_NEWPW_REQUEST,
-    password,
-    addToast,
-    token,
-    history
+  type: userConstants.USER_NEWPW_REQUEST,
+  password,
+  addToast,
+  token,
+  history,
 })
 
 export const userProfileAction = (addToast) => ({
-    type: userConstants.USER_PROFILE_REQUEST,
-    addToast
+  type: userConstants.USER_PROFILE_REQUEST,
+  addToast,
 })
 
 export const userProfileUpdateAction = (addToast, user) => ({
-    type: userConstants.USER_UPDATE_PROFILE_REQUEST,
-    addToast,
-    user
+  type: userConstants.USER_UPDATE_PROFILE_REQUEST,
+  addToast,
+  user,
 })
 
 export const userChangePasswordAction = (addToast, password, oldPassword) => ({
-    type: userConstants.USER_UPDATE_PW_REQUEST,
-    addToast,
-    password,
-    oldPassword
-})
-export const addWishlist = (addToast, slug) => ({
-    type: userConstants.USER_ADD_WISHLIST_REQUEST,
-    addToast,
-    slug
-})
-export const removeWishlist = (addToast, slug) => ({
-    type: userConstants.USER_REMOVE_WISHLIST_REQUEST,
-    addToast,
-    slug
+  type: userConstants.USER_UPDATE_PW_REQUEST,
+  addToast,
+  password,
+  oldPassword,
 })

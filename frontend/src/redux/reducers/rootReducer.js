@@ -14,6 +14,7 @@ import {
   userProfileReducer,
   userUpdateProfileReducer,
   userUpdatePasswordReducer,
+  userReviewReducer,
 } from './userReducer'
 import { addWishlistReducer, listWishlistReducer } from './wishlistReducer'
 
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   listCart: listCart,
   addToWishList: addWishlistReducer,
+  userReview: userReviewReducer
 })
 
 export default rootReducer

@@ -11,3 +11,7 @@ db.donutCombos.updateMany({ 'donuts.color': 'white' }, {
         'donuts.$.color': 'pink'
     } 
 });
+
+api:
+    review: POST /reviews/:slugProduct
+    reply: POST /reviews/reply/:slugProduct/:user

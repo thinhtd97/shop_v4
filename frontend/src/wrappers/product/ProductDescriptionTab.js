@@ -1,9 +1,35 @@
-import PropTypes from "prop-types";
-import React from "react";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
+import PropTypes from 'prop-types'
+import React, { Fragment, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import Tab from 'react-bootstrap/Tab'
+import Nav from 'react-bootstrap/Nav'
+import ProductRating from '../../components/product/sub-components/ProductRating'
+import Avartar from '../../assets/avt.png'
+import {
+  userReviewsAction,
+  replyComment,
+} from '../../redux/actions/userActions'
+import Loader from '../../components/Loader'
 
-const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
+const ProductDescriptionTab = ({
+  spaceBottomClass,
+  productFullDesc,
+  product,
+  userInfo,
+}) => {
+  const dispatch = useDispatch()
+  const { loading } = useSelector((state) => state.userReview)
+  const [openReply, setOpenReply] = useState(false)
+  const [comment, setComment] = useState('')
+  const [reply, setReply] = useState('')
+  const [rating, setRating] = useState('')
+  const reviewHandler = (e, slug, comment, rating) => {
+    e.preventDefault()
+    dispatch(userReviewsAction(slug, comment, rating))
+  }
+  const replyHandler = (slug, user, reply) => {
+    dispatch(replyComment(slug, user, reply))
+  }
   return (
     <div className={`description-review-area ${spaceBottomClass}`}>
       <div className="container">
@@ -30,7 +56,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                       <span>Weight</span> 400 g
                     </li>
                     <li>
-                      <span>Dimensions</span>10 x 10 x 15 cm{" "}
+                      <span>Dimensions</span>10 x 10 x 15 cm{' '}
                     </li>
                     <li>
                       <span>Materials</span> 60% cotton, 40% polyester
@@ -46,141 +72,215 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                 {productFullDesc}
               </Tab.Pane>
               <Tab.Pane eventKey="productReviews">
-                <div className="row">
-                  <div className="col-lg-7">
-                    <div className="review-wrapper">
-                      <div className="single-review">
-                        <div className="review-img">
-                          <img
-                            src={
-                              process.env.PUBLIC_URL +
-                              "/assets/img/testimonial/1.jpg"
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div className="review-content">
-                          <div className="review-top-wrap">
-                            <div className="review-left">
-                              <div className="review-name">
-                                <h4>White Lewis</h4>
-                              </div>
-                              <div className="review-rating">
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                              </div>
-                            </div>
-                            <div className="review-left">
-                              <button>Reply</button>
-                            </div>
-                          </div>
-                          <div className="review-bottom">
-                            <p>
-                              Vestibulum ante ipsum primis aucibus orci
-                              luctustrices posuere cubilia Curae Suspendisse
-                              viverra ed viverra. Mauris ullarper euismod
-                              vehicula. Phasellus quam nisi, congue id nulla.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="single-review child-review">
-                        <div className="review-img">
-                          <img
-                            src={
-                              process.env.PUBLIC_URL +
-                              "/assets/img/testimonial/2.jpg"
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div className="review-content">
-                          <div className="review-top-wrap">
-                            <div className="review-left">
-                              <div className="review-name">
-                                <h4>White Lewis</h4>
-                              </div>
-                              <div className="review-rating">
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                                <i className="fa fa-star" />
-                              </div>
-                            </div>
-                            <div className="review-left">
-                              <button>Reply</button>
-                            </div>
-                          </div>
-                          <div className="review-bottom">
-                            <p>
-                              Vestibulum ante ipsum primis aucibus orci
-                              luctustrices posuere cubilia Curae Suspendisse
-                              viverra ed viverra. Mauris ullarper euismod
-                              vehicula. Phasellus quam nisi, congue id nulla.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                {loading ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Loader />
                   </div>
-                  <div className="col-lg-5">
-                    <div className="ratting-form-wrapper pl-50">
-                      <h3>Add a Review</h3>
-                      <div className="ratting-form">
-                        <form action="#">
-                          <div className="star-box">
-                            <span>Your rating:</span>
-                            <div className="ratting-star">
-                              <i className="fa fa-star" />
-                              <i className="fa fa-star" />
-                              <i className="fa fa-star" />
-                              <i className="fa fa-star" />
-                              <i className="fa fa-star" />
+                ) : (
+                  <div className="row">
+                    {userInfo ? (
+                      <Fragment>
+                        <div className="col-lg-7">
+                          {product.reviews && product.reviews.length > 0 ? (
+                            <Fragment>
+                              {product.reviews.map((el, key) => (
+                                <div key={key} className="review-wrapper">
+                                  <div className="single-review" style={{marginBottom: '20px'}}>
+                                    <div className="review-img">
+                                      <img src={Avartar} width={80} alt="" />
+                                    </div>
+                                    <div className="review-content">
+                                      <div className="review-top-wrap">
+                                        <div className="review-left">
+                                          <div className="review-name">
+                                            <h4>{el.name}</h4>
+                                          </div>
+                                          <div className="review-rating">
+                                            <ProductRating value={el.rating} />
+                                          </div>
+                                        </div>
+                                        <div className="review-left">
+                                          <button
+                                            onClick={() =>
+                                              setOpenReply(!openReply)
+                                            }
+                                          >
+                                            Reply
+                                          </button>
+                                        </div>
+                                      </div>
+                                      <div className="review-bottom">
+                                        <p>{el.comment}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {el.reply.length > 0 ? (
+                                    <Fragment>
+                                      {el.reply.map((repl, key) => (
+                                        <Fragment key={key}>
+                                          <div className="single-review child-review">
+                                            <div className="review-img">
+                                              <img
+                                                src={Avartar}
+                                                width={80}
+                                                alt=""
+                                              />
+                                            </div>
+                                            <div className="review-content">
+                                              <div className="review-top-wrap">
+                                                <div className="review-left">
+                                                  <div className="review-name">
+                                                    <h4>{repl.name}</h4>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div className="review-bottom">
+                                                <p>{repl.replyComment}</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </Fragment>
+                                      ))}
+                                    </Fragment>
+                                  ) : (
+                                    ''
+                                  )}
+                                  {openReply ? (
+                                    <div className="single-review child-review">
+                                      <div className="review-img">
+                                        <img src={Avartar} width={80} alt="" />
+                                      </div>
+                                      <div className="review-content">
+                                        <div className="review-top-wrap">
+                                          <div className="review-left">
+                                            <div className="review-name">
+                                              <input
+                                                style={{
+                                                  background: 'white',
+                                                }}
+                                                type="text"
+                                                onChange={(e) =>
+                                                  setReply(e.target.value)
+                                                }
+                                                placeholder="Reply..."
+                                              />
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className="review-bottom">
+                                          <button
+                                            onClick={() =>
+                                              replyHandler(
+                                                product.slug,
+                                                userInfo._id,
+                                                reply,
+                                              )
+                                            }
+                                            className="btn btn-primary"
+                                          >
+                                            Reply
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    ''
+                                  )}
+                                </div>
+                              ))}
+                            </Fragment>
+                          ) : (
+                            <p> No Reviews </p>
+                          )}
+                        </div>
+                        <div className="col-lg-5">
+                          <div className="ratting-form-wrapper pl-50">
+                            <h3>Add a Review</h3>
+                            <div className="ratting-form">
+                              <form
+                                onSubmit={(e) =>
+                                  reviewHandler(
+                                    e,
+                                    product.slug,
+                                    comment,
+                                    rating,
+                                  )
+                                }
+                              >
+                                <div className="star-box">
+                                  <span>Your rating:</span>
+                                  <div className="ratting-star">
+                                    <select
+                                      onChange={(e) =>
+                                        setRating(e.target.value)
+                                      }
+                                    >
+                                      <option value={1}>1 - Poor</option>
+                                      <option value={2}>2 - Fair</option>
+                                      <option value={3}>3 - Good</option>
+                                      <option value={4}>4 - Very Good</option>
+                                      <option value={5}>5 - Excellent</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="rating-form-style form-submit">
+                                      <textarea
+                                        onChange={(e) =>
+                                          setComment(e.target.value)
+                                        }
+                                        name="Your Review"
+                                        placeholder="Message"
+                                        defaultValue={''}
+                                      />
+                                      <input
+                                        type="submit"
+                                        defaultValue="Submit"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </form>
                             </div>
                           </div>
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="rating-form-style mb-10">
-                                <input placeholder="Name" type="text" />
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="rating-form-style mb-10">
-                                <input placeholder="Email" type="email" />
-                              </div>
-                            </div>
-                            <div className="col-md-12">
-                              <div className="rating-form-style form-submit">
-                                <textarea
-                                  name="Your Review"
-                                  placeholder="Message"
-                                  defaultValue={""}
-                                />
-                                <input type="submit" defaultValue="Submit" />
-                              </div>
-                            </div>
-                          </div>
-                        </form>
+                        </div>
+                      </Fragment>
+                    ) : (
+                      <div
+                        className="col-lg-12"
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <p>Please Login To Reviews</p>
                       </div>
-                    </div>
+                    )}
                   </div>
-                </div>
+                )}
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 ProductDescriptionTab.propTypes = {
   productFullDesc: PropTypes.string,
-  spaceBottomClass: PropTypes.string
-};
+  spaceBottomClass: PropTypes.string,
+}
 
-export default ProductDescriptionTab;
+export default ProductDescriptionTab

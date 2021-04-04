@@ -2,6 +2,7 @@ import { call, put, takeEvery, select, all } from 'redux-saga/effects'
 import axios from 'axios'
 import * as userConstant from '../constants/userConstants'
 import * as cartConstant from '../constants/cartConstant'
+import * as productConstant from '../constants/productConstant'
 
 function* login(action) {
   const { email, password, addToast } = action
@@ -330,6 +331,84 @@ function* updatePasswordProfile(action) {
   }
 }
 
+function* userReview(action) {
+  const { slug, comment, rating } = action
+  try {
+    const { userInfo } = yield select((state) => state.userLogin)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    yield call(() =>
+      axios.post(
+        `${process.env.REACT_APP_API}/reviews/${slug}`,
+        { comment, rating },
+        config,
+      ),
+    )
+    const { data } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/products/${slug}`),
+    )
+    yield put({
+      type: userConstant.USER_REVIEWS_SUCCESS,
+    })
+    yield put({
+      type: productConstant.PRODUCT_DETAIL_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    yield put({
+      type: userConstant.USER_REVIEWS_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+function* reply(action) {
+  const { slug, user, replyComment } = action
+  try {
+    const { userInfo } = yield select((state) => state.userLogin)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    yield call(() =>
+      axios.post(
+        `${process.env.REACT_APP_API}/reviews/reply/${slug}/${user}`,
+        { replyComment },
+        config,
+      ),
+    )
+    const { data } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/products/${slug}`),
+    )
+    yield put({
+      type: productConstant.PRODUCT_DETAIL_SUCCESS,
+      payload: data,
+    })
+    yield put({
+      type: userConstant.USER_REPLY_REVIEWS_SUCCESS,
+    })
+  } catch (error) {
+    yield put({
+      type: userConstant.USER_REVIEWS_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
 function* userSaga() {
   yield takeEvery(userConstant.USER_LOGIN_REQUEST, login)
   yield takeEvery(userConstant.USER_REGISTER_REQUEST, register)
@@ -338,6 +417,8 @@ function* userSaga() {
   yield takeEvery(userConstant.USER_PROFILE_REQUEST, userProfile)
   yield takeEvery(userConstant.USER_UPDATE_PROFILE_REQUEST, updateProfile)
   yield takeEvery(userConstant.USER_UPDATE_PW_REQUEST, updatePasswordProfile)
+  yield takeEvery(userConstant.USER_REVIEWS_REQUEST, userReview)
+  yield takeEvery(userConstant.USER_REPLY_REVIEWS_REQUEST, reply)
   yield takeEvery(userConstant.LOGOUT_REQUEST, logout)
 }
 

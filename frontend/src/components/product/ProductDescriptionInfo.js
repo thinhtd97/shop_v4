@@ -6,11 +6,12 @@ import {
   addToCartAction,
   cartAddToDatabase,
 } from '../../redux/actions/cartActions'
+import { addWishlistAction } from '../../redux/actions/wishlistActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useToasts } from 'react-toast-notifications'
 import { useCallback } from 'react'
 
-const ProductDescriptionInfo = ({ product, discountedPrice }) => {
+const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
   const dispatch = useDispatch()
   const { addToast } = useToasts()
   const [selectedProductColor, setSelectedProductColor] = useState(
@@ -92,7 +93,16 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
       ),
     )
   }
-
+  const handleAddToWishlist = (addToast, slug) => {
+    if (!userInfo) {
+      return addToast('Please login to add', {
+        appearance: 'error',
+        autoDismiss: true,
+      })
+    } else {
+      dispatch(addWishlistAction(addToast, slug))
+    }
+  }
   return (
     <div className="product-details-content ml-70">
       <h2>{product.name}</h2>
@@ -106,15 +116,15 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
           <span>${product.price?.toFixed(2)} </span>
         )}
       </div>
-      {/* {product.rating && product.rating > 0 ? ( */}
-        <div className="pro-details-rating-wrap">
-          <div className="pro-details-rating">
-            <Rating value={2.8} />
-          </div>
+
+      <div className="pro-details-rating-wrap">
+        <div className="pro-details-rating">
+          <Rating value={product.rating} />
+          <br />
+          <span class="badge badge-primary">{product.numReviews}</span> reviews
         </div>
-      {/* ) : (
-        ''
-      )} */}
+      </div>
+
       <div className="pro-details-list">
         <p>{product.description}</p>
       </div>
@@ -282,14 +292,18 @@ const ProductDescriptionInfo = ({ product, discountedPrice }) => {
             )}
           </div>
           <div className="pro-details-wishlist">
-            <button title="Add to wishlist">
-              <i className="pe-7s-like" />
-            </button>
-          </div>
-          <div className="pro-details-compare">
-            <button title="Add to compare">
-              <i className="pe-7s-shuffle" />
-            </button>
+            {wishlistItem ? (
+              <button title="Add to wishlist" style={{ cursor: 'not-allowed' }}>
+                <i className="pe-7s-like" />
+              </button>
+            ) : (
+              <button
+                onClick={() => handleAddToWishlist(addToast, product.slug)}
+                title="Add to wishlist"
+              >
+                <i className="pe-7s-like" />
+              </button>
+            )}
           </div>
         </div>
       )}

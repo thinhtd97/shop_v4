@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { detailProductAction } from '../../redux/actions/productActions'
 
 const ProductTabLeft = ({ location, match }) => {
+  const { userInfo } = useSelector((state) => state.userLogin);
   const { pathname } = location
   const slug = match.params.slug
   const { product, loading } = useSelector((state) => state.detailProduct)
@@ -41,6 +42,7 @@ const ProductTabLeft = ({ location, match }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            overflow: 'hidden'
           }}
         >
           {loading ? (
@@ -62,6 +64,8 @@ const ProductTabLeft = ({ location, match }) => {
               <ProductDescriptionTab
                 spaceBottomClass="pb-90"
                 productFullDesc={product?.description}
+                product={product}
+                userInfo={userInfo}
               />
               {/* related product slider */}
               {/* <RelatedProductSlider

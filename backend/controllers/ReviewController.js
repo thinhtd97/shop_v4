@@ -24,14 +24,46 @@ export const createReview = asyncHandle(async (req, res) => {
     })
     if (review) {
       const created = await review.save()
-      product.reviews.push(created._id)
-      await product.save()
+      const reviews = await Review.find({ product: product._id })
+      if (created) {
+        product.reviews.push(created._id)
+        product.rating = (
+          Number(reviews.reduce((acc, i) => acc + i.rating, 0)) / reviews.length
+        ).toFixed(2)
+        product.numReviews += 1
+        console.log(product.rating)
+        await product.save()
+      }
+      res.json(review)
     }
-    res.json(review)
   }
 })
 export const reply = asyncHandle(async (req, res) => {
-    const { replyComment } = req.body;
-    const review = await Review.findById(req.params.id);
-    
+  const { replyComment } = req.body
+  const product = await Product.findOne({ slug: req.params.slugProduct })
+  const user = await User.findById(req.user.id)
+  const review = await Review.findOne({
+    user: req.params.user,
+    product: product._id,
+  })
+  const reviewContent = {
+    name: `${user.firstName} ${user.lastName}`,
+    replyComment,
+  }
+  if (review) {
+    review.reply.push(reviewContent)
+    await review.save()
+  }
+  res.json({
+    message: 'Reply Success!!!',
+  })
+})
+export const resetReviews = asyncHandle(async (req, res) => {
+  const product = await Product.findOne({ slug: req.params.slugProduct })
+  await Review.deleteMany()
+  product.numReviews = 0
+  product.reviews = []
+  product.rating = 0
+  await product.save()
+  res.json('OK')
 })

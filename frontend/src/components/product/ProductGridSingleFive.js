@@ -159,14 +159,14 @@ const ProductGridSingleFive = ({
                 <div className="product-action-3">
                   <div className="pro-same-action pro-wishlist">
                     {wishlistItem ? (<button disabled>
-                      <i class="fa fa-heart"></i>
+                      <i className="fa fa-heart"></i>
                     </button>) : ( <button
                       onClick={() =>
                         handleAddToWishlist(addToast, product.slug)
                       }
                       title={`Add to wishlist`}
                     >
-                      <i class="fa fa-heart-o"></i>
+                      <i className="fa fa-heart-o"></i>
                     </button>)}
                    
                   </div>

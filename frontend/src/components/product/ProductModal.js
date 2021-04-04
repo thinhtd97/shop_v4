@@ -203,7 +203,8 @@ function ProductModal(props) {
                 </div>
                 <div className="pro-details-rating-wrap">
                   <div className="pro-details-rating">
-                    <Rating value={2.8} />
+                    <Rating value={product.rating} /> <br />
+                    <span class="badge badge-primary">{product.numReviews}</span> reviews
                   </div>
                 </div>
 

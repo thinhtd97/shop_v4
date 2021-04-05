@@ -1,17 +1,35 @@
-import PropTypes from "prop-types";
-import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
-import MetaTags from "react-meta-tags";
-import { connect } from "react-redux";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import { getDiscountPrice } from "../../helpers/product";
-import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import PropTypes from 'prop-types'
+import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
+import MetaTags from 'react-meta-tags'
+import { useSelector } from 'react-redux'
+import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
+import LayoutOne from '../../layouts/LayoutOne'
+import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb'
 
-const Checkout = ({ location, cartItems, currency }) => {
-  const { pathname } = location;
-  let cartTotalPrice = 0;
+const Checkout = ({ location }) => {
+  const { pathname } = location
+  const { userInfo } = useSelector((state) => state.userLogin)
+  const { cartItems } = useSelector((state) => state.cart)
+  const { cartItems: cartItemsDatabase } = useSelector(
+    (state) => state.listCart,
+  )
+  const finalCartItems = userInfo ? cartItemsDatabase : cartItems
+  const cartTotalPrice = finalCartItems.reduce((acc, item) => {
+    if (item.priceDiscount !== 0) {
+      return acc + item.priceDiscount * item.qty
+    }
+    return acc + item.price * item.qty
+  }, 0)
+  const { coupons } = useSelector((state) => state.coupons)
+  const totalDiscountCoupon = coupons
+    ? coupons.reduce((acc, item) => {
+        return acc + item.discount
+      }, 0)
+    : 0
 
+  const shippingPrice = cartTotalPrice >= 100 ? 0 : cartTotalPrice * (30 / 100)
+  const finalPrice = cartTotalPrice + shippingPrice - totalDiscountCoupon
   return (
     <Fragment>
       <MetaTags>
@@ -21,7 +39,7 @@ const Checkout = ({ location, cartItems, currency }) => {
           content="Checkout page of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>Home</BreadcrumbsItem>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
         Checkout
       </BreadcrumbsItem>
@@ -30,7 +48,7 @@ const Checkout = ({ location, cartItems, currency }) => {
         <Breadcrumb />
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
-            {cartItems && cartItems.length >= 1 ? (
+            {finalCartItems && finalCartItems.length >= 1 ? (
               <div className="row">
                 <div className="col-lg-7">
                   <div className="billing-info-wrap">
@@ -120,7 +138,7 @@ const Checkout = ({ location, cartItems, currency }) => {
                         <textarea
                           placeholder="Notes about your order, e.g. special notes for delivery. "
                           name="message"
-                          defaultValue={""}
+                          defaultValue={''}
                         />
                       </div>
                     </div>
@@ -138,60 +156,59 @@ const Checkout = ({ location, cartItems, currency }) => {
                             <li>Total</li>
                           </ul>
                         </div>
+
                         <div className="your-order-middle">
                           <ul>
-                            {cartItems.map((cartItem, key) => {
-                              const discountedPrice = getDiscountPrice(
-                                cartItem.price,
-                                cartItem.discount
-                              );
-                              const finalProductPrice = (
-                                cartItem.price * currency.currencyRate
-                              ).toFixed(2);
-                              const finalDiscountedPrice = (
-                                discountedPrice * currency.currencyRate
-                              ).toFixed(2);
-
-                              discountedPrice != null
-                                ? (cartTotalPrice +=
-                                    finalDiscountedPrice * cartItem.quantity)
-                                : (cartTotalPrice +=
-                                    finalProductPrice * cartItem.quantity);
+                            {finalCartItems.map((cartItem, key) => {
                               return (
                                 <li key={key}>
                                   <span className="order-middle-left">
-                                    {cartItem.name} X {cartItem.quantity}
-                                  </span>{" "}
+                                    {cartItem.name} * {cartItem.qty}
+                                  </span>{' '}
                                   <span className="order-price">
-                                    {discountedPrice !== null
-                                      ? currency.currencySymbol +
-                                        (
-                                          finalDiscountedPrice *
-                                          cartItem.quantity
-                                        ).toFixed(2)
-                                      : currency.currencySymbol +
-                                        (
-                                          finalProductPrice * cartItem.quantity
-                                        ).toFixed(2)}
+                                    {cartItem.priceDiscount !== 0
+                                      ? `$${(
+                                          cartItem.priceDiscount * cartItem.qty
+                                        ).toFixed(2)}`
+                                      : `$${(
+                                          cartItem.price * cartItem.qty
+                                        ).toFixed(2)}`}
                                   </span>
                                 </li>
-                              );
+                              )
                             })}
                           </ul>
                         </div>
                         <div className="your-order-bottom">
                           <ul>
                             <li className="your-order-shipping">Shipping</li>
-                            <li>Free shipping</li>
+                            <li>
+                              {shippingPrice !== 0
+                                ? `$${shippingPrice.toFixed(2)}`
+                                : `Free Shipping`}
+                            </li>
+                          </ul>
+                        </div>
+                        <hr />
+                        <div className="your-order-bottom">
+                          <ul>
+                            <li>Coupons</li>
+                            {coupons.map((coupon, key) => (
+                              <li key={key}>
+                                <span
+                                  style={{ margin: '8px', fontSize: '15px' }}
+                                  className="badge badge-success"
+                                >
+                                  {coupon.code}
+                                </span>
+                              </li>
+                            ))}
                           </ul>
                         </div>
                         <div className="your-order-total">
                           <ul>
                             <li className="order-total">Total</li>
-                            <li>
-                              {currency.currencySymbol +
-                                cartTotalPrice.toFixed(2)}
-                            </li>
+                            <li>${finalPrice.toFixed(2)}</li>
                           </ul>
                         </div>
                       </div>
@@ -211,8 +228,8 @@ const Checkout = ({ location, cartItems, currency }) => {
                       <i className="pe-7s-cash"></i>
                     </div>
                     <div className="item-empty-area__text">
-                      No items found in cart to checkout <br />{" "}
-                      <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                      No items found in cart to checkout <br />{' '}
+                      <Link to={process.env.PUBLIC_URL + '/shop'}>
                         Shop Now
                       </Link>
                     </div>
@@ -224,20 +241,11 @@ const Checkout = ({ location, cartItems, currency }) => {
         </div>
       </LayoutOne>
     </Fragment>
-  );
-};
+  )
+}
 
 Checkout.propTypes = {
   cartItems: PropTypes.array,
-  currency: PropTypes.object,
-  location: PropTypes.object
-};
+}
 
-const mapStateToProps = state => {
-  return {
-    cartItems: state.cartData,
-    currency: state.currencyData
-  };
-};
-
-export default connect(mapStateToProps)(Checkout);
+export default Checkout

@@ -99,6 +99,7 @@ const ShopGridTwoColumn = ({ location }) => {
                 <ShopSidebar
                   sideSpaceClass="mr-30"
                   getSortParams={getSortParams}
+                  getFilterSortParams={getFilterSortParams}
                   categories={categories}
                   colors={colors}
                   sizes={sizes}

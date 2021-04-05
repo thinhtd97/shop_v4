@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { detailProductAction } from '../../redux/actions/productActions'
 
 const ProductTabLeft = ({ location, match }) => {
-  const { userInfo } = useSelector((state) => state.userLogin);
+  const { userInfo } = useSelector((state) => state.userLogin)
   const { pathname } = location
   const slug = match.params.slug
   const { product, loading } = useSelector((state) => state.detailProduct)
@@ -37,46 +37,47 @@ const ProductTabLeft = ({ location, match }) => {
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
         <Breadcrumb />
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            overflow: 'hidden'
-          }}
-        >
-          {loading ? (
+
+        {loading ? (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: '30px',
+            }}
+          >
             <div className="spinner-border" role="status">
               <span className="sr-only">Loading...</span>
             </div>
-          ) : (
-            <>
-              {product && (
-                <ProductImageDescription
-                  spaceTopClass="pt-100"
-                  spaceBottomClass="pb-100"
-                  product={product}
-                  galleryType="leftThumb"
-                />
-              )}
-
-              {/* product description tab */}
-              <ProductDescriptionTab
-                spaceBottomClass="pb-90"
-                productFullDesc={product?.description}
+          </div>
+        ) : (
+          <>
+            {product && (
+              <ProductImageDescription
+                spaceTopClass="pt-100"
+                spaceBottomClass="pb-100"
                 product={product}
-                userInfo={userInfo}
+                galleryType="leftThumb"
               />
-              {/* related product slider */}
-              {/* <RelatedProductSlider
+            )}
+
+            {/* product description tab */}
+            <ProductDescriptionTab
+              spaceBottomClass="pb-90"
+              productFullDesc={product?.description}
+              product={product}
+              userInfo={userInfo}
+            />
+            {/* related product slider */}
+            {/* <RelatedProductSlider
 spaceBottomClass="pb-95"
 category={product.category[0]}
 /> */}
-            </>
-          )}
+          </>
+        )}
 
-          {/* product description with image */}
-        </div>
+        {/* product description with image */}
       </LayoutOne>
     </Fragment>
   )

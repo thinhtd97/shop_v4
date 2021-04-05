@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Space, Button, Input, Image, Pagination } from 'antd'
+import { Table, Space, Button, Input, Image } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   listProductAction,

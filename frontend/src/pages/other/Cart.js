@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import MetaTags from 'react-meta-tags'
@@ -8,22 +8,41 @@ import LayoutOne from '../../layouts/LayoutOne'
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  applyCouponAction,
   decrementQuantity,
   incrementQuantity,
   removeAllItem,
   removeItem,
 } from '../../redux/actions/cartActions'
-import emptyCart from '../../assets/empty-cart.png'
 const Cart = ({ location }) => {
   const { addToast } = useToasts()
   const { pathname } = location
   const dispatch = useDispatch()
 
+  const [code, setCode] = useState()
   const { cart } = useSelector((state) => state)
   const { userInfo } = useSelector((state) => state.userLogin)
   const { cartItems: cartItemsUser } = useSelector((state) => state.listCart)
+  const { coupons } = useSelector((state) => state.coupons)
   const { cartItems } = cart
   const finalCartItems = userInfo ? cartItemsUser : cartItems
+  const totalPrice = finalCartItems.reduce((acc, item) => {
+    if (item.priceDiscount !== 0) {
+      return acc + item.priceDiscount * item.qty
+    }
+    return acc + item.price * item.qty
+  }, 0)
+  const totalDiscountCoupon = coupons
+    ? coupons.reduce((acc, item) => {
+        return acc + item.discount
+      }, 0)
+    : 0
+
+  const finalPrice = totalPrice - totalDiscountCoupon
+
+  const totalProducts = finalCartItems.reduce((acc, item) => {
+    return acc + item.qty
+  }, 0)
   const handleDecrement = (item) => {
     dispatch(decrementQuantity(item))
   }
@@ -35,6 +54,10 @@ const Cart = ({ location }) => {
   }
   const clearCart = () => {
     dispatch(removeAllItem())
+  }
+  const applyCouponHandle = (e, code, addToast) => {
+    e.preventDefault()
+    dispatch(applyCouponAction(code, addToast))
   }
   return (
     <Fragment>
@@ -58,13 +81,13 @@ const Cart = ({ location }) => {
           <div className="container">
             <Fragment>
               <h3 className="cart-page-title">Your cart items</h3>
-              <div className="row">
-                <div className="col-12">
-                  <div
-                    className="table-content table-responsive cart-table-content"
-                    style={{ display: 'flex', justifyContent: 'center' }}
-                  >
-                    {finalCartItems && finalCartItems.length > 0 ? (
+              {finalCartItems && finalCartItems.length > 0 ? (
+                <div className="row">
+                  <div className="col-12">
+                    <div
+                      className="table-content table-responsive cart-table-content"
+                      style={{ display: 'flex', justifyContent: 'center' }}
+                    >
                       <table>
                         <thead>
                           <tr>
@@ -105,10 +128,14 @@ const Cart = ({ location }) => {
                                 >
                                   {item.name}
                                 </Link>
-                                
+
                                 <div className="cart-item-variation">
-                                  {item.color && item.color !== '' && <span>Color: {item.color}</span>}
-                                  {item.size && item.size !== '' && <span>Size: {item.size}</span>}
+                                  {item.color && item.color !== '' && (
+                                    <span>Color: {item.color}</span>
+                                  )}
+                                  {item.size && item.size !== '' && (
+                                    <span>Size: {item.size}</span>
+                                  )}
                                 </div>
                               </td>
 
@@ -183,12 +210,26 @@ const Cart = ({ location }) => {
                           ))}
                         </tbody>
                       </table>
-                    ) : (
-                      <img src={emptyCart} width="600" alt="" />
-                    )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="item-empty-area text-center">
+                      <div className="item-empty-area__icon mb-30">
+                        <i className="pe-7s-cart"></i>
+                      </div>
+                      <div className="item-empty-area__text">
+                        No items found in cart <br />{' '}
+                        <Link to={process.env.PUBLIC_URL + '/shop'}>
+                          Shop Now
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="row">
                 <div className="col-lg-12">
                   <div className="cart-shiping-update-wrapper">
@@ -205,49 +246,7 @@ const Cart = ({ location }) => {
               </div>
 
               <div className="row">
-                <div className="col-lg-4 col-md-6">
-                  <div className="cart-tax">
-                    <div className="title-wrap">
-                      <h4 className="cart-bottom-title section-bg-gray">
-                        Estimate Shipping And Tax
-                      </h4>
-                    </div>
-                    <div className="tax-wrapper">
-                      <p>Enter your destination to get a shipping estimate.</p>
-                      <div className="tax-select-wrapper">
-                        <div className="tax-select">
-                          <label>* Country</label>
-                          <select className="email s-email s-wid">
-                            <option>Bangladesh</option>
-                            <option>Albania</option>
-                            <option>Åland Islands</option>
-                            <option>Afghanistan</option>
-                            <option>Belgium</option>
-                          </select>
-                        </div>
-                        <div className="tax-select">
-                          <label>* Region / State</label>
-                          <select className="email s-email s-wid">
-                            <option>Bangladesh</option>
-                            <option>Albania</option>
-                            <option>Åland Islands</option>
-                            <option>Afghanistan</option>
-                            <option>Belgium</option>
-                          </select>
-                        </div>
-                        <div className="tax-select">
-                          <label>* Zip/Postal Code</label>
-                          <input type="text" />
-                        </div>
-                        <button className="cart-btn-2" type="submit">
-                          Get A Quote
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-lg-4 col-md-6">
+                <div className="col-lg-8 col-md-12">
                   <div className="discount-code-wrapper">
                     <div className="title-wrap">
                       <h4 className="cart-bottom-title section-bg-gray">
@@ -257,8 +256,17 @@ const Cart = ({ location }) => {
                     <div className="discount-code">
                       <p>Enter your coupon code if you have one.</p>
                       <form>
-                        <input type="text" required name="name" />
-                        <button className="cart-btn-2" type="submit">
+                        <input
+                          onChange={(e) => setCode(e.target.value)}
+                          type="text"
+                          required
+                          name="code"
+                        />
+                        <button
+                          onClick={(e) => applyCouponHandle(e, code, addToast)}
+                          className="cart-btn-2"
+                          type="submit"
+                        >
                           Apply Coupon
                         </button>
                       </form>
@@ -274,11 +282,23 @@ const Cart = ({ location }) => {
                       </h4>
                     </div>
                     <h5>
-                      Total products <span>$20</span>
+                      Total products <span>{totalProducts}</span>
                     </h5>
-
+                    <ul style={{ display: 'flex', marginBottom: '20px' }}>
+                      {coupons.map((coupon, key) => (
+                        <li key={key}>
+                          <span
+                            style={{ margin: '8px', fontSize: '15px' }}
+                            className="badge badge-success"
+                          >
+                            {coupon.code}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
                     <h4 className="grand-totall-title">
-                      Grand Total <span>$20</span>
+                      Grand Total
+                      <span>${finalPrice.toFixed(2)}</span>
                     </h4>
                     <Link to={process.env.PUBLIC_URL + '/checkout'}>
                       Proceed to Checkout
@@ -287,21 +307,6 @@ const Cart = ({ location }) => {
                 </div>
               </div>
             </Fragment>
-            <div className="row">
-              <div className="col-lg-12">
-                <div className="item-empty-area text-center">
-                  <div className="item-empty-area__icon mb-30">
-                    <i className="pe-7s-cart"></i>
-                  </div>
-                  <div className="item-empty-area__text">
-                    No items found in cart <br />{' '}
-                    <Link to={process.env.PUBLIC_URL + '/shop-grid-standard'}>
-                      Shop Now
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </LayoutOne>
@@ -311,10 +316,9 @@ const Cart = ({ location }) => {
 
 Cart.propTypes = {
   currency: PropTypes.object,
-  decrementQty: PropTypes.func,
   location: PropTypes.object,
-  removeAllFromCart: PropTypes.func,
-  removeFromCart: PropTypes.func,
+  removeAllItem: PropTypes.func,
+  removeItem: PropTypes.func,
 }
 
 export default Cart

@@ -7,6 +7,7 @@ import {
   SisternodeOutlined,
   AppstoreAddOutlined,
   LogoutOutlined,
+  DollarCircleOutlined,
   SyncOutlined,
 } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
@@ -69,6 +70,14 @@ const SiderNav = () => {
           </Menu.Item>
           <Menu.Item key="list-sub-categories">
             <Link to="/sub-category/list-sub-catgories">List</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="coupon" icon={<DollarCircleOutlined />} title="Coupon">
+          <Menu.Item key="create-coupon">
+            <Link to="/coupon/create-coupon">Create</Link>
+          </Menu.Item>
+          <Menu.Item key="list-coupon">
+            <Link to="/coupon/list-coupons">List</Link>
           </Menu.Item>
         </SubMenu>
         <Menu.Item key="change-password" icon={<SyncOutlined />}>

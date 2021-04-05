@@ -121,7 +121,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
         <div className="pro-details-rating">
           <Rating value={product.rating} />
           <br />
-          <span class="badge badge-primary">{product.numReviews}</span> reviews
+          <span className="badge badge-primary">{product.numReviews}</span> reviews
         </div>
       </div>
 

@@ -20,9 +20,6 @@ const UpdateVariation = ({ history, match }) => {
   const colors = ['Black', 'Brown', 'Silver', 'White', 'Blue']
   const { adminInfo } = useSelector((state) => state.adminLogin)
   const { products } = useSelector((state) => state.productList)
-  const { product: productCurrent } = useSelector(
-    (state) => state.productCurrent,
-  )
   const slugProduct = match.params.slug;
   const antIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />
   const dispatch = useDispatch()

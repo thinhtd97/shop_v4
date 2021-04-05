@@ -40,7 +40,7 @@ export const incrementQuantity = (item) => ({
 export const removeItem = (item, addToast) => ({
   type: cartConstant.REMOVE_ITEM,
   item,
-  addToast
+  addToast,
 })
 export const removeAllItem = () => ({
   type: cartConstant.REMOVE_ALL_CART,
@@ -73,4 +73,9 @@ export const cartAddToDatabase = (
   color,
   discountedPrice,
   addToast,
+})
+export const applyCouponAction = (code, addToast) => ({
+  type: cartConstant.COUPON_APPLY_REQUEST,
+  code,
+  addToast
 })

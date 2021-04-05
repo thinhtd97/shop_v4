@@ -12,6 +12,7 @@ import variationRoute from './routes/Variation.js'
 import sizeRoute from './routes/SizeRoute.js'
 import cartRoute from './routes/CartRoute.js'
 import reviewRoute from './routes/ReviewRoute.js'
+import couponRoute from './routes/CouponRoute.js'
 import cors from 'cors'
 
 dotenv.config()
@@ -32,6 +33,7 @@ app.use('/api', variationRoute)
 app.use('/api', sizeRoute)
 app.use('/api', cartRoute)
 app.use('/api', reviewRoute)
+app.use('/api', couponRoute)
 
 app.use(notFound)
 

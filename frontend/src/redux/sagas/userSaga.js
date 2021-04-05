@@ -22,14 +22,13 @@ function* login(action) {
         config,
       ),
     )
-
+    const configListCart = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${data.token}`,
+      },
+    }
     if (cartItems.length >= 1) {
-      const configListCart = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${data.token}`,
-        },
-      }
       yield all(
         cartItems.map((item) =>
           call(() =>
@@ -51,14 +50,12 @@ function* login(action) {
           ),
         ),
       )
-
-      const { data: dataCart } = yield call(
-        async () =>
-          await axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
-      )
-      yield put({ type: cartConstant.LIST_CART_SUCCESS, payload: dataCart })
     }
-
+    const { data: dataCart } = yield call(
+      async () =>
+        await axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
+    )
+    yield put({ type: cartConstant.LIST_CART_SUCCESS, payload: dataCart })
     yield put({ type: userConstant.USER_LOGIN_SUCCESS, payload: data })
 
     localStorage.setItem('userInfo', JSON.stringify(data))
@@ -130,6 +127,7 @@ function* logout() {
   yield put({ type: userConstant.LOGOUT_SUCCESS })
   yield put({ type: userConstant.USER_PROFILE_RESET })
   yield put({ type: cartConstant.LIST_CART_RESET })
+  yield put({ type: cartConstant.COUPON_APPLY_RESET })
 }
 function* sendMail(action) {
   const { email, addToast } = action

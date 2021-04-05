@@ -1,11 +1,11 @@
-import PropTypes from "prop-types";
-import React, { Fragment, useEffect, useState } from "react";
-import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
-import Swiper from "react-id-swiper";
+import PropTypes from 'prop-types'
+import React, { Fragment, useEffect, useState } from 'react'
+import { LightgalleryProvider, LightgalleryItem } from 'react-lightgallery'
+import Swiper from 'react-id-swiper'
 
 const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
-  const [gallerySwiper, getGallerySwiper] = useState(null);
-  const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
+  const [gallerySwiper, getGallerySwiper] = useState(null)
+  const [thumbnailSwiper, getThumbnailSwiper] = useState(null)
 
   // effect for swiper slider synchronize
   useEffect(() => {
@@ -15,10 +15,10 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
       thumbnailSwiper !== null &&
       thumbnailSwiper.controller
     ) {
-      gallerySwiper.controller.control = thumbnailSwiper;
-      thumbnailSwiper.controller.control = gallerySwiper;
+      gallerySwiper.controller.control = thumbnailSwiper
+      thumbnailSwiper.controller.control = gallerySwiper
     }
-  }, [gallerySwiper, thumbnailSwiper]);
+  }, [gallerySwiper, thumbnailSwiper])
 
   // swiper slider settings
   const gallerySwiperParams = {
@@ -26,8 +26,8 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
-  };
+    effect: 'fade',
+  }
 
   const thumbnailSwiperParams = {
     getSwiper: getThumbnailSwiper,
@@ -37,39 +37,39 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
     touchRatio: 0.2,
     loop: true,
     slideToClickedSlide: true,
-    direction: "vertical",
+    direction: 'vertical',
     breakpoints: {
       1200: {
         slidesPerView: 4,
-        direction: "vertical"
+        direction: 'vertical',
       },
       992: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       768: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       640: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       320: {
         slidesPerView: 4,
-        direction: "horizontal"
-      }
-    }
-  };
+        direction: 'horizontal',
+      },
+    },
+  }
 
   return (
     <Fragment>
       <div className="row row-5">
         <div
           className={` ${
-            thumbPosition && thumbPosition === "left"
-              ? "col-xl-10 order-1 order-xl-2"
-              : "col-xl-10"
+            thumbPosition && thumbPosition === 'left'
+              ? 'col-xl-10 order-1 order-xl-2'
+              : 'col-xl-10'
           }`}
         >
           <div className="product-large-image-wrapper">
@@ -78,12 +78,12 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                 {product.discount ? (
                   <span className="pink">-{product.discount}%</span>
                 ) : (
-                  ""
+                  ''
                 )}
-                {product.newLaunced ? <span className="purple">New</span> : ""}
+                {product.newLaunced ? <span className="purple">New</span> : ''}
               </div>
             ) : (
-              ""
+              ''
             )}
             <LightgalleryProvider>
               <Swiper {...gallerySwiperParams}>
@@ -91,23 +91,16 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                   product.image.map((single, key) => {
                     return (
                       <div key={key}>
-                        <LightgalleryItem
-                          group="any"
-                          src={single.url}
-                        >
+                        <LightgalleryItem group="any" src={single.url}>
                           <button>
                             <i className="pe-7s-expand1"></i>
                           </button>
                         </LightgalleryItem>
                         <div className="single-image">
-                          <img
-                            src={single.url}
-                            className="img-fluid"
-                            alt=""
-                          />
+                          <img src={single.url} className="img-fluid" alt="" />
                         </div>
                       </div>
-                    );
+                    )
                   })}
               </Swiper>
             </LightgalleryProvider>
@@ -115,9 +108,9 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
         </div>
         <div
           className={` ${
-            thumbPosition && thumbPosition === "left"
-              ? "col-xl-2 order-2 order-xl-1"
-              : "col-xl-2"
+            thumbPosition && thumbPosition === 'left'
+              ? 'col-xl-2 order-2 order-xl-1'
+              : 'col-xl-2'
           }`}
         >
           <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
@@ -127,26 +120,22 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                   return (
                     <div key={key}>
                       <div className="single-image">
-                        <img
-                          src={single.url}
-                          className="img-fluid"
-                          alt=""
-                        />
+                        <img src={single.url} className="img-fluid" alt="" />
                       </div>
                     </div>
-                  );
+                  )
                 })}
             </Swiper>
           </div>
         </div>
       </div>
     </Fragment>
-  );
-};
+  )
+}
 
 ProductImageGalleryLeftThumb.propTypes = {
   product: PropTypes.object,
-  thumbPosition: PropTypes.string
-};
+  thumbPosition: PropTypes.string,
+}
 
-export default ProductImageGalleryLeftThumb;
+export default ProductImageGalleryLeftThumb

@@ -193,6 +193,41 @@ function* deleteAllItems() {
     yield call(() => axios.delete(`${process.env.REACT_APP_API}/cart`, config))
   }
 }
+function* applyCoupon(action) {
+  const { code, addToast } = action
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+  try {
+    const { data } = yield call(() =>
+      axios.post(`${process.env.REACT_APP_API}/coupon/apply`, { code }, config),
+    )
+    yield put({
+      type: cartConstants.COUPON_APPLY_SUCCESS,
+      payload: data
+    })
+  } catch (error) {
+    yield put({
+      type: cartConstants.COUPON_APPLY_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+    addToast(
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+      {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 1000,
+      },
+    )
+  }
+}
 
 function* cartSaga() {
   yield takeEvery(cartConstants.CART_ADD_REQUEST, addToCart)
@@ -201,6 +236,7 @@ function* cartSaga() {
   yield takeEvery(cartConstants.INCREMENT_QUANTITY, handleDIncrementQuantity)
   yield takeEvery(cartConstants.REMOVE_ITEM, deleteItems)
   yield takeEvery(cartConstants.REMOVE_ALL_CART, deleteAllItems)
+  yield takeEvery(cartConstants.COUPON_APPLY_REQUEST, applyCoupon)
 }
 
 export default cartSaga

@@ -30,7 +30,7 @@ const ProductImageDescription = ({
     >
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 col-md-6">
+          <div className="col-xs-12 col-sm-12 col-lg-6 col-md-6">
             {/* product image gallery */}
             {galleryType === 'leftThumb' ? (
               <ProductImageGallerySideThumb
@@ -45,7 +45,7 @@ const ProductImageDescription = ({
               <ProductImageGallery product={product} />
             )}
           </div>
-          <div className="col-lg-6 col-md-6">
+          <div className="col-xs-12 col-sm-12 col-lg-6 col-md-6">
             {/* product description info */}
             <ProductDescriptionInfo
               product={product}

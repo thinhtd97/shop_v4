@@ -5,6 +5,7 @@ import subSaga from './subSaga'
 import productSaga from './productSaga'
 import variationSaga from './variationSaga'
 import sizeSaga from './SizeSaga'
+import couponSaga from './CouponSaga'
 
 export function* rootSaga() {
   yield all([
@@ -13,6 +14,7 @@ export function* rootSaga() {
     subSaga(),
     productSaga(),
     variationSaga(),
-    sizeSaga()
+    sizeSaga(),
+    couponSaga()
   ])
 }

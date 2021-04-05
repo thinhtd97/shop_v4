@@ -15,17 +15,6 @@ const ShopTopAction = ({ getLayout, getFilterSortParams, brands }) => {
             <option value="priceLowToHigh">Price - Low to High</option>
           </select>
         </div>
-        <div className="shop-select">
-          <select
-            onChange={(e) => getFilterSortParams('filterPrice', e.target.value)}
-          >
-            <option value="">All Price</option>
-            <option value="0to200">From 0 to 200</option>
-            <option value="201to400">From 201 to 400</option>
-            <option value="401to800">From 401 to 800</option>
-            <option value="800tomax">From 800 more</option>
-          </select>
-        </div>
       </div>
 
       <div className="shop-tab">

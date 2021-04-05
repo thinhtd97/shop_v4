@@ -237,7 +237,7 @@ const ProductGridListSingle = ({
             </h3>
 
             <div className="product-rating">
-              <Rating value={2.8} />
+              <Rating value={product.rating} />
             </div>
 
             <div className="product-price">

@@ -7,9 +7,9 @@ const cartReducer = (state = { cartItems: [] }, action) => {
       return { ...state, loading: true }
     case cartConstant.CART_ADD_ITEM:
       let item = action.payload
-        if (state.cartItems === undefined) {
-          state.cartItems = []
-        }
+      if (state.cartItems === undefined) {
+        state.cartItems = []
+      }
       const existItem = state.cartItems.find((p) => p.product === item.product)
       if (existItem) {
         item.qty += existItem.qty
@@ -100,6 +100,23 @@ export const listCart = (state = { cartItems: [] }, action) => {
         loading: false,
         cartItems: [],
       }
+    case cartConstant.CART_ADD_DATABASE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+    case cartConstant.CART_ADD_DATABASE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      }
+    case cartConstant.CART_ADD_DATABASE_FAILED:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      }
     case cartConstant.DECREMENT_QUANTITY:
       if (product.qty === 1) {
         let item = state.cartItems.filter(
@@ -150,6 +167,47 @@ export const listCart = (state = { cartItems: [] }, action) => {
   }
 }
 
+export const couponReducer = (state = { coupons: [] }, action) => {
+  switch (action.type) {
+    case cartConstant.COUPON_APPLY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+    case cartConstant.COUPON_APPLY_SUCCESS:
+      let item = action.payload
 
+      const existCoupon = state.coupons.find(
+        (coupon) => coupon.code === item.code,
+      )
+      if (existCoupon) {
+        return {
+          ...state,
+          loading: false,
+          coupons: state.coupons.map((coupon) =>
+            coupon.code === existCoupon.code ? item : coupon,
+          ),
+        }
+      } else {
+        return {
+          ...state,
+          loading: false,
+          coupons: [...state.coupons, item],
+        }
+      }
+
+    case cartConstant.COUPON_APPLY_FAILED:
+      return {
+        loading: false,
+        error: action.payload,
+      }
+    case cartConstant.COUPON_APPLY_RESET:
+      return {
+        coupons: [],
+      }
+    default:
+      return state
+  }
+}
 
 export default cartReducer

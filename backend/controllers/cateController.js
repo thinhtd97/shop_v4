@@ -2,6 +2,7 @@ import Category from '../models/category.js'
 import Sub from '../models/sub.js'
 import asyncHandle from 'express-async-handler'
 import slugify from 'slugify'
+import Product from '../models/product.js'
 
 export const create = asyncHandle(async (req, res) => {
   const { name } = req.body
@@ -50,8 +51,15 @@ export const update = asyncHandle(async (req, res) => {
 })
 export const remove = asyncHandle(async (req, res) => {
   try {
-    const deleted = await Category.findOneAndDelete({ slug: req.params.slug })
-    res.json(deleted)
+    const category = await Category.findOne({ slug: req.params.slug })
+    await Product.updateMany({}, { $pullAll: { category: `${category._id}` } })
+    await Sub.updateMany({}, { $pullAll: { parent: `${category._id}` } })
+    if (category) {
+      await category.remove()
+    }
+    res.json({
+      message: 'Delete Success.',
+    })
   } catch (error) {
     res.status(400)
     throw new Error('Category Delete failed.')
@@ -59,13 +67,12 @@ export const remove = asyncHandle(async (req, res) => {
 })
 export const getSubs = asyncHandle(async (req, res) => {
   try {
-    const subs = Sub.find({ parent: req.params.id }).populate(
-      'parent',
-      '_id name',
-    ).exec((err, subs) => {
-      if (err) console.log(err);
-      res.json(subs);
-    })
+    const subs = Sub.find({ parent: req.params.id })
+      .populate('parent', '_id name')
+      .exec((err, subs) => {
+        if (err) console.log(err)
+        res.json(subs)
+      })
   } catch (error) {
     res.status(400)
     throw new Error(error)

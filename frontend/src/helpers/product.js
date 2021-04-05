@@ -64,7 +64,7 @@ export const getSortedProducts = (products, sortType, sortValue) => {
     if (sortType === 'category') {
       return products.filter(
         // product => product.filter(single => single.name === sortValue)[0]
-        (product) => product.category.name === sortValue,
+        (product) => product.category?.name === sortValue,
       )
     }
     if (sortType === 'tag') {
@@ -126,9 +126,38 @@ export const getSortedProducts = (products, sortType, sortValue) => {
       if (sortValue === '800tomax') {
         return sortProduct.filter((product) => product.price > 800)
       }
-      return sortProduct;
+      return sortProduct
     }
-
+    if (sortType === 'star') {
+      let sortProduct = [...products]
+        if (sortValue === 0) {
+          return sortProduct.filter((product) => product.rating < 1)
+        }
+      if (sortValue === 1) {
+        return sortProduct.filter(
+          (product) => product.rating >= 1 && product.rating < 2,
+        )
+      }
+      if (sortValue === 2) {
+        return sortProduct.filter(
+          (product) => product.rating >= 2 && product.rating < 3,
+        )
+      }
+      if (sortValue === 3) {
+        return sortProduct.filter(
+          (product) => product.rating >= 3 && product.rating < 4,
+        )
+      }
+      if (sortValue === 4) {
+        return sortProduct.filter(
+          (product) => product.rating >= 4 && product.rating < 5,
+        )
+      }
+      if (sortValue === 5) {
+        return sortProduct.filter((product) => product.rating >= 5)
+      }
+      return sortProduct
+    }
     if (sortType === 'brand') {
       let sortProduct = [...products]
       return sortProduct.filter(
@@ -136,11 +165,11 @@ export const getSortedProducts = (products, sortType, sortValue) => {
         (product) => product.brand === sortValue,
       )
     }
-    if(sortType === 'searchQuery') {
-        return products.filter(product => {
-            let productName = product.name.toLowerCase()
-            return productName.includes(sortValue.toLowerCase())
-        })
+    if (sortType === 'searchQuery') {
+      return products.filter((product) => {
+        let productName = product.name.toLowerCase()
+        return productName.includes(sortValue.toLowerCase())
+      })
     }
   }
   return products

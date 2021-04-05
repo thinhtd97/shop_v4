@@ -16,7 +16,6 @@ const ListSize = ({ history, match }) => {
   const variationId = match.params.variationId
   const slugProduct = match.params.slugProduct
   const { variation, loading } = useSelector((state) => state.variationDetail)
-  const { product: productDetail } = useSelector((state) => state.productDetail)
   const { adminInfo } = useSelector((state) => state.adminLogin)
   const columns = [
     {
@@ -35,7 +34,9 @@ const ListSize = ({ history, match }) => {
       render: (value) => (
         <Space>
           <Button type="primary">
-            <Link to={`/product/variation/list-size/update/${slugProduct}/${variation?._id}/${value.key}`}>
+            <Link
+              to={`/product/variation/list-size/update/${slugProduct}/${variation?._id}/${value.key}`}
+            >
               <FileSyncOutlined />
             </Link>
           </Button>
@@ -76,7 +77,9 @@ const ListSize = ({ history, match }) => {
           <Link to={`/product/list-products`}>List Product</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to={`/product/list-variation/${slugProduct}`}>List Variation</Link>
+          <Link to={`/product/list-variation/${slugProduct}`}>
+            List Variation
+          </Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>List Size </Breadcrumb.Item>
       </Breadcrumb>
@@ -88,7 +91,7 @@ const ListSize = ({ history, match }) => {
         loading={{ indicator: antIcon, spinning: loading }}
         columns={columns}
         dataSource={data}
-        pagination={{ pageSize: 4, total: (variation?.size?.length - 1) }}
+        pagination={{ pageSize: 4, total: variation?.size?.length - 1 }}
       />
     </>
   )

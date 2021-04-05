@@ -67,7 +67,7 @@ const MenuCart = ({ cartItems, removeFromCart }) => {
               <Link className="default-btn" to="/cart">
                 view cart
               </Link>
-              <Link className="default-btn" to="#">
+              <Link className="default-btn" to="/checkout">
                 checkout
               </Link>
             </div>

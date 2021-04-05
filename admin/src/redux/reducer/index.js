@@ -5,6 +5,7 @@ import * as subReducer from './subReducer.js';
 import * as productReducer from './productReducer.js';
 import * as variationReducer from './variationReducer.js';
 import * as sizeReducer from './sizeReducer.js';
+import * as couponReducer from './couponReducer.js';
 
 const rootReducer = combineReducers({
     adminLogin: adminReducer.loginReducer,
@@ -34,7 +35,9 @@ const rootReducer = combineReducers({
     sizeCreate: sizeReducer.createSizeReducer,
     sizeDelete: sizeReducer.deleteSizeReducer,
     sizeDetail: sizeReducer.detailSizeReducer,
-    sizeUpdate: sizeReducer.updateSizeReducer
+    sizeUpdate: sizeReducer.updateSizeReducer,
+    couponList: couponReducer.listReducer,
+    couponCreate: couponReducer.createReducer,
 })
 
 export default rootReducer

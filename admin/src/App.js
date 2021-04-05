@@ -28,6 +28,8 @@ import UpdateVariation from './pages/product/UpdateVariation'
 import CreateSize from './pages/size/CreateSize'
 import ListSize from './pages/size/ListSize'
 import UpdateSize from './pages/size/UpdateSize'
+import CreateCoupon from './pages/coupon/CreateCoupon';
+import ListCoupon from './pages/coupon/ListCoupon'
 
 const { Content, Footer } = Layout
 
@@ -138,6 +140,16 @@ function App() {
                     <Route
                       path="/product/variation/list-size/update/:slugProduct/:variationId/:sizeId"
                       component={UpdateSize}
+                      exact
+                    />
+                    <Route
+                      path="/coupon/create-coupon"
+                      component={CreateCoupon}
+                      exact
+                    />
+                     <Route
+                      path="/coupon/list-coupons"
+                      component={ListCoupon}
                       exact
                     />
                     <Route path="*" component={NotFound} />

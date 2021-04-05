@@ -9,7 +9,7 @@ const FunFactOne = ({ spaceTopClass, spaceBottomClass, bgClass }) => {
       className={`funfact-area ${spaceTopClass ? spaceTopClass : ""} ${
         spaceBottomClass ? spaceBottomClass : ""
       } ${bgClass ? bgClass : ""}`}
-    >
+    > 
       <div className="container">
         <div className="row">
           {funFactData &&

@@ -14,7 +14,11 @@ const ShopCategories = ({ getCateFilterParams, categories }) => {
         {clear && (
           <span onClick={clearOption} className="clearOption">
             <i
-              style={{ fontSize: '18px', marginRight: '6px', marginBottom: '10px' }}
+              style={{
+                fontSize: '18px',
+                marginRight: '6px',
+                marginBottom: '10px',
+              }}
               className="fa fa-angle-left"
             ></i>
             Clear
@@ -22,8 +26,8 @@ const ShopCategories = ({ getCateFilterParams, categories }) => {
         )}
         <ul>
           {categories?.map((single, key) => (
-            <Fragment>
-              <li key={key}>
+            <Fragment key={key}>
+              <li>
                 <div className="sidebar-widget-list-left">
                   <button
                     onClick={(e) => {

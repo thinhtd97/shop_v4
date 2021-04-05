@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import { setActiveSort } from '../../helpers/product'
 
-const ShopStar = ({ getFilterSortParams }) => {
+const ShopStar = ({ getStarFilterParams }) => {
   const [clear, setClear] = useState(false)
   const clearOption = () => {
-    getFilterSortParams('star', 0)
+    getStarFilterParams('star', 0)
     setClear(false)
   }
   return (
@@ -29,8 +28,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 style={{ padding: '0px' }}
                 className="text-uppercase"
                 onClick={(e) => {
-                  getFilterSortParams('star', 0)
-                  setActiveSort(e)
+                  getStarFilterParams('star', 0)
                 }}
               >
                 <div className="rating">
@@ -61,8 +59,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 style={{ padding: '0px' }}
                 className="text-uppercase"
                 onClick={(e) => {
-                  getFilterSortParams('star', 1)
-                  setActiveSort(e)
+                  getStarFilterParams('star', 1)
                   setClear(true)
                 }}
               >
@@ -94,8 +91,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 style={{ padding: '0px' }}
                 className="text-uppercase"
                 onClick={(e) => {
-                  getFilterSortParams('star', 2)
-                  setActiveSort(e)
+                  getStarFilterParams('star', 2)
                   setClear(true)
                 }}
               >
@@ -127,8 +123,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 style={{ padding: '0px' }}
                 className="text-uppercase"
                 onClick={(e) => {
-                  getFilterSortParams('star', 3)
-                  setActiveSort(e)
+                  getStarFilterParams('star', 3)
                   setClear(true)
                 }}
               >
@@ -160,8 +155,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 style={{ padding: '0px' }}
                 className="text-uppercase"
                 onClick={(e) => {
-                  getFilterSortParams('star', 4)
-                  setActiveSort(e)
+                  getStarFilterParams('star', 4)
                   setClear(true)
                 }}
               >
@@ -193,8 +187,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 style={{ padding: '0px' }}
                 className="text-uppercase"
                 onClick={(e) => {
-                  getFilterSortParams('star', 5)
-                  setActiveSort(e)
+                  getStarFilterParams('star', 5)
                   setClear(true)
                 }}
               >

@@ -15,6 +15,7 @@ const ShopSidebar = ({
   getFilterSortParams,
   getFilterPriceParams,
   getCateFilterParams,
+  getStarFilterParams,
   categories,
   colors,
   sizes,
@@ -36,7 +37,7 @@ const ShopSidebar = ({
       <ShopSize getSortParams={getSortParams} sizes={sizes} />
 
       {/* filter by star */}
-      <ShopStar getFilterSortParams={getFilterSortParams} />
+      <ShopStar getStarFilterParams={getStarFilterParams} />
 
       {/* filter by price */}
       <ShopPrice getFilterPriceParams={getFilterPriceParams} />

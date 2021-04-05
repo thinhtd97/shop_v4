@@ -26,6 +26,9 @@ const ShopGridTwoColumn = ({ location }) => {
   const [filterCateSortType, setFilterCateSortType] = useState('')
   const [filterCateSortValue, setFilterCateSortValue] = useState('')
 
+  const [filterStarSortType, setFilterStarSortType] = useState('')
+  const [filterStarSortValue, setFilterStarSortValue] = useState('')
+
   const [offset, setOffset] = useState(0)
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -66,6 +69,11 @@ const ShopGridTwoColumn = ({ location }) => {
     setFilterCateSortValue(sortValue)
   }
 
+  const getStarFilterParams = (sortType, sortValue) => {
+    setFilterStarSortType(sortType)
+    setFilterStarSortValue(sortValue)
+  }
+
   useEffect(() => {
     let sortedProducts = getSortedProducts(products, sortType, sortValue)
     const filterSortedProducts = getSortedProducts(
@@ -83,7 +91,12 @@ const ShopGridTwoColumn = ({ location }) => {
       filterCateSortType,
       filterCateSortValue,
     )
-    sortedProducts = filterCateSortedProduct
+    const filterStarSortedProduct = getSortedProducts(
+      filterCateSortedProduct,
+      filterStarSortType,
+      filterStarSortValue,
+    )
+    sortedProducts = filterStarSortedProduct
     setSortedProducts(sortedProducts)
     setCurrentData(sortedProducts?.slice(offset, offset + pageLimit))
   }, [
@@ -97,6 +110,8 @@ const ShopGridTwoColumn = ({ location }) => {
     filterPriceSortValue,
     filterCateSortType,
     filterCateSortValue,
+    filterStarSortType,
+    filterStarSortValue,
   ])
 
   const colors = ['black', 'brown', 'green', 'white', 'blue']
@@ -139,6 +154,7 @@ const ShopGridTwoColumn = ({ location }) => {
                   getFilterSortParams={getFilterSortParams}
                   getFilterPriceParams={getFilterPriceParams}
                   getCateFilterParams={getCateFilterParams}
+                  getStarFilterParams={getStarFilterParams}
                   categories={categories}
                   colors={colors}
                   sizes={sizes}

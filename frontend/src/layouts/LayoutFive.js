@@ -9,7 +9,7 @@ const LayoutFive = ({ children }) => {
       {/* header */}
       <HeaderFour />
       {children}
-      <FooterTwo
+      <FooterTwo 
         backgroundColorClass="bg-black"
         footerTopBackgroundColorClass="bg-black"
         footerTopSpaceTopClass="pt-80"

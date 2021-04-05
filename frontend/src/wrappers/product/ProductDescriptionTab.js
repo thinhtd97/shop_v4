@@ -88,7 +88,7 @@ const ProductDescriptionTab = ({
                     {userInfo ? (
                       <Fragment>
                         <div className="col-lg-7">
-                          {product.reviews && product.reviews.length > 0 ? (
+                          {product?.reviews && product.reviews.length > 0 ? (
                             <Fragment>
                               {product.reviews.map((el, key) => (
                                 <div key={key} className="review-wrapper">

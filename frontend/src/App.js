@@ -15,8 +15,6 @@ const ShopGridTwoColumn = lazy(() => import('./pages/shop/ShopGridTwoColumn'))
 
 // product pages
 const ProductTabLeft = lazy(() => import('./pages/shop-product/ProductTabLeft'))
-// blog pages
-const BlogNoSidebar = lazy(() => import('./pages/blog/BlogNoSidebar'))
 
 // other pages
 const About = lazy(() => import('./pages/other/About'))
@@ -41,7 +39,7 @@ const App = (props) => {
           en: require('./translations/english.json'),
           fn: require('./translations/french.json'),
           de: require('./translations/germany.json'),
-        },    
+        },
       }),
     )
   })
@@ -78,11 +76,7 @@ const App = (props) => {
                     path={process.env.PUBLIC_URL + '/product/:slug'}
                     component={ProductTabLeft}
                   />
-                  {/* Blog pages */}
-                  <Route
-                    path={process.env.PUBLIC_URL + '/blog'}
-                    component={BlogNoSidebar}
-                  />
+
                   {/* Other pages */}
                   <Route
                     path={process.env.PUBLIC_URL + '/about'}

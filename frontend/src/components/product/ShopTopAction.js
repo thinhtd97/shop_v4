@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { setActiveLayout } from '../../helpers/product'
 
-const ShopTopAction = ({ getLayout, getFilterSortParams, brands }) => {
+const ShopTopAction = ({ getLayout, getFilterSortParams }) => {
   return (
     <div className="shop-top-bar mb-35">
       <div className="select-shoing-wrap">

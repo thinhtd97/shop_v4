@@ -1,12 +1,27 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState } from 'react'
 import { setActiveSort } from '../../helpers/product'
 
 const ShopStar = ({ getFilterSortParams }) => {
+  const [clear, setClear] = useState(false)
+  const clearOption = () => {
+    getFilterSortParams('star', 0)
+    setClear(false)
+  }
   return (
     <div className="sidebar-widget mt-40">
       <h4 className="pro-sidebar-title">Star </h4>
+
       <div className="sidebar-widget-list mt-20">
+        {clear && (
+          <span onClick={clearOption} className="clearOption">
+            <i
+              style={{ fontSize: '18px', marginRight: '6px' }}
+              className="fa fa-angle-left"
+            ></i>
+            Clear
+          </span>
+        )}
         <ul>
           <li>
             <div className="sidebar-widget-list-left">
@@ -48,6 +63,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 onClick={(e) => {
                   getFilterSortParams('star', 1)
                   setActiveSort(e)
+                  setClear(true)
                 }}
               >
                 <div className="rating">
@@ -80,6 +96,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 onClick={(e) => {
                   getFilterSortParams('star', 2)
                   setActiveSort(e)
+                  setClear(true)
                 }}
               >
                 <div className="rating">
@@ -112,6 +129,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 onClick={(e) => {
                   getFilterSortParams('star', 3)
                   setActiveSort(e)
+                  setClear(true)
                 }}
               >
                 <div className="rating">
@@ -144,6 +162,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 onClick={(e) => {
                   getFilterSortParams('star', 4)
                   setActiveSort(e)
+                  setClear(true)
                 }}
               >
                 <div className="rating">
@@ -176,6 +195,7 @@ const ShopStar = ({ getFilterSortParams }) => {
                 onClick={(e) => {
                   getFilterSortParams('star', 5)
                   setActiveSort(e)
+                  setClear(true)
                 }}
               >
                 <div className="rating">

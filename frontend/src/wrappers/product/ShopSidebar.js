@@ -13,6 +13,8 @@ const ShopSidebar = ({
   sideSpaceClass,
   getSortParams,
   getFilterSortParams,
+  getFilterPriceParams,
+  getCateFilterParams,
   categories,
   colors,
   sizes,
@@ -25,7 +27,7 @@ const ShopSidebar = ({
       <ShopSearch getSortParams={getSortParams} />
 
       {/* filter by categories */}
-      <ShopCategories categories={categories} getSortParams={getSortParams} />
+      <ShopCategories categories={categories} getCateFilterParams={getCateFilterParams} />
 
       {/* filter by color */}
       <ShopColor colors={colors} getSortParams={getSortParams} />
@@ -37,7 +39,7 @@ const ShopSidebar = ({
       <ShopStar getFilterSortParams={getFilterSortParams} />
 
       {/* filter by price */}
-      <ShopPrice getFilterSortParams={getFilterSortParams} />
+      <ShopPrice getFilterPriceParams={getFilterPriceParams} />
 
       {/* filter by brand */}
       <ShopBrand brands={brands} getSortParams={getSortParams} />

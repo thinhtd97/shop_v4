@@ -20,6 +20,12 @@ const ShopGridTwoColumn = ({ location }) => {
   const [filterSortType, setFilterSortType] = useState('')
   const [filterSortValue, setFilterSortValue] = useState('')
 
+  const [filterPriceSortType, setFilterPriceSortType] = useState('')
+  const [filterPriceSortValue, setFilterPriceSortValue] = useState('')
+
+  const [filterCateSortType, setFilterCateSortType] = useState('')
+  const [filterCateSortValue, setFilterCateSortValue] = useState('')
+
   const [offset, setOffset] = useState(0)
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -50,6 +56,16 @@ const ShopGridTwoColumn = ({ location }) => {
     setFilterSortValue(sortValue)
   }
 
+  const getFilterPriceParams = (sortType, sortValue) => {
+    setFilterPriceSortType(sortType)
+    setFilterPriceSortValue(sortValue)
+  }
+
+  const getCateFilterParams = (sortType, sortValue) => {
+    setFilterCateSortType(sortType)
+    setFilterCateSortValue(sortValue)
+  }
+
   useEffect(() => {
     let sortedProducts = getSortedProducts(products, sortType, sortValue)
     const filterSortedProducts = getSortedProducts(
@@ -57,10 +73,31 @@ const ShopGridTwoColumn = ({ location }) => {
       filterSortType,
       filterSortValue,
     )
-    sortedProducts = filterSortedProducts
+    const filterPriceSortedProduct = getSortedProducts(
+      filterSortedProducts,
+      filterPriceSortType,
+      filterPriceSortValue,
+    )
+    const filterCateSortedProduct = getSortedProducts(
+      filterPriceSortedProduct,
+      filterCateSortType,
+      filterCateSortValue,
+    )
+    sortedProducts = filterCateSortedProduct
     setSortedProducts(sortedProducts)
     setCurrentData(sortedProducts?.slice(offset, offset + pageLimit))
-  }, [offset, products, sortType, sortValue, filterSortType, filterSortValue])
+  }, [
+    offset,
+    products,
+    sortType,
+    sortValue,
+    filterSortType,
+    filterSortValue,
+    filterPriceSortType,
+    filterPriceSortValue,
+    filterCateSortType,
+    filterCateSortValue,
+  ])
 
   const colors = ['black', 'brown', 'green', 'white', 'blue']
   const brands = [
@@ -100,6 +137,8 @@ const ShopGridTwoColumn = ({ location }) => {
                   sideSpaceClass="mr-30"
                   getSortParams={getSortParams}
                   getFilterSortParams={getFilterSortParams}
+                  getFilterPriceParams={getFilterPriceParams}
+                  getCateFilterParams={getCateFilterParams}
                   categories={categories}
                   colors={colors}
                   sizes={sizes}

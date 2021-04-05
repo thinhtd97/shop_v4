@@ -12,6 +12,7 @@ function* addToWishlist(action) {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
+    addToast('Added To Wishlist', { appearance: 'success', autoDismiss: true })
     yield call(() =>
       axios.post(
         `${process.env.REACT_APP_API}/user/wishlist/${slug}`,
@@ -22,7 +23,7 @@ function* addToWishlist(action) {
     const { data } = yield call(() =>
       axios.get(`${process.env.REACT_APP_API}/user/wishlist`, config),
     )
-    addToast('Added To Wishlist', { appearance: 'success', autoDismiss: true })
+
     yield put({
       type: wishlistConstant.ADD_WISHLIST_SUCCESS,
     })
@@ -68,7 +69,6 @@ function* removeItem(action) {
       config,
     ),
   )
-
 }
 function* listWishlist(action) {
   const { addToast } = action

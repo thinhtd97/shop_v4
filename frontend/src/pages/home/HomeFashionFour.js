@@ -21,9 +21,14 @@ const HomeFashionFour = () => {
         {/* hero slider */}
         <HeroSliderTwelve />
         {/* product grid */}
-        <div style={{display: 'flex', justifyContent: 'center'}}>
+        
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           {loading ? (
-            <div style={{margin: '60px'}} className="spinner-border" role="status">
+            <div
+              style={{ margin: '60px' }}
+              className="spinner-border"
+              role="status"
+            >
               <span className="sr-only">Loading...</span>
             </div>
           ) : (

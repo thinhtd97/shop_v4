@@ -20,6 +20,7 @@ const ShopSidebar = ({
   colors,
   sizes,
   subs,
+  location,
   brands,
 }) => {
   return (

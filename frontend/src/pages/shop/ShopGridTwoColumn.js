@@ -160,6 +160,7 @@ const ShopGridTwoColumn = ({ location }) => {
                   sizes={sizes}
                   subs={subs}
                   brands={brands}
+                  
                 />
               </div>
               <div className="col-lg-9">

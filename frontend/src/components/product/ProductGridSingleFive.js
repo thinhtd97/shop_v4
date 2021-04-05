@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Fragment, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { getDiscountPrice } from '../../helpers/product'

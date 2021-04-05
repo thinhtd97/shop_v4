@@ -5,6 +5,7 @@ const ShopCategories = ({ getCateFilterParams, categories }) => {
   const [clear, setClear] = useState(false)
   const clearOption = () => {
     getCateFilterParams('category', '')
+    
     setClear(false)
   }
   return (
@@ -30,7 +31,7 @@ const ShopCategories = ({ getCateFilterParams, categories }) => {
               <li>
                 <div className="sidebar-widget-list-left">
                   <button
-                    onClick={(e) => {
+                    onClick={() => {
                       getCateFilterParams('category', single.name)
                       setClear(true)
                     }}

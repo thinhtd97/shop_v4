@@ -18,7 +18,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
     product.variation ? product.variation[0]?.color : '',
   )
   const [selectedProductSize, setSelectedProductSize] = useState(
-    product.variation ? product.variation[0]?.size[0]?.name : '',
+    product.variation ? product.variation[0]?.size[0].size : '',
   )
   const [productStock, setProductStock] = useState(
     product.variation
@@ -44,24 +44,28 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
     ) => {
       e.preventDefault()
       let cartId = `${Date.now()}`
-      dispatch(
-        addToCartAction(
-          product,
-          cartId,
-          slug,
-          name,
-          image,
-          price,
-          countInStock,
-          quantity,
-          size,
-          color,
-          discountedPrice,
-          addToast,
-        ),
-      )
+      if (product.variation.length > 0 && selectedProductSize === '') {
+        addToast('Size Required', { appearance: 'error', autoDismiss: true })
+      } else {
+        dispatch(
+          addToCartAction(
+            product,
+            cartId,
+            slug,
+            name,
+            image,
+            price,
+            countInStock,
+            quantity,
+            size,
+            color,
+            discountedPrice,
+            addToast,
+          ),
+        )
+      }
     },
-    [dispatch, addToast],
+    [dispatch, addToast, selectedProductSize],
   )
 
   const addToCartDatabase = (
@@ -93,6 +97,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
       ),
     )
   }
+
   const handleAddToWishlist = (addToast, slug) => {
     if (!userInfo) {
       return addToast('Please login to add', {
@@ -121,7 +126,8 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
         <div className="pro-details-rating">
           <Rating value={product.rating} />
           <br />
-          <span className="badge badge-primary">{product.numReviews}</span> reviews
+          <span className="badge badge-primary">{product.numReviews}</span>{' '}
+          reviews
         </div>
       </div>
 

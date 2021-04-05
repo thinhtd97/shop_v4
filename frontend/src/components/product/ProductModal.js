@@ -24,7 +24,7 @@ function ProductModal(props) {
     product.variation ? product.variation[0]?.color : '',
   )
   const [selectedProductSize, setSelectedProductSize] = useState(
-    product.variation ? product.variation[0]?.size[0]?.name : '',
+    product.variation ? product.variation[0]?.size[0].size : '',
   )
   const [productStock, setProductStock] = useState(
     product.variation

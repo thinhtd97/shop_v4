@@ -300,9 +300,20 @@ const Cart = ({ location }) => {
                       Grand Total
                       <span>${finalPrice.toFixed(2)}</span>
                     </h4>
-                    <Link to={process.env.PUBLIC_URL + '/checkout'}>
-                      Proceed to Checkout
-                    </Link>
+                    {userInfo ? (
+                      <Link to={process.env.PUBLIC_URL + '/checkout'}>
+                        Proceed to Checkout
+                      </Link>
+                    ) : (
+                      <Link
+                        to={
+                          process.env.PUBLIC_URL +
+                          '/login-register?redirect=checkout'
+                        }
+                      >
+                        Proceed to Checkout
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>

@@ -3,9 +3,16 @@ import React, { Fragment, useState } from 'react'
 
 const ShopCategories = ({ getCateFilterParams, categories }) => {
   const [clear, setClear] = useState(false)
+  const handleActive = (e) => {
+    const buttons = document.querySelectorAll('.filterCategory')
+    buttons.forEach((elem) => {
+      elem.classList.remove('active')
+    })
+    e.currentTarget.classList.add('active')
+  }
   const clearOption = () => {
     getCateFilterParams('category', '')
-    
+
     setClear(false)
   }
   return (
@@ -31,9 +38,11 @@ const ShopCategories = ({ getCateFilterParams, categories }) => {
               <li>
                 <div className="sidebar-widget-list-left">
                   <button
-                    onClick={() => {
+                    className="filterCategory"
+                    onClick={(e) => {
                       getCateFilterParams('category', single.name)
                       setClear(true)
+                      handleActive(e)
                     }}
                   >
                     {single.name} <span className="checkmark" />

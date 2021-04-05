@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { setActiveSort } from '../../helpers/product'
 
-const ShopTag = ({ subs, getSortParams }) => {
+const ShopTag = ({ subs, getFilterTagsParams }) => {
   const filters = []
   subs && subs.filter((el) => {
     if(filters.indexOf(el.name) === -1) {
@@ -11,6 +10,13 @@ const ShopTag = ({ subs, getSortParams }) => {
     }
     return false
   })
+  const handleActive = (e) => {
+    const buttons = document.querySelectorAll('.filterTags')
+    buttons.forEach((elem) => {
+      elem.classList.remove('active')
+    })
+    e.currentTarget.classList.add('active')
+  }
   return (
     <div className="sidebar-widget mt-50">
       <h4 className="pro-sidebar-title">Tag</h4>
@@ -19,9 +25,11 @@ const ShopTag = ({ subs, getSortParams }) => {
           {filters?.map((single, key) => (
             <li key={key}>
               <button
+                className="filterTags"
                 onClick={(e) => {
-                  getSortParams('tag', single)
-                  setActiveSort(e)
+                  getFilterTagsParams('tag', single)
+                  handleActive(e)
+                  
                 }}
               >
                 {single}

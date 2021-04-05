@@ -204,7 +204,10 @@ function ProductModal(props) {
                 <div className="pro-details-rating-wrap">
                   <div className="pro-details-rating">
                     <Rating value={product.rating} /> <br />
-                    <span class="badge badge-primary">{product.numReviews}</span> reviews
+                    <span className="badge badge-primary">
+                      {product.numReviews}
+                    </span>{' '}
+                    reviews
                   </div>
                 </div>
 
@@ -380,7 +383,7 @@ function ProductModal(props) {
                   </div>
                   <div className="pro-details-wishlist">
                     {wishlistItem ? (
-                      <button disabled style={{cursor: 'not-allowed'}}>
+                      <button disabled style={{ cursor: 'not-allowed' }}>
                         <i className="pe-7s-like" />
                       </button>
                     ) : (

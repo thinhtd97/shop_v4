@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { animateScroll } from "react-scroll";
+import PropTypes from 'prop-types'
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { animateScroll } from 'react-scroll'
 
 const FooterTwo = ({
   backgroundColorClass,
@@ -11,53 +11,41 @@ const FooterTwo = ({
   footerTopBackgroundColorClass,
   footerTopSpaceTopClass,
   footerTopSpaceBottomClass,
-  footerLogo
 }) => {
-  const [scroll, setScroll] = useState(0);
-  const [top, setTop] = useState(0);
+  const [scroll, setScroll] = useState(0)
+  const [top, setTop] = useState(0)
 
   useEffect(() => {
-    setTop(100);
-    window.addEventListener("scroll", handleScroll);
+    setTop(100)
+    window.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const scrollToTop = () => {
-    animateScroll.scrollToTop();
-  };
+    animateScroll.scrollToTop()
+  }
 
   const handleScroll = () => {
-    setScroll(window.scrollY);
-  };
+    setScroll(window.scrollY)
+  }
   return (
     <footer
       className={`footer-area ${
-        backgroundColorClass ? backgroundColorClass : ""
-      } ${spaceLeftClass ? spaceLeftClass : ""} ${
-        spaceRightClass ? spaceRightClass : ""
+        backgroundColorClass ? backgroundColorClass : ''
+      } ${spaceLeftClass ? spaceLeftClass : ''} ${
+        spaceRightClass ? spaceRightClass : ''
       }`}
     >
       <div
         className={`footer-top text-center ${
-          footerTopBackgroundColorClass ? footerTopBackgroundColorClass : ""
-        } ${footerTopSpaceTopClass ? footerTopSpaceTopClass : ""}  ${
-          footerTopSpaceBottomClass ? footerTopSpaceBottomClass : ""
+          footerTopBackgroundColorClass ? footerTopBackgroundColorClass : ''
+        } ${footerTopSpaceTopClass ? footerTopSpaceTopClass : ''}  ${
+          footerTopSpaceBottomClass ? footerTopSpaceBottomClass : ''
         }`}
       >
         <div className="container">
-          <div className="footer-logo">
-            <Link to={process.env.PUBLIC_URL}>
-              <img
-                alt=""
-                src={
-                  process.env.PUBLIC_URL +
-                  `${footerLogo ? footerLogo : "/assets/img/logo/logo.png"}`
-                }
-              />
-            </Link>
-          </div>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -66,29 +54,29 @@ const FooterTwo = ({
           <div className="footer-social">
             <ul>
               <li>
-                <a href="//www.facebook.com">
+                <Link to="//www.facebook.com">
                   <i className="fa fa-facebook" />
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="//www.dribbble.com">
+                <Link to="//www.dribbble.com">
                   <i className="fa fa-dribbble" />
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="//www.pinterest.com">
+                <Link to="//www.pinterest.com">
                   <i className="fa fa-pinterest-p" />
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="//www.twitter.com">
+                <Link to="//www.twitter.com">
                   <i className="fa fa-twitter" />
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="//www.linkedin.com">
+                <Link to="//www.linkedin.com">
                   <i className="fa fa-linkedin" />
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -98,32 +86,30 @@ const FooterTwo = ({
         <div className="container">
           <div
             className={`copyright-2 ${
-              copyrightColorClass ? copyrightColorClass : ""
+              copyrightColorClass ? copyrightColorClass : ''
             }`}
           >
             <p>
-              © 2020{" "}
-              <a
-                href="//www.hasthemes.com"
+              © 2020{' '}
+              <Link
+                to="//www.hasthemes.com"
                 rel="noopener noreferrer"
                 target="_blank"
-              >
-                Flone
-              </a>
+              ></Link>
               . All Rights Reserved.
             </p>
           </div>
         </div>
       </div>
       <button
-        className={`scroll-top ${scroll > top ? "show" : ""}`}
+        className={`scroll-top ${scroll > top ? 'show' : ''}`}
         onClick={() => scrollToTop()}
       >
         <i className="fa fa-angle-double-up"></i>
       </button>
     </footer>
-  );
-};
+  )
+}
 
 FooterTwo.propTypes = {
   backgroundColorClass: PropTypes.string,
@@ -133,7 +119,7 @@ FooterTwo.propTypes = {
   footerTopSpaceBottomClass: PropTypes.string,
   footerTopSpaceTopClass: PropTypes.string,
   spaceLeftClass: PropTypes.string,
-  spaceRightClass: PropTypes.string
-};
+  spaceRightClass: PropTypes.string,
+}
 
-export default FooterTwo;
+export default FooterTwo

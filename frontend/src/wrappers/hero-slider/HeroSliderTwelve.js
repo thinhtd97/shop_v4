@@ -2,6 +2,7 @@ import React from "react";
 import Swiper from "react-id-swiper";
 import sliderData from "../../data/hero-sliders/hero-slider-twelve.json";
 import HeroSliderTwelveSingle from "../../components/hero-slider/HeroSliderTwelveSingle.js";
+
 const HeroSliderTwelve = () => {
   const params = {
     effect: "fade",

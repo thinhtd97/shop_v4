@@ -12,15 +12,17 @@ import ShopPrice from '../../components/product/ShopPrice'
 const ShopSidebar = ({
   sideSpaceClass,
   getSortParams,
-  getFilterSortParams,
+  getFilterColorParams,
+  getFilterSizeParams,
   getFilterPriceParams,
   getCateFilterParams,
   getStarFilterParams,
+  getFilterBrandParams,
+  getFilterTagsParams,
   categories,
   colors,
   sizes,
   subs,
-  location,
   brands,
 }) => {
   return (
@@ -29,13 +31,16 @@ const ShopSidebar = ({
       <ShopSearch getSortParams={getSortParams} />
 
       {/* filter by categories */}
-      <ShopCategories categories={categories} getCateFilterParams={getCateFilterParams} />
+      <ShopCategories
+        categories={categories}
+        getCateFilterParams={getCateFilterParams}
+      />
 
       {/* filter by color */}
-      <ShopColor colors={colors} getSortParams={getSortParams} />
+      <ShopColor colors={colors} getFilterColorParams={getFilterColorParams} />
 
       {/* filter by size */}
-      <ShopSize getSortParams={getSortParams} sizes={sizes} />
+      <ShopSize getFilterSizeParams={getFilterSizeParams} sizes={sizes} />
 
       {/* filter by star */}
       <ShopStar getStarFilterParams={getStarFilterParams} />
@@ -44,10 +49,10 @@ const ShopSidebar = ({
       <ShopPrice getFilterPriceParams={getFilterPriceParams} />
 
       {/* filter by brand */}
-      <ShopBrand brands={brands} getSortParams={getSortParams} />
+      <ShopBrand brands={brands} getFilterBrandParams={getFilterBrandParams} />
 
       {/* filter by tag */}
-      <ShopTag subs={subs} getSortParams={getSortParams} />
+      <ShopTag subs={subs} getFilterTagsParams={getFilterTagsParams} />
     </div>
   )
 }

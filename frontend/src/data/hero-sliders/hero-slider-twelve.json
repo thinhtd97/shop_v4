@@ -4,15 +4,15 @@
     "title": "New Arrival",
     "subtitle": "Final Sale",
     "text": "30% off Summer Vacation",
-    "image": "/assets/img/slider/slider-3.jpg",
-    "url": "/shop-grid-standard"
+    "image": "/assets/img/slider/fashion-slider-3.jpg",
+    "url": "/shop"
   },
   {
     "id": 2,
     "title": "New Arrival",
     "subtitle": "Final Sale",
     "text": "40% off Summer Vacation",
-    "image": "/assets/img/slider/slider-4.jpg",
-    "url": "/shop-grid-standard"
+    "image": "/assets/img/slider/fashion-Slider-003-b.jpg",
+    "url": "/shop"
   }
 ]

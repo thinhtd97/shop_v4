@@ -29,6 +29,18 @@ const ShopGridTwoColumn = ({ location }) => {
   const [filterStarSortType, setFilterStarSortType] = useState('')
   const [filterStarSortValue, setFilterStarSortValue] = useState('')
 
+  const [filterColorSortType, setFilterColorSortType] = useState('')
+  const [filterColorSortValue, setFilterColorSortValue] = useState('')
+
+  const [filterBrandSortType, setFilterBrandSortType] = useState('')
+  const [filterBrandSortValue, setFilterBrandSortValue] = useState('')
+
+  const [filterSizeSortType, setFilterSizeSortType] = useState('')
+  const [filterSizeSortValue, setFilterSizeSortValue] = useState('')
+
+  const [filterTagsSortType, setFilterTagsSortType] = useState('')
+  const [filterTagsSortValue, setFilterTagsSortValue] = useState('')
+
   const [offset, setOffset] = useState(0)
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -64,6 +76,26 @@ const ShopGridTwoColumn = ({ location }) => {
     setFilterPriceSortValue(sortValue)
   }
 
+  const getFilterTagsParams = (sortType, sortValue) => {
+    setFilterTagsSortType(sortType)
+    setFilterTagsSortValue(sortValue)
+  }
+
+  const getFilterBrandParams = (sortType, sortValue) => {
+    setFilterBrandSortType(sortType)
+    setFilterBrandSortValue(sortValue)
+  }
+
+  const getFilterColorParams = (sortType, sortValue) => {
+    setFilterColorSortType(sortType)
+    setFilterColorSortValue(sortValue)
+  }
+
+  const getFilterSizeParams = (sortType, sortValue) => {
+    setFilterSizeSortType(sortType)
+    setFilterSizeSortValue(sortValue)
+  }
+
   const getCateFilterParams = (sortType, sortValue) => {
     setFilterCateSortType(sortType)
     setFilterCateSortValue(sortValue)
@@ -96,7 +128,27 @@ const ShopGridTwoColumn = ({ location }) => {
       filterStarSortType,
       filterStarSortValue,
     )
-    sortedProducts = filterStarSortedProduct
+    const filterColorSortedProduct = getSortedProducts(
+      filterStarSortedProduct,
+      filterColorSortType,
+      filterColorSortValue,
+    )
+    const filterSizeSortedProduct = getSortedProducts(
+      filterColorSortedProduct,
+      filterSizeSortType,
+      filterSizeSortValue,
+    )
+    const filterBrandSortedProduct = getSortedProducts(
+      filterSizeSortedProduct,
+      filterBrandSortType,
+      filterBrandSortValue,
+    )
+    const filterTagsSortedProduct = getSortedProducts(
+      filterBrandSortedProduct,
+      filterTagsSortType,
+      filterTagsSortValue,
+    )
+    sortedProducts = filterTagsSortedProduct
     setSortedProducts(sortedProducts)
     setCurrentData(sortedProducts?.slice(offset, offset + pageLimit))
   }, [
@@ -112,6 +164,14 @@ const ShopGridTwoColumn = ({ location }) => {
     filterCateSortValue,
     filterStarSortType,
     filterStarSortValue,
+    filterColorSortType,
+    filterColorSortValue,
+    filterSizeSortType,
+    filterSizeSortValue,
+    filterBrandSortType,
+    filterBrandSortValue,
+    filterTagsSortType,
+    filterTagsSortValue,
   ])
 
   const colors = ['black', 'brown', 'green', 'white', 'blue']
@@ -155,12 +215,15 @@ const ShopGridTwoColumn = ({ location }) => {
                   getFilterPriceParams={getFilterPriceParams}
                   getCateFilterParams={getCateFilterParams}
                   getStarFilterParams={getStarFilterParams}
+                  getFilterColorParams={getFilterColorParams}
+                  getFilterSizeParams={getFilterSizeParams}
+                  getFilterBrandParams={getFilterBrandParams}
+                  getFilterTagsParams={getFilterTagsParams}
                   categories={categories}
                   colors={colors}
                   sizes={sizes}
                   subs={subs}
                   brands={brands}
-                  
                 />
               </div>
               <div className="col-lg-9">

@@ -6,6 +6,13 @@ const ShopPrice = ({ getFilterPriceParams }) => {
     getFilterPriceParams('filterPrice', '')
     setClear(false)
   }
+  const handleActive = (e) => {
+    const buttons = document.querySelectorAll('.filterPrice')
+    buttons.forEach((elem) => {
+      elem.classList.remove('active')
+    })
+    e.currentTarget.classList.add('active')
+  }
   return (
     <div className="sidebar-widget mt-50">
       <h4 className="pro-sidebar-title">Price</h4>
@@ -22,8 +29,10 @@ const ShopPrice = ({ getFilterPriceParams }) => {
         <ul>
           <li>
             <button
-              onClick={() => {
+              className="filterPrice"
+              onClick={(e) => {
                 getFilterPriceParams('filterPrice', '')
+                handleActive(e)
               }}
             >
               All Price
@@ -32,9 +41,11 @@ const ShopPrice = ({ getFilterPriceParams }) => {
           <br />
           <li>
             <button
-              onClick={() => {
+              className="filterPrice"
+              onClick={(e) => {
                 getFilterPriceParams('filterPrice', '0to200')
                 setClear(true)
+                handleActive(e)
               }}
             >
               From 0 To 200
@@ -42,9 +53,10 @@ const ShopPrice = ({ getFilterPriceParams }) => {
           </li>
           <li>
             <button
-              onClick={() => {
+              onClick={(e) => {
                 getFilterPriceParams('filterPrice', '201to400')
                 setClear(true)
+                handleActive(e)
               }}
             >
               From 201 To 400
@@ -52,9 +64,10 @@ const ShopPrice = ({ getFilterPriceParams }) => {
           </li>
           <li>
             <button
-              onClick={() => {
+              onClick={(e) => {
                 getFilterPriceParams('filterPrice', '401to800')
                 setClear(true)
+                handleActive(e)
               }}
             >
               From 401 To 800
@@ -62,9 +75,10 @@ const ShopPrice = ({ getFilterPriceParams }) => {
           </li>
           <li>
             <button
-              onClick={() => {
+              onClick={(e) => {
                 getFilterPriceParams('filterPrice', '800tomax')
                 setClear(true)
+                handleActive(e)
               }}
             >
               Over 800

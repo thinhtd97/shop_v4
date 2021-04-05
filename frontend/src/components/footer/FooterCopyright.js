@@ -1,29 +1,20 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-const FooterCopyright = ({ footerLogo, spaceBottomClass }) => {
+const FooterCopyright = ({ spaceBottomClass }) => {
   return (
-    <div className={`copyright ${spaceBottomClass ? spaceBottomClass : ""}`}>
-      <div className="footer-logo">
-        <Link to={process.env.PUBLIC_URL + "/"}>
-          <img alt="" src={process.env.PUBLIC_URL + footerLogo} />
-        </Link>
-      </div>
+    <div className={`copyright ${spaceBottomClass ? spaceBottomClass : ''}`}>
       <p>
-        © 2020{" "}
-        <a href="//hasthemes.com" rel="noopener noreferrer" target="_blank">
-          Flone
-        </a>
+        © 2020{' '}
+        <Link
+          to="//hasthemes.com"
+          rel="noopener noreferrer"
+          target="_blank"
+        ></Link>
         .<br /> All Rights Reserved
       </p>
     </div>
-  );
-};
+  )
+}
 
-FooterCopyright.propTypes = {
-  footerLogo: PropTypes.string,
-  spaceBottomClass: PropTypes.string
-};
-
-export default FooterCopyright;
+export default FooterCopyright

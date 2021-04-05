@@ -130,28 +130,20 @@ export const getSortedProducts = (products, sortType, sortValue) => {
     }
     if (sortType === 'star') {
       let sortProduct = [...products]
-        if (sortValue === 0) {
-          return sortProduct.filter((product) => product.rating < 1)
-        }
+      if (sortValue === 0) {
+        return sortProduct.filter((product) => product.rating < 1)
+      }
       if (sortValue === 1) {
-        return sortProduct.filter(
-          (product) => product.rating >= 1 && product.rating < 2,
-        )
+        return sortProduct.filter((product) => product.rating >= 1)
       }
       if (sortValue === 2) {
-        return sortProduct.filter(
-          (product) => product.rating >= 2 && product.rating < 3,
-        )
+        return sortProduct.filter((product) => product.rating >= 2)
       }
       if (sortValue === 3) {
-        return sortProduct.filter(
-          (product) => product.rating >= 3 && product.rating < 4,
-        )
+        return sortProduct.filter((product) => product.rating >= 3)
       }
       if (sortValue === 4) {
-        return sortProduct.filter(
-          (product) => product.rating >= 4 && product.rating < 5,
-        )
+        return sortProduct.filter((product) => product.rating >= 4)
       }
       if (sortValue === 5) {
         return sortProduct.filter((product) => product.rating >= 5)

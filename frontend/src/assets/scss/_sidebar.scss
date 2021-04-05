@@ -256,6 +256,15 @@
   }
 }
 .filter-star {
-  margin: 6px;
-  font-size: 20px;
+  margin: 3px;
+  font-size: 14px;
+}
+.rating {
+  display: flex;
+  align-items: center;
+  p {
+    font-size: 12px;
+    margin-left: 6px;
+    text-transform: lowercase;
+  }
 }

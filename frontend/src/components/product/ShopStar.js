@@ -18,26 +18,29 @@ const ShopStar = ({ getFilterSortParams }) => {
                   setActiveSort(e)
                 }}
               >
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
+                <div className="rating">
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>{' '}
+                  <p>From 0 star</p>
+                </div>
               </button>
               <button
                 style={{ padding: '0px' }}
@@ -47,26 +50,29 @@ const ShopStar = ({ getFilterSortParams }) => {
                   setActiveSort(e)
                 }}
               >
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
+                <div className="rating">
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>{' '}
+                  <p>From 1 star</p>
+                </div>
               </button>
               <button
                 style={{ padding: '0px' }}
@@ -76,26 +82,29 @@ const ShopStar = ({ getFilterSortParams }) => {
                   setActiveSort(e)
                 }}
               >
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
+                <div className="rating">
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>{' '}
+                  <p>From 2 star</p>
+                </div>
               </button>
               <button
                 style={{ padding: '0px' }}
@@ -105,26 +114,29 @@ const ShopStar = ({ getFilterSortParams }) => {
                   setActiveSort(e)
                 }}
               >
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
+                <div className="rating">
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>{' '}
+                  <p>From 3 star</p>
+                </div>
               </button>
               <button
                 style={{ padding: '0px' }}
@@ -134,26 +146,29 @@ const ShopStar = ({ getFilterSortParams }) => {
                   setActiveSort(e)
                 }}
               >
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star-o filter-star"
-                ></i>
+                <div className="rating">
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star-o filter-star"
+                  ></i>{' '}
+                  <p>From 4 star</p>
+                </div>
               </button>
               <button
                 style={{ padding: '0px' }}
@@ -163,26 +178,29 @@ const ShopStar = ({ getFilterSortParams }) => {
                   setActiveSort(e)
                 }}
               >
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
-                <i
-                  style={{ color: 'yellow' }}
-                  className="fa fa-star filter-star"
-                ></i>
+                <div className="rating">
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>
+                  <i
+                    style={{ color: 'yellow' }}
+                    className="fa fa-star filter-star"
+                  ></i>{' '}
+                  <p>From 5 star</p>
+                </div>
               </button>
             </div>
           </li>

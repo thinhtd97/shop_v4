@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState } from 'react'
 
 const ShopSize = ({ sizes, getFilterSizeParams }) => {
+  const [clear, setClear] = useState(false)
   const handleActive = (e) => {
     const buttons = document.querySelectorAll('.filterSize')
     buttons.forEach((elem) => {
@@ -9,10 +10,31 @@ const ShopSize = ({ sizes, getFilterSizeParams }) => {
     })
     e.currentTarget.classList.add('active')
   }
+  const clearOption = () => {
+    const buttons = document.querySelectorAll('.filterSize')
+    buttons.forEach((elem) => {
+      elem.classList.remove('active')
+    })
+    getFilterSizeParams('size', '')
+    setClear(false)
+  }
   return (
     <div className="sidebar-widget mt-40">
       <h4 className="pro-sidebar-title">Size </h4>
       <div className="sidebar-widget-list mt-20">
+        {clear && (
+          <span onClick={clearOption} className="clearOption">
+            <i
+              style={{
+                fontSize: '18px',
+                marginRight: '6px',
+                marginBottom: '10px',
+              }}
+              className="fa fa-angle-left"
+            ></i>
+            Clear
+          </span>
+        )}
         <ul>
           <li>
             <div className="sidebar-widget-list-left">
@@ -35,6 +57,7 @@ const ShopSize = ({ sizes, getFilterSizeParams }) => {
                   onClick={(e) => {
                     getFilterSizeParams('size', single)
                     handleActive(e)
+                    setClear(true)
                   }}
                 >
                   {single} <span className="checkmark" />

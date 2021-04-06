@@ -19,11 +19,11 @@ const MyAccount = ({ location, history }) => {
   const { addToast } = useToasts()
   const { pathname } = location
   const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('');
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [address, setAddress] = useState('')
-  const [phone, setPhone] = useState('');
-  const [oldPassword, setOldPassword] = useState('');
+  const [phone, setPhone] = useState('')
+  const [oldPassword, setOldPassword] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -53,15 +53,15 @@ const MyAccount = ({ location, history }) => {
   }
 
   const changePasswordHandler = (e) => {
-    e.preventDefault();
-    if(password !== confirmPassword) {
+    e.preventDefault()
+    if (password !== confirmPassword) {
       return addToast('Password and confirm password not match', {
         autoDismiss: true,
         appearance: 'error',
         autoDismissTimeout: 1000,
       })
     }
-    dispatch(userChangePasswordAction(addToast, password, oldPassword));
+    dispatch(userChangePasswordAction(addToast, password, oldPassword))
   }
 
   useEffect(() => {
@@ -193,7 +193,7 @@ const MyAccount = ({ location, history }) => {
                               <h5>Your Password</h5>
                             </div>
                             <div className="row">
-                            <div className="col-lg-12 col-md-12">
+                              <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
                                   <label>Your password</label>
                                   <input
@@ -245,7 +245,7 @@ const MyAccount = ({ location, history }) => {
                       <Card.Header className="panel-heading">
                         <Accordion.Toggle variant="link" eventKey="2">
                           <h3 className="panel-title">
-                            <span>3 .</span> Modify your address book entries{' '}
+                            <span>3 .</span> Address Book{' '}
                           </h3>
                         </Accordion.Toggle>
                       </Card.Header>
@@ -253,35 +253,40 @@ const MyAccount = ({ location, history }) => {
                         <Card.Body>
                           <div className="myaccount-info-wrapper">
                             <div className="account-info-wrapper">
-                              <h4>Address Book </h4>
+                              <h4>My Account Information</h4>
+                              <h5>Your Personal Details</h5>
                             </div>
-                            <div className="entries-wrapper">
-                              <div className="row">
-                                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                  <div className="entries-info text-center">
-                                    <input
-                                      type="text"
-                                      value={address}
-                                      onChange={(e) =>
-                                        setAddress(e.target.value)
-                                      }
-                                    />
-                                  </div>
+                            <div className="row">
+                              <div className="col-lg-6 col-md-6">
+                                <div className="billing-info">
+                                  <label>First Name</label>
+                                  <input type="text" />
                                 </div>
-                                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                  <div className="entries-edit-delete text-center">
-                                    <button
-                                      className="edit btn btn-block"
-                                      onClick={handleUpdateProfile}
-                                    >
-                                      Edit
-                                    </button>
-                                    {/* <button>Delete</button> */}
-                                  </div>
+                              </div>
+                              <div className="col-lg-6 col-md-6">
+                                <div className="billing-info">
+                                  <label>Last Name</label>
+                                  <input type="text" />
+                                </div>
+                              </div>
+                              <div className="col-lg-12 col-md-12">
+                                <div className="billing-info">
+                                  <label>Email Address</label>
+                                  <input type="email" />
+                                </div>
+                              </div>
+                              <div className="col-lg-12 col-md-12">
+                                <div className="billing-info">
+                                  <label>Telephone</label>
+                                  <input type="text" />
                                 </div>
                               </div>
                             </div>
-                            
+                            <div className="billing-back-btn">
+                              <div className="billing-btn">
+                                <button type="submit">Continue</button>
+                              </div>
+                            </div>
                           </div>
                         </Card.Body>
                       </Accordion.Collapse>

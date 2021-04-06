@@ -70,10 +70,10 @@ const ProductTabLeft = ({ location, match }) => {
               userInfo={userInfo}
             />
             {/* related product slider */}
-            {/* <RelatedProductSlider
-spaceBottomClass="pb-95"
-category={product.category[0]}
-/> */}
+            <RelatedProductSlider
+              spaceBottomClass="pb-95"
+              category={product && product.category?.name}
+            />
           </>
         )}
 

@@ -233,7 +233,7 @@ function ProductModal(props) {
                               value={single.color}
                               onChange={() => {
                                 setSelectedProductColor(single.color)
-                                setSelectedProductSize(single.size[0]?.name)
+                                setSelectedProductSize(single.size[0]?.size)
                                 setProductStock(single.size[0]?.stock)
                               }}
                               type="radio"
@@ -263,7 +263,7 @@ function ProductModal(props) {
                                       }
                                       onChange={() => {
                                         setSelectedProductSize(singleSize.size)
-                                        setProductStock(single.size[0].stock)
+                                        setProductStock(singleSize.stock)
                                         setQuantityCount(1)
                                       }}
                                       type="radio"

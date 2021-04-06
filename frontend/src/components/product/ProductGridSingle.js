@@ -3,8 +3,8 @@ import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { getDiscountPrice } from '../../helpers/product'
-import Rating from './sub-components/ProductRating'
 import ProductModal from './ProductModal'
+import ProductRating from './sub-components/ProductRating'
 
 const ProductGridSingle = ({ product, sliderClassName, spaceBottomClass }) => {
   const [modalShow, setModalShow] = useState(false)
@@ -24,20 +24,9 @@ const ProductGridSingle = ({ product, sliderClassName, spaceBottomClass }) => {
         >
           <div className="product-img">
             <Link to={process.env.PUBLIC_URL + '/product/' + product.slug}>
-              <img
-                className="default-img"
-                src={process.env.PUBLIC_URL + product.image[0].url}
-                alt=""
-              />
-              {product.image.length > 1 ? (
-                <img
-                  className="hover-img"
-                  src={process.env.PUBLIC_URL + product.image[1].url}
-                  alt=""
-                />
-              ) : (
-                ''
-              )}
+              <img className="default-img" src={product?.image[0].url} alt="" />
+
+              <img className="hover-img" src={product?.image[1].url} alt="" />
             </Link>
             {product.discount !== 0 || product.new ? (
               <div className="product-img-badges">
@@ -69,7 +58,9 @@ const ProductGridSingle = ({ product, sliderClassName, spaceBottomClass }) => {
                     Buy now{' '}
                   </a>
                 ) : product.variation && product.variation.length >= 1 ? (
-                  <Link to={`${process.env.PUBLIC_URL}/product/${product.id}`}>
+                  <Link
+                    to={`${process.env.PUBLIC_URL}/product/${product.slug}`}
+                  >
                     Select Option
                   </Link>
                 ) : product.countInStock && product.countInStock > 0 ? (
@@ -96,13 +87,11 @@ const ProductGridSingle = ({ product, sliderClassName, spaceBottomClass }) => {
                 {product.name}
               </Link>
             </h3>
-            {/* {product.rating && product.rating > 0 ? (
-              <div className="product-rating">
-                <Rating ratingValue={product.rating} />
-              </div>
-            ) : (
-              ''
-            )} */}
+
+            <div className="product-rating">
+              <ProductRating value={product.rating} />
+            </div>
+
             <div className="product-price">
               {discountedPrice !== null ? (
                 <Fragment>

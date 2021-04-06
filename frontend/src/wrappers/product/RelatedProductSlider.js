@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import React from "react";
-import Swiper from "react-id-swiper";
-import SectionTitle from "../../components/section-title/SectionTitle";
-import ProductGrid from "./ProductGrid";
+import PropTypes from 'prop-types'
+import React from 'react'
+import Swiper from 'react-id-swiper'
+import SectionTitle from '../../components/section-title/SectionTitle'
+import ProductGrid from './ProductGrid'
 
 const RelatedProductSlider = ({ spaceBottomClass, category }) => {
   const settings = {
@@ -11,24 +11,24 @@ const RelatedProductSlider = ({ spaceBottomClass, category }) => {
     grabCursor: true,
     breakpoints: {
       1024: {
-        slidesPerView: 4
+        slidesPerView: 4,
       },
       768: {
-        slidesPerView: 3
+        slidesPerView: 3,
       },
       640: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       320: {
-        slidesPerView: 1
-      }
-    }
-  };
+        slidesPerView: 1,
+      },
+    },
+  }
 
   return (
     <div
       className={`related-product-area ${
-        spaceBottomClass ? spaceBottomClass : ""
+        spaceBottomClass ? spaceBottomClass : ''
       }`}
     >
       <div className="container">
@@ -48,12 +48,7 @@ const RelatedProductSlider = ({ spaceBottomClass, category }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-RelatedProductSlider.propTypes = {
-  category: PropTypes.string,
-  spaceBottomClass: PropTypes.string
-};
-
-export default RelatedProductSlider;
+export default RelatedProductSlider

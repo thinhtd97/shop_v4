@@ -155,7 +155,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
                       }
                       onChange={() => {
                         setSelectedProductColor(single.color)
-                        setSelectedProductSize(single.size[0]?.name)
+                        setSelectedProductSize(single.size[0]?.size)
                         setProductStock(single.size[0]?.stock)
                       }}
                     />
@@ -184,8 +184,9 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
                                   : ''
                               }
                               onChange={() => {
+                                setProductStock(singleSize.stock)
                                 setSelectedProductSize(singleSize.size)
-                                setProductStock(single.size[0].stock)
+                                setQuantityCount(1)
                               }}
                               type="radio"
                               name="size"

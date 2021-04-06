@@ -11,8 +11,11 @@ const ShopCategories = ({ getCateFilterParams, categories }) => {
     e.currentTarget.classList.add('active')
   }
   const clearOption = () => {
+    const buttons = document.querySelectorAll('.filterCategory')
+    buttons.forEach((elem) => {
+      elem.classList.remove('active')
+    })
     getCateFilterParams('category', '')
-
     setClear(false)
   }
   return (

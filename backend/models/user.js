@@ -31,7 +31,6 @@ const userSchema = mongoose.Schema(
     image: {
       type: String,
     },
-    address: String,
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
   },
   { timestamps: true },

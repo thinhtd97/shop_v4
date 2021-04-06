@@ -3,6 +3,10 @@ import React, { useState } from 'react'
 const ShopPrice = ({ getFilterPriceParams }) => {
   const [clear, setClear] = useState(false)
   const clearOption = () => {
+    const buttons = document.querySelectorAll('.filterPrice')
+    buttons.forEach((elem) => {
+      elem.classList.remove('active')
+    })
     getFilterPriceParams('filterPrice', '')
     setClear(false)
   }

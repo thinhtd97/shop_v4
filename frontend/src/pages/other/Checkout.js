@@ -189,22 +189,31 @@ const Checkout = ({ location }) => {
                             </li>
                           </ul>
                         </div>
-                        <hr />
-                        <div className="your-order-bottom">
-                          <ul>
-                            <li>Coupons</li>
-                            {coupons.map((coupon, key) => (
-                              <li key={key}>
-                                <span
-                                  style={{ margin: '8px', fontSize: '15px' }}
-                                  className="badge badge-success"
-                                >
-                                  {coupon.code}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                        {coupons.length > 0 ? (
+                          <Fragment>
+                            <hr />
+                            <div className="your-order-bottom">
+                              <ul>
+                                <li>Coupons</li>
+                                {coupons.map((coupon, key) => (
+                                  <li key={key}>
+                                    <span
+                                      style={{
+                                        margin: '8px',
+                                        fontSize: '15px',
+                                      }}
+                                      className="badge badge-success"
+                                    >
+                                      {coupon.code}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </Fragment>
+                        ) : (
+                          ''
+                        )}
                         <div className="your-order-total">
                           <ul>
                             <li className="order-total">Total</li>

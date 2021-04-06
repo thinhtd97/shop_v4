@@ -2,7 +2,11 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { setActiveLayout } from '../../helpers/product'
 
-const ShopTopAction = ({ getLayout, getFilterSortParams }) => {
+const ShopTopAction = ({
+  getLayout,
+  getFilterSortParams,
+  getDiscountFilterParams,
+}) => {
   return (
     <div className="shop-top-bar mb-35">
       <div className="select-shoing-wrap">
@@ -13,6 +17,15 @@ const ShopTopAction = ({ getLayout, getFilterSortParams }) => {
             <option value="default">Default</option>
             <option value="priceHighToLow">Price - High to Low</option>
             <option value="priceLowToHigh">Price - Low to High</option>
+          </select>
+        </div>
+        <div className="shop-select">
+          <select
+            onChange={(e) => getDiscountFilterParams('sortDiscount', e.target.value)}
+          >
+            <option value="default">Filter Discount</option>
+            <option value="discountHighToLow">Discount - High to Low</option>
+            <option value="discountLowToHigh">Discount - Low to High</option>
           </select>
         </div>
       </div>

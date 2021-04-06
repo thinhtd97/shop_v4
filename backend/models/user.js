@@ -22,6 +22,12 @@ const userSchema = mongoose.Schema(
       required: true,
       default: '0123456789',
     },
+    address: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Address',
+      },
+    ],
     resetToken: {
       type: String,
     },

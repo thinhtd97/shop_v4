@@ -67,7 +67,7 @@ const Wishlist = ({
                         <thead>
                           <tr>
                             <th>Image</th>
-                            <th>Product Name</th>
+                            <th>Product</th>
                             <th>Unit Price</th>
                             <th>Add To Cart</th>
                             <th>action</th>

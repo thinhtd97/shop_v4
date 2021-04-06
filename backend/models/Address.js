@@ -8,7 +8,7 @@ const addressSchema = mongoose.Schema(
     },
     district: {
       type: String,
-      required: true
+      required: true,
     },
     wards: {
       type: String,
@@ -30,10 +30,6 @@ const addressSchema = mongoose.Schema(
       type: String,
       required: true,
       maxLength: 10,
-    },
-    email: {
-      type: String,
-      required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

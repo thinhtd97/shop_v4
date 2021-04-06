@@ -13,6 +13,7 @@ import {
   userProfileAction,
   userProfileUpdateAction,
 } from '../../redux/actions/userActions'
+import { addAddressAction } from '../../redux/actions/addressAction'
 import { useToasts } from 'react-toast-notifications'
 
 const MyAccount = ({ location, history }) => {
@@ -26,6 +27,17 @@ const MyAccount = ({ location, history }) => {
   const [oldPassword, setOldPassword] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+
+  const [values, setValues] = useState({
+    fullname: '',
+    wards: '',
+    district: '',
+    city: '',
+    address: '',
+    company: '',
+    phone: '',
+    email: '',
+  })
 
   const dispatch = useDispatch()
   const { userInfo } = useSelector((state) => state.userLogin)
@@ -79,6 +91,10 @@ const MyAccount = ({ location, history }) => {
       }
     }
   }, [dispatch, addToast, userInfo, history, user])
+
+  const submitHandle = (values, addToast) => {
+    dispatch(addAddressAction(values, addToast))
+  }
 
   return (
     <Fragment>
@@ -252,39 +268,161 @@ const MyAccount = ({ location, history }) => {
                       <Accordion.Collapse eventKey="2">
                         <Card.Body>
                           <div className="myaccount-info-wrapper">
-                            <div className="account-info-wrapper">
-                              <h4>My Account Information</h4>
-                              <h5>Your Personal Details</h5>
-                            </div>
                             <div className="row">
                               <div className="col-lg-6 col-md-6">
                                 <div className="billing-info">
-                                  <label>First Name</label>
-                                  <input type="text" />
+                                  <label>Full Name</label>
+                                  <input
+                                    type="text"
+                                    onChange={(e) =>
+                                      setValues({
+                                        ...values,
+                                        fullname: e.target.value,
+                                      })
+                                    }
+                                  />
                                 </div>
                               </div>
                               <div className="col-lg-6 col-md-6">
                                 <div className="billing-info">
-                                  <label>Last Name</label>
-                                  <input type="text" />
+                                  <label>Email</label>
+                                  <input
+                                    type="email"
+                                    onChange={(e) =>
+                                      setValues({
+                                        ...values,
+                                        email: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-lg-6 col-md-6">
+                                <div className="billing-info">
+                                  <label>Wards</label>
+                                  <input
+                                    type="text"
+                                    onChange={(e) =>
+                                      setValues({
+                                        ...values,
+                                        wards: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-lg-6 col-md-6">
+                                <div className="billing-info">
+                                  <label>District</label>
+                                  <input
+                                    type="text"
+                                    onChange={(e) =>
+                                      setValues({
+                                        ...values,
+                                        district: e.target.value,
+                                      })
+                                    }
+                                  />
                                 </div>
                               </div>
                               <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
-                                  <label>Email Address</label>
-                                  <input type="email" />
+                                  <label>City</label>
+                                  <input
+                                    type="text"
+                                    onChange={(e) =>
+                                      setValues({
+                                        ...values,
+                                        city: e.target.value,
+                                      })
+                                    }
+                                  />
                                 </div>
                               </div>
                               <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
-                                  <label>Telephone</label>
-                                  <input type="text" />
+                                  <label>Address</label>
+                                  <textarea
+                                    onChange={(e) =>
+                                      setValues({
+                                        ...values,
+                                        address: e.target.value,
+                                      })
+                                    }
+                                    style={{ background: '#fff' }}
+                                  ></textarea>
+                                </div>
+                              </div>
+                              <div className="col-lg-6 col-md-6">
+                                <div className="billing-info">
+                                  <label>Company</label>
+                                  <div
+                                    className="form-group d-flex"
+                                    style={{ alignItems: 'center' }}
+                                  >
+                                    <input
+                                      type="radio"
+                                      value="home"
+                                      onChange={(e) =>
+                                        setValues({
+                                          ...values,
+                                          company: e.target.value,
+                                        })
+                                      }
+                                      name="company"
+                                      className="form-control"
+                                      style={{ width: '16px', height: '16px' }}
+                                    />{' '}
+                                    <span style={{ marginLeft: '6px' }}>
+                                      Home
+                                    </span>
+                                    <input
+                                      type="radio"
+                                      name="company"
+                                      className="form-control"
+                                      onChange={(e) =>
+                                        setValues({
+                                          ...values,
+                                          company: e.target.value,
+                                        })
+                                      }
+                                      value="At work"
+                                      style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        marginLeft: '10px',
+                                      }}
+                                    />{' '}
+                                    <span style={{ marginLeft: '6px' }}>
+                                      At work
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-lg-12 col-md-12">
+                                <div className="billing-info">
+                                  <label>Phone</label>
+                                  <input
+                                    type="text"
+                                    onChange={(e) =>
+                                      setValues({
+                                        ...values,
+                                        phone: e.target.value,
+                                      })
+                                    }
+                                  />
                                 </div>
                               </div>
                             </div>
                             <div className="billing-back-btn">
                               <div className="billing-btn">
-                                <button type="submit">Continue</button>
+                                <button
+                                  style={{ borderRadius: '5px' }}
+                                  type="submit"
+                                  onClick={() => submitHandle(values, addToast)}
+                                >
+                                  Add
+                                </button>
                               </div>
                             </div>
                           </div>

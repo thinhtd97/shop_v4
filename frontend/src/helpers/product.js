@@ -90,6 +90,25 @@ export const getSortedProducts = (products, sortType, sortValue) => {
           )[0],
       )
     }
+    if (sortType === 'sortDiscount') {
+      let sortProducts = [...products]
+      let productExistDiscount = sortProducts.filter(
+        (item) => item.discount > 0,
+      )
+      if (sortValue === 'default') {
+        return sortProducts
+      }
+      if (sortValue === 'discountHighToLow') {
+        return productExistDiscount.sort((a, b) => {
+          return b.discount - a.discount
+        })
+      }
+      if (sortValue === 'discountLowToHigh') {
+        return productExistDiscount.sort((a, b) => {
+          return a.discount - b.discount
+        })
+      }
+    }
     if (sortType === 'filterSort') {
       let sortProducts = [...products]
       if (sortValue === 'default') {

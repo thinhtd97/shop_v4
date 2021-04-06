@@ -41,6 +41,9 @@ const ShopGridTwoColumn = ({ location }) => {
   const [filterTagsSortType, setFilterTagsSortType] = useState('')
   const [filterTagsSortValue, setFilterTagsSortValue] = useState('')
 
+  const [filterDiscountSortType, setFilterDiscountSortType] = useState('')
+  const [filterDiscountSortValue, setFilterDiscountSortValue] = useState('')
+
   const [offset, setOffset] = useState(0)
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -106,6 +109,11 @@ const ShopGridTwoColumn = ({ location }) => {
     setFilterStarSortValue(sortValue)
   }
 
+  const getDiscountFilterParams = (sortType, sortValue) => {
+    setFilterDiscountSortType(sortType)
+    setFilterDiscountSortValue(sortValue)
+  }
+
   useEffect(() => {
     let sortedProducts = getSortedProducts(products, sortType, sortValue)
     const filterSortedProducts = getSortedProducts(
@@ -148,7 +156,12 @@ const ShopGridTwoColumn = ({ location }) => {
       filterTagsSortType,
       filterTagsSortValue,
     )
-    sortedProducts = filterTagsSortedProduct
+    const filterDiscountSortedProduct = getSortedProducts(
+      filterTagsSortedProduct,
+      filterDiscountSortType,
+      filterDiscountSortValue,
+    )
+    sortedProducts = filterDiscountSortedProduct
     setSortedProducts(sortedProducts)
     setCurrentData(sortedProducts?.slice(offset, offset + pageLimit))
   }, [
@@ -172,6 +185,8 @@ const ShopGridTwoColumn = ({ location }) => {
     filterBrandSortValue,
     filterTagsSortType,
     filterTagsSortValue,
+    filterDiscountSortType,
+    filterDiscountSortValue
   ])
 
   const colors = ['black', 'brown', 'green', 'white', 'blue']
@@ -230,6 +245,7 @@ const ShopGridTwoColumn = ({ location }) => {
                 {/* shop topbar default */}
                 <ShopTopbar
                   getFilterSortParams={getFilterSortParams}
+                  getDiscountFilterParams={getDiscountFilterParams}
                   getLayout={getLayout}
                 />
 

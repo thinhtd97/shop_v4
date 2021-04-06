@@ -275,7 +275,7 @@ const ProductGridListSingle = ({
                     <div className="product-img-badges">
                       {product.discount && (
                         <span className="pink">
-                          -{product.discount.toFixed(2)}%
+                          -{product.discount}%
                         </span>
                       )}
 

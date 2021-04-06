@@ -1,4 +1,5 @@
 import { all } from 'redux-saga/effects';
+import addressSaga from './addressSaga';
 import cartSaga from './cartSaga';
 import cateSaga from './categorySaga';
 import productSaga from './productSaga';
@@ -13,6 +14,7 @@ export function* rootSaga() {
         cateSaga(),
         subSaga(),
         cartSaga(),
-        wishlistSaga()
+        wishlistSaga(),
+        addressSaga()
     ])
 }

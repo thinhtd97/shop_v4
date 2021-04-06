@@ -52,133 +52,115 @@ const Checkout = ({ location }) => {
               <div className="row">
                 <div className="col-lg-7">
                   <div className="billing-info-wrap">
-                    <h3>Billing Details</h3>
                     <div className="row">
-                      <div className="col-lg-6 col-md-6">
-                        <div className="billing-info mb-20">
-                          <label>First Name</label>
-                          <input type="text" />
+                      <div className="col-lg-12 col-md-12">
+                        <div className="discount-code-wrapper">
+                          <div className="title-wrap">
+                            <h4 className="cart-bottom-title section-bg-gray">
+                              Select Payment Method
+                            </h4>
+                          </div>
+                          <div className="discount-code">
+                            <div className="form-group">
+                              <select className="form-control">
+                                <option>Paypal</option>
+                                <option>Stripe</option>
+                              </select>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="col-lg-6 col-md-6">
-                        <div className="billing-info mb-20">
-                          <label>Last Name</label>
-                          <input type="text" />
+                      <div
+                        className="col-lg-12 col-md-12"
+                        style={{ marginTop: '16px' }}
+                      >
+                        <div className="discount-code-wrapper">
+                          <div className="title-wrap">
+                            <h4 className="cart-bottom-title section-bg-gray">
+                              Order Items
+                            </h4>
+                          </div>
+                          {finalCartItems.map((item, key) => (
+                            <div
+                              className="row mt-3"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                              }}
+                              key={key}
+                            >
+                              <div className="col-lg-2">
+                                <img
+                                  src={item.image}
+                                  alt=""
+                                  style={{ width: 'inherit' }}
+                                />
+                              </div>
+                              <div
+                                className="col-lg-6 col-sm-12"
+                                style={{
+                                  fontSize: '18px',
+                                }}
+                              >
+                                {item.name}
+                              </div>
+                              <div className="col-lg-4 col-sm-12">
+                                {item.priceDiscount !== 0
+                                  ? item.priceDiscount
+                                  : item.price}{' '}
+                                * {item.qty} = ${' '}
+                                {item.priceDiscount !== 0
+                                  ? `$${(item.priceDiscount * item.qty).toFixed(
+                                      2,
+                                    )}`
+                                  : `$${(item.price * item.qty).toFixed(2)}`}
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <div className="billing-info mb-20">
-                          <label>Company Name</label>
-                          <input type="text" />
-                        </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <div className="billing-select mb-20">
-                          <label>Country</label>
-                          <select>
-                            <option>Select a country</option>
-                            <option>Azerbaijan</option>
-                            <option>Bahamas</option>
-                            <option>Bahrain</option>
-                            <option>Bangladesh</option>
-                            <option>Barbados</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <div className="billing-info mb-20">
-                          <label>Street Address</label>
-                          <input
-                            className="billing-address"
-                            placeholder="House number and street name"
-                            type="text"
-                          />
-                          <input
-                            placeholder="Apartment, suite, unit etc."
-                            type="text"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <div className="billing-info mb-20">
-                          <label>Town / City</label>
-                          <input type="text" />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 col-md-6">
-                        <div className="billing-info mb-20">
-                          <label>State / County</label>
-                          <input type="text" />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 col-md-6">
-                        <div className="billing-info mb-20">
-                          <label>Postcode / ZIP</label>
-                          <input type="text" />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 col-md-6">
-                        <div className="billing-info mb-20">
-                          <label>Phone</label>
-                          <input type="text" />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 col-md-6">
-                        <div className="billing-info mb-20">
-                          <label>Email Address</label>
-                          <input type="text" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="additional-info-wrap">
-                      <h4>Additional information</h4>
-                      <div className="additional-info">
-                        <label>Order notes</label>
-                        <textarea
-                          placeholder="Notes about your order, e.g. special notes for delivery. "
-                          name="message"
-                          defaultValue={''}
-                        />
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div className="col-lg-5">
                   <div className="your-order-area">
-                    <h3>Your order</h3>
                     <div className="your-order-wrap gray-bg-4">
                       <div className="your-order-product-info">
                         <div className="your-order-top">
                           <ul>
-                            <li>Product</li>
-                            <li>Total</li>
+                            <li>
+                              <h3>Delivery Address</h3>
+                            </li>
+                            <li>
+                              <button className="btn btn-info">Change</button>
+                            </li>
                           </ul>
                         </div>
 
-                        <div className="your-order-middle">
+                        <hr />
+                        <div className="your-order-bottom">
                           <ul>
-                            {finalCartItems.map((cartItem, key) => {
-                              return (
-                                <li key={key}>
-                                  <span className="order-middle-left">
-                                    {cartItem.name} * {cartItem.qty}
-                                  </span>{' '}
-                                  <span className="order-price">
-                                    {cartItem.priceDiscount !== 0
-                                      ? `$${(
-                                          cartItem.priceDiscount * cartItem.qty
-                                        ).toFixed(2)}`
-                                      : `$${(
-                                          cartItem.price * cartItem.qty
-                                        ).toFixed(2)}`}
-                                  </span>
-                                </li>
-                              )
-                            })}
+                            <li className="your-order-shipping">Shipping</li>
+                            <li></li>
                           </ul>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="your-order-area"
+                    style={{ marginTop: '20px' }}
+                  >
+                    <div className="your-order-wrap gray-bg-4">
+                      <div className="your-order-product-info">
+                        <div className="your-order-top">
+                          <ul>
+                            <li>Provisional</li>
+                            <li>${finalPrice.toFixed(2)}</li>
+                          </ul>
+                        </div>
+
+                        <hr />
                         <div className="your-order-bottom">
                           <ul>
                             <li className="your-order-shipping">Shipping</li>

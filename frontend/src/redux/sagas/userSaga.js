@@ -3,6 +3,7 @@ import axios from 'axios'
 import * as userConstant from '../constants/userConstants'
 import * as cartConstant from '../constants/cartConstant'
 import * as productConstant from '../constants/productConstant'
+import * as addressConstant from '../constants/AddressConstant'
 
 function* login(action) {
   const { email, password, addToast } = action
@@ -51,10 +52,19 @@ function* login(action) {
         ),
       )
     }
+
+    const { data: dataAddress } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/address`, configListCart),
+    )
+
     const { data: dataCart } = yield call(
       async () =>
         await axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
     )
+    yield put({
+      type: addressConstant.ADDRESS_LIST_SUCCESS,
+      payload: dataAddress,
+    })
     yield put({ type: cartConstant.LIST_CART_SUCCESS, payload: dataCart })
     yield put({ type: userConstant.USER_LOGIN_SUCCESS, payload: data })
 
@@ -128,6 +138,7 @@ function* logout() {
   yield put({ type: userConstant.USER_PROFILE_RESET })
   yield put({ type: cartConstant.LIST_CART_RESET })
   yield put({ type: cartConstant.COUPON_APPLY_RESET })
+  yield put({ type: addressConstant.ADDRESS_LIST_RESET })
 }
 function* sendMail(action) {
   const { email, addToast } = action

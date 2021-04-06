@@ -246,7 +246,28 @@ const Cart = ({ location }) => {
               </div>
 
               <div className="row">
-                <div className="col-lg-8 col-md-12">
+                <div className="col-lg-4 col-md-8">
+                  <div className="discount-code-wrapper">
+                    <div className="title-wrap">
+                      <h4 className="cart-bottom-title section-bg-gray">
+                        Select Payment Method
+                      </h4>
+                    </div>
+                    <div className="discount-code">
+                      <div className="form-group">
+                        <p>Enter your payment method.</p>
+                        <select
+                          className="form-control"
+                          style={{ marginBottom: '20px' }}
+                        >
+                          <option value="paypal">Paypal</option>
+                          <option value="stripe">Stripe</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-4 col-md-8">
                   <div className="discount-code-wrapper">
                     <div className="title-wrap">
                       <h4 className="cart-bottom-title section-bg-gray">

@@ -57,6 +57,7 @@ const ShopPrice = ({ getFilterPriceParams }) => {
           </li>
           <li>
             <button
+              className="filterPrice"
               onClick={(e) => {
                 getFilterPriceParams('filterPrice', '201to400')
                 setClear(true)
@@ -68,6 +69,7 @@ const ShopPrice = ({ getFilterPriceParams }) => {
           </li>
           <li>
             <button
+              className="filterPrice"
               onClick={(e) => {
                 getFilterPriceParams('filterPrice', '401to800')
                 setClear(true)
@@ -79,6 +81,7 @@ const ShopPrice = ({ getFilterPriceParams }) => {
           </li>
           <li>
             <button
+              className="filterPrice"
               onClick={(e) => {
                 getFilterPriceParams('filterPrice', '800tomax')
                 setClear(true)

@@ -5,6 +5,7 @@ import ShopTopAction from "../../components/product/ShopTopAction";
 const ShopTopbar = ({
   getLayout,
   getFilterSortParams,
+  getDiscountFilterParams
 }) => {
   return (
     <Fragment>
@@ -12,6 +13,7 @@ const ShopTopbar = ({
       <ShopTopAction
         getFilterSortParams={getFilterSortParams}
         getLayout={getLayout}
+        getDiscountFilterParams={getDiscountFilterParams}
       />
       
     </Fragment>

@@ -14,15 +14,21 @@ const DetailAddress = ({ location, match, history }) => {
     (state) => state.listAddress,
   )
   const { userInfo } = useSelector((state) => state.userLogin)
-  const [fullname, setFullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [ward, setWard] = useState('')
-  const [district, setDistrict] = useState('')
-  const [company, setCompany] = useState('')
-  const [phone, setPhone] = useState('')
-  const [address, setAddress] = useState('')
-  const [city, setCity] = useState('')
-  const [active, setActive] = useState('')
+
+  const [values, setValues] = useState({
+    email: '',
+    fullname: '',
+    ward: '',
+    district: '',
+    company: '',
+    phone: '',
+    address: '',
+    city: '',
+    active: '',
+  })
+  const handleSubmit = (e, values) => {
+    e.preventDefault()
+  }
   useEffect(() => {
     if (!userInfo) {
       history.push('/login-register')
@@ -34,15 +40,18 @@ const DetailAddress = ({ location, match, history }) => {
       ) {
         dispatch(detailAddressAction(addressId))
       } else {
-        setFullName(addressOne.fullname)
-        setEmail(addressOne.email)
-        setWard(addressOne.wards)
-        setDistrict(addressOne.district)
-        setCompany(addressOne.company)
-        setAddress(addressOne.address)
-        setCity(addressOne.city)
-        setPhone(addressOne.phone)
-        setActive(addressOne.active)
+        setValues({
+          ...values,
+          email: addressOne.email,
+          fullname: addressOne.fullname,
+          wards: addressOne.wards,
+          district: addressOne.district,
+          company: addressOne.company,
+          phone: addressOne.phone,
+          address: addressOne.address,
+          city: addressOne.city,
+          active: addressOne.active,
+        })
       }
     }
   }, [addressId, dispatch, addressOne, userInfo, history])
@@ -68,134 +77,172 @@ const DetailAddress = ({ location, match, history }) => {
               <div className="col-lg-8 ml-auto mr-auto">
                 <div className="billing-info-wrap">
                   <h3>Edit Address</h3>
-                  <div className="row">
-                    <div className="col-lg-6 col-md-6">
-                      <div className="billing-info mb-20">
-                        <label>Full Name</label>
-                        <input
-                          onChange={(e) => setFullName(e.target.value)}
-                          type="text"
-                          value={fullname}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6">
-                      <div className="billing-info mb-20">
-                        <label>Email</label>
-                        <input
-                          type="text"
-                          onChange={(e) => setEmail(e.target.value)}
-                          value={email}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6">
-                      <div className="billing-info mb-20">
-                        <label>Ward</label>
-                        <input
-                          type="text"
-                          onChange={(e) => setWard(e.target.value)}
-                          value={ward}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6">
-                      <div className="billing-info mb-20">
-                        <label>District</label>
-                        <input
-                          type="text"
-                          value={district}
-                          onChange={(e) => setDistrict(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6">
-                      <div className="billing-select mb-20">
-                        <label>Company</label>
-                        <select
-                          value={company}
-                          onChange={(e) => setCompany(e.target.value)}
-                        >
-                          <option value="At work">At work</option>
-                          <option value="home">Home</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6">
-                      <div className="billing-info mb-20">
-                        <label>Phone</label>
-                        <input
-                          type="text"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-12">
-                      <div className="billing-info mb-20">
-                        <label>Street Address</label>
-                        <textarea
-                          value={address}
-                          onChange={(e) => setAddress(e.target.value)}
-                          style={{
-                            background: '#fff',
-                            border: '1px solid lightgray',
-                          }}
-                        ></textarea>
-                      </div>
-                    </div>
-                    <div className="col-lg-12">
-                      <div className="billing-info mb-20">
-                        <label>City</label>
-                        <input
-                          type="text"
-                          value={city}
-                          onChange={(e) => setCity(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-12">
-                      <div
-                        className="billing-info mb-20"
-                        style={{ display: 'flex', alignItems: 'center' }}
-                      >
-                        <label>Default:</label>
-                        {addressData.length < 2 ? (
-                          <input
-                            disabled
-                            checked={active}
-                            type="checkbox"
-                            style={{
-                              width: '14px',
-                              marginLeft: '20px',
-                              marginBottom: '8px',
-                            }}
-                            value={city}
-                            onChange={(e) => setActive(e.target.checked)}
-                          />
-                        ) : (
-                          <input
-                            checked={active}
-                            type="checkbox"
-                            style={{
-                              width: '14px',
-                              marginLeft: '20px',
-                              marginBottom: '8px',
-                            }}
-                            value={city}
-                            onChange={(e) => setActive(e.target.checked)}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </div>
 
-                  <button
-                    style={{ marginTop: '20px' }}
-                    className="btn btn-outline-secondary"
-                  >
-                    Update
-                  </button>
+                  <form onSubmit={(e) => handleSubmit(e)}>
+                    <div className="row">
+                      <div className="col-lg-6 col-md-6">
+                        <div className="billing-info mb-20">
+                          <label>Full Name</label>
+                          <input
+                            required
+                            onChange={(e) =>
+                              setValues({ ...values, fullname: e.target.value })
+                            }
+                            type="text"
+                            value={values.fullname}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-6">
+                        <div className="billing-info mb-20">
+                          <label>Email</label>
+                          <input
+                            required
+                            type="text"
+                            onChange={(e) =>
+                              setValues({ ...values, email: e.target.value })
+                            }
+                            value={values.email}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-6">
+                        <div className="billing-info mb-20">
+                          <label>Ward</label>
+                          <input
+                            required
+                            type="text"
+                            onChange={(e) =>
+                              setValues({ ...values, wards: e.target.value })
+                            }
+                            value={values.wards}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-6">
+                        <div className="billing-info mb-20">
+                          <label>District</label>
+                          <input
+                            required
+                            type="text"
+                            value={values.district}
+                            onChange={(e) =>
+                              setValues({ ...values, district: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-6">
+                        <div className="billing-select mb-20">
+                          <label>Company</label>
+                          <select
+                            required
+                            value={values.company}
+                            onChange={(e) =>
+                              setValues({ ...values, company: e.target.value })
+                            }
+                          >
+                            <option value="At work">At work</option>
+                            <option value="home">Home</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-6">
+                        <div className="billing-info mb-20">
+                          <label>Phone</label>
+                          <input
+                            required
+                            type="text"
+                            value={values.phone}
+                            onChange={(e) =>
+                              setValues({ ...values, phone: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-12">
+                        <div className="billing-info mb-20">
+                          <label>Street Address</label>
+                          <textarea
+                            required
+                            value={values.address}
+                            onChange={(e) =>
+                              setValues({ ...values, address: e.target.value })
+                            }
+                            style={{
+                              background: '#fff',
+                              border: '1px solid lightgray',
+                            }}
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div className="col-lg-12">
+                        <div className="billing-info mb-20">
+                          <label>City</label>
+                          <input
+                            required
+                            type="text"
+                            value={values.city}
+                            onChange={(e) =>
+                              setValues({ ...values, city: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-12">
+                        <div
+                          className="billing-info mb-20"
+                          style={{ display: 'flex', alignItems: 'center' }}
+                        >
+                          <label>Default:</label>
+                          {addressData.length < 2 ? (
+                            <input
+                              disabled
+                              checked={values.active}
+                              type="checkbox"
+                              style={{
+                                width: '14px',
+                                marginLeft: '20px',
+                                marginBottom: '8px',
+                              }}
+                              value={values.active}
+                              onChange={(e) =>
+                                setValues({
+                                  ...values,
+                                  active: e.target.checked,
+                                })
+                              }
+                            />
+                          ) : (
+                            <input
+                              required
+                              checked={values.active}
+                              type="checkbox"
+                              style={{
+                                width: '14px',
+                                marginLeft: '20px',
+                                marginBottom: '8px',
+                              }}
+                              value={values.active}
+                              onChange={(e) =>
+                                setValues({
+                                  ...values,
+                                  active: e.target.checked,
+                                })
+                              }
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      style={{ marginTop: '20px' }}
+                      className="btn btn-outline-secondary"
+                    >
+                      Update
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>

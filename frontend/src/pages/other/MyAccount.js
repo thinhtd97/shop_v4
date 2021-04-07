@@ -532,7 +532,7 @@ const MyAccount = ({ location, history }) => {
                                         >
                                           <Link
                                             style={{ float: 'right' }}
-                                            className="btn btn-outline-secondary"
+                                            className="btn btn-outline-secondary btn-sm"
                                             to={`/detail-address/${addres.addressId}`}
                                           >
                                             Edit
@@ -569,7 +569,7 @@ const MyAccount = ({ location, history }) => {
                                         >
                                           <Link
                                             style={{ float: 'right' }}
-                                            className="btn btn-outline-secondary"
+                                            className="btn btn-outline-secondary btn-sm"
                                             to={`/detail-address/${addres.addressId}`}
                                           >
                                             Edit
@@ -579,7 +579,7 @@ const MyAccount = ({ location, history }) => {
                                             onClick={() =>
                                               removeAddress(addres, addToast)
                                             }
-                                            className="btn btn-outline-danger"
+                                            className="btn btn-outline-danger btn-sm"
                                             style={{
                                               float: 'right',
                                               marginRight: '8px',

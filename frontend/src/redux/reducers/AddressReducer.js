@@ -5,6 +5,7 @@ export const addressReducer = (
   action,
 ) => {
   let address = action.address
+  let addressId = action.addressId
   switch (action.type) {
     case addressConstant.ADDRESS_LIST_REQUEST:
       return {
@@ -24,11 +25,22 @@ export const addressReducer = (
         error: action.payload,
       }
     case addressConstant.ADD_ADDRESS:
+      let updateActive = []
+      if (address.active === true) {
+        updateActive = state.address.forEach((addres) => {
+          if (address.addressId === addres.addressId) {
+            addres.active = true
+          }
+          addres.active = false
+        })
+      }
+      updateActive = address
       return {
         ...state,
         loading: false,
-        address: [...state.address, address],
+        address: [updateActive, ...state.address],
       }
+
     case addressConstant.REMOVE_ADDRESS:
       let removeAddress = state.address.filter(
         (addres) => addres.addressId !== address.addressId,
@@ -40,7 +52,7 @@ export const addressReducer = (
       }
     case addressConstant.DETAIL_ADDRESS:
       let detail = state.address.find(
-        (addres) => addres.addressId === address.addressId,
+        (addres) => addres.addressId === addressId,
       )
       return {
         ...state,
@@ -50,6 +62,7 @@ export const addressReducer = (
     case addressConstant.ADDRESS_LIST_RESET:
       return {
         ...state,
+        addressOne: {},
         address: [],
       }
     default:

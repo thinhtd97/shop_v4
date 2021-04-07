@@ -20,6 +20,7 @@ import {
 } from '../../redux/actions/addressAction'
 import { useToasts } from 'react-toast-notifications'
 import uniqid from 'uniqid'
+import { Link } from 'react-router-dom'
 
 const MyAccount = ({ location, history }) => {
   const { addToast } = useToasts()
@@ -73,7 +74,9 @@ const MyAccount = ({ location, history }) => {
   }
 
   const removeAddress = (address, addToast) => {
-    dispatch(removeAddressAction(address, addToast))
+    if (window.confirm('Are you sure?')) {
+      dispatch(removeAddressAction(address, addToast))
+    }
   }
 
   const changePasswordHandler = (e) => {
@@ -527,12 +530,14 @@ const MyAccount = ({ location, history }) => {
                                           }}
                                           className="col-lg-12 col-md-12"
                                         >
-                                          <button
-                                            className="btn btn-secondary"
+                                          <Link
                                             style={{ float: 'right' }}
+                                            className="btn btn-outline-secondary"
+                                            to={`/detail-address/${addres.addressId}`}
                                           >
                                             Edit
-                                          </button>
+                                          </Link>
+
                                           <div className="fullname">
                                             {addres.fullname}{' '}
                                             <span
@@ -562,17 +567,19 @@ const MyAccount = ({ location, history }) => {
                                           }}
                                           className="col-lg-12 col-md-12"
                                         >
-                                          <button
-                                            className="btn btn-secondary"
+                                          <Link
                                             style={{ float: 'right' }}
+                                            className="btn btn-outline-secondary"
+                                            to={`/detail-address/${addres.addressId}`}
                                           >
                                             Edit
-                                          </button>
+                                          </Link>
+
                                           <button
                                             onClick={() =>
                                               removeAddress(addres, addToast)
                                             }
-                                            className="btn btn-danger"
+                                            className="btn btn-outline-danger"
                                             style={{
                                               float: 'right',
                                               marginRight: '8px',

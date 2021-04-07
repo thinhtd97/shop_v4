@@ -13,6 +13,9 @@ const addressSchema = mongoose.Schema(
     addressId: {
       type: String,
     },
+    email: {
+      type: String,
+    },
     wards: {
       type: String,
       required: true,

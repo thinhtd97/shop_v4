@@ -257,13 +257,13 @@ const Cart = ({ location }) => {
                     <div className="discount-code">
                       <div className="form-group">
                         <button className="btn btn-dark">Change</button>
-                        <div style={{marginTop: '16px'}}>
+                        <div style={{ marginTop: '16px' }}>
                           {address.length > 0 &&
                             address.map((item, key) => {
                               if (item.active === true) {
                                 return (
                                   <ul key={key}>
-                                    <li style={{marginBottom: '10px'}}>
+                                    <li style={{ marginBottom: '10px' }}>
                                       {item.fullname} | {item.phone}
                                     </li>
                                     <li>
@@ -273,6 +273,7 @@ const Cart = ({ location }) => {
                                   </ul>
                                 )
                               }
+                              return ''
                             })}
                         </div>
                       </div>

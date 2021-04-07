@@ -1,6 +1,5 @@
 import asyncHandler from 'express-async-handler'
 import Address from '../models/Address.js'
-import User from '../models/user.js'
 
 export const create = asyncHandler(async (req, res) => {
   const {
@@ -10,14 +9,13 @@ export const create = asyncHandler(async (req, res) => {
     city,
     address,
     company,
-    phone,
     email,
+    phone,
     active,
-    addressId
+    addressId,
   } = req.body
   try {
-    const user = await User.findById(req.user.id)
-
+    const addressCurrent = await Address.find({ user: req.user.id })
     const newAddress = new Address({
       fullname,
       district,
@@ -33,10 +31,13 @@ export const create = asyncHandler(async (req, res) => {
     })
     const created = await newAddress.save()
 
-    if (created) {
-      user.address.push(created._id)
-      await user.save()
-    }
+    addressCurrent.forEach((addres) => {
+      addres.active = false
+      addres.save()
+    })
+    created.active = true
+    await created.save()
+
     res.json(created)
   } catch (error) {
     console.log(error)
@@ -59,16 +60,32 @@ export const list = asyncHandler(async (req, res) => {
 })
 export const update = asyncHandler(async (req, res) => {
   try {
-    const updated = await Address.findOneAndUpdate(
-      { _id: req.params.id },
-      req.body,
-      { new: true },
-    ).exec()
-    if (!updated) {
-      res.status(400)
-      throw new Error('Address Update Failed.')
+    const address = await Address.findOne({ addressId: req.params.id })
+    const listAddress = await Address.find({ user: req.user.id })
+
+    if (req.body.active === true) {
+      listAddress.forEach((addres) => {
+        addres.active = false
+        addres.save()
+      })
     }
-    res.json(updated)
+
+    if (address) {
+      address.fullname = req.body.fullname || address.fullname
+      address.district = req.body.district || address.district
+      address.wards = req.body.wards || address.wards
+      address.city = req.body.city || address.city
+      address.address = req.body.address || address.address
+      address.company = req.body.company || address.company
+      address.email = req.body.email || address.email
+      address.phone = req.body.phone || address.phone
+      address.active = req.body.active || address.active
+      const updated = await address.save()
+      res.json(updated)
+    } else {
+      res.status(404)
+      throw new Error('Update Address Failed!!!')
+    }
   } catch (error) {
     res.status(404)
     throw new Error(`${error}`)

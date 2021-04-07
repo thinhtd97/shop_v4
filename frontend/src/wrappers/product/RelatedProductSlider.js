@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 import Swiper from 'react-id-swiper'
 import SectionTitle from '../../components/section-title/SectionTitle'

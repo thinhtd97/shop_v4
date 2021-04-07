@@ -28,6 +28,7 @@ const Cart = lazy(() => import('./pages/other/Cart'))
 const Wishlist = lazy(() => import('./pages/other/Wishlist'))
 
 const Checkout = lazy(() => import('./pages/other/Checkout'))
+const DetailAddress = lazy(() => import('./pages/other/DetailAddress'))
 
 const NotFound = lazy(() => import('./pages/other/NotFound'))
 
@@ -124,6 +125,10 @@ const App = (props) => {
                     component={NewPassword}
                   />
 
+                  <Route
+                    path={process.env.PUBLIC_URL + '/detail-address/:addressId'}
+                    component={DetailAddress}
+                  />
                   <Route exact component={NotFound} />
                 </Switch>
               </Suspense>

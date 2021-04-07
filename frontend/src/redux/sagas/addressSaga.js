@@ -6,7 +6,6 @@ function* addAddress(action) {
   const { addToast, address } = action
   try {
     const { userInfo } = yield select((state) => state.userLogin)
-    addToast('Add Success', { appearance: 'success', autoDismiss: true })
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -26,11 +25,12 @@ function* addAddress(action) {
           phone: address.phone,
           addressId: address.addressId,
           email: address.email,
-          active: address.active
+          active: address.active,
         },
         config,
       ),
     )
+    addToast('Add Success', { appearance: 'success', autoDismiss: true })
   } catch (error) {
     addToast(`${error}`, { appearance: 'error', autoDismiss: true })
   }

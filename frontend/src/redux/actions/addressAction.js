@@ -1,16 +1,20 @@
-import * as addressConstant from '../constants/AddressConstant';
+import * as addressConstant from '../constants/AddressConstant'
 
 export const addAddressAction = (address, addToast) => ({
-    type: addressConstant.ADD_ADDRESS,
-    address,
-    addToast
+  type: addressConstant.ADD_ADDRESS,
+  address,
+  addToast,
 })
 export const removeAddressAction = (address, addToast) => ({
-    type: addressConstant.REMOVE_ADDRESS,
-    address,
-    addToast
+  type: addressConstant.REMOVE_ADDRESS,
+  address,
+  addToast,
 })
 
 export const listAddressAction = () => ({
-    type: addressConstant.ADDRESS_LIST_REQUEST,
+  type: addressConstant.ADDRESS_LIST_REQUEST,
+})
+export const detailAddressAction = (addressId) => ({
+  type: addressConstant.DETAIL_ADDRESS,
+  addressId,
 })

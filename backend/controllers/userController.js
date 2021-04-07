@@ -271,6 +271,7 @@ export const updateUserByID = asyncHandler(async (req, res) => {
 })
 export const addWishlist = asyncHandler(async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slugProduct })
+
   const user = await User.findById(req.user.id)
   if (!product) {
     res.status(404)

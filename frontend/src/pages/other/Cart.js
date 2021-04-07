@@ -21,6 +21,7 @@ const Cart = ({ location }) => {
 
   const [code, setCode] = useState()
   const { cart } = useSelector((state) => state)
+  const { address } = useSelector((state) => state.listAddress)
   const { userInfo } = useSelector((state) => state.userLogin)
   const { cartItems: cartItemsUser } = useSelector((state) => state.listCart)
   const { coupons } = useSelector((state) => state.coupons)
@@ -250,19 +251,30 @@ const Cart = ({ location }) => {
                   <div className="discount-code-wrapper">
                     <div className="title-wrap">
                       <h4 className="cart-bottom-title section-bg-gray">
-                        Select Payment Method
+                        Delivery Address
                       </h4>
                     </div>
                     <div className="discount-code">
                       <div className="form-group">
-                        <p>Enter your payment method.</p>
-                        <select
-                          className="form-control"
-                          style={{ marginBottom: '20px' }}
-                        >
-                          <option value="paypal">Paypal</option>
-                          <option value="stripe">Stripe</option>
-                        </select>
+                        <button className="btn btn-dark">Change</button>
+                        <div style={{marginTop: '16px'}}>
+                          {address.length > 0 &&
+                            address.map((item, key) => {
+                              if (item.active === true) {
+                                return (
+                                  <ul key={key}>
+                                    <li style={{marginBottom: '10px'}}>
+                                      {item.fullname} | {item.phone}
+                                    </li>
+                                    <li>
+                                      Address: {item.wards}, Q.{item.district},{' '}
+                                      {item.city}
+                                    </li>
+                                  </ul>
+                                )
+                              }
+                            })}
+                        </div>
                       </div>
                     </div>
                   </div>

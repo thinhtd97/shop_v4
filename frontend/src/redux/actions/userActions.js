@@ -48,11 +48,12 @@ export const userChangePasswordAction = (addToast, password, oldPassword) => ({
   oldPassword,
 })
 
-export const userReviewsAction = (slug, comment, rating) => ({
+export const userReviewsAction = (slug, comment, rating, addToast) => ({
   type: userConstants.USER_REVIEWS_REQUEST,
   slug,
   comment,
-  rating
+  rating,
+  addToast
 })
 export const replyComment = (slug, user, replyComment) => ({
   type: userConstants.USER_REPLY_REVIEWS_REQUEST,

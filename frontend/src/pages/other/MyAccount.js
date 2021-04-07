@@ -13,8 +13,13 @@ import {
   userProfileAction,
   userProfileUpdateAction,
 } from '../../redux/actions/userActions'
-import { addAddressAction } from '../../redux/actions/addressAction'
+
+import {
+  addAddressAction,
+  removeAddressAction,
+} from '../../redux/actions/addressAction'
 import { useToasts } from 'react-toast-notifications'
+import uniqid from 'uniqid'
 
 const MyAccount = ({ location, history }) => {
   const { addToast } = useToasts()
@@ -27,16 +32,19 @@ const MyAccount = ({ location, history }) => {
   const [oldPassword, setOldPassword] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const { address: listAddress } = useSelector((state) => state.listAddress)
 
   const [values, setValues] = useState({
     fullname: '',
     wards: '',
     district: '',
+    addressId: uniqid(),
     city: '',
     address: '',
-    company: '',
+    company: 'home',
     phone: '',
     email: '',
+    active: false,
   })
 
   const dispatch = useDispatch()
@@ -62,6 +70,10 @@ const MyAccount = ({ location, history }) => {
         address,
       }),
     )
+  }
+
+  const removeAddress = (address, addToast) => {
+    dispatch(removeAddressAction(address, addToast))
   }
 
   const changePasswordHandler = (e) => {
@@ -92,7 +104,9 @@ const MyAccount = ({ location, history }) => {
     }
   }, [dispatch, addToast, userInfo, history, user])
 
-  const submitHandle = (values, addToast) => {
+  const submitHandle = (e, values, addToast) => {
+    e.preventDefault()
+    setValues({ ...values, addressId: uniqid() })
     dispatch(addAddressAction(values, addToast))
   }
 
@@ -138,6 +152,7 @@ const MyAccount = ({ location, history }) => {
                                 <div className="billing-info">
                                   <label>First Name</label>
                                   <input
+                                    placeholder="First name..."
                                     type="text"
                                     value={firstName}
                                     onChange={(e) =>
@@ -150,6 +165,7 @@ const MyAccount = ({ location, history }) => {
                                 <div className="billing-info">
                                   <label>Last Name</label>
                                   <input
+                                    placeholder="Last name..."
                                     value={lastName}
                                     type="text"
                                     onChange={(e) =>
@@ -162,6 +178,7 @@ const MyAccount = ({ location, history }) => {
                                 <div className="billing-info">
                                   <label>Email Address</label>
                                   <input
+                                    placeholder="Email address..."
                                     value={email}
                                     type="email"
                                     onChange={(e) => setEmail(e.target.value)}
@@ -172,6 +189,7 @@ const MyAccount = ({ location, history }) => {
                                 <div className="billing-info">
                                   <label>Telephone</label>
                                   <input
+                                    placeholder="Telephone..."
                                     value={phone}
                                     type="text"
                                     onChange={(e) => setPhone(e.target.value)}
@@ -213,6 +231,7 @@ const MyAccount = ({ location, history }) => {
                                 <div className="billing-info">
                                   <label>Your password</label>
                                   <input
+                                    placeholder="Your password..."
                                     type="password"
                                     onChange={(e) =>
                                       setOldPassword(e.target.value)
@@ -224,6 +243,7 @@ const MyAccount = ({ location, history }) => {
                                 <div className="billing-info">
                                   <label>New Password</label>
                                   <input
+                                    placeholder="New password..."
                                     type="password"
                                     onChange={(e) =>
                                       setPassword(e.target.value)
@@ -235,6 +255,7 @@ const MyAccount = ({ location, history }) => {
                                 <div className="billing-info">
                                   <label>Password Confirm</label>
                                   <input
+                                    placeholder="Password confirm..."
                                     type="password"
                                     onChange={(e) =>
                                       setConfirmPassword(e.target.value)
@@ -261,169 +282,319 @@ const MyAccount = ({ location, history }) => {
                       <Card.Header className="panel-heading">
                         <Accordion.Toggle variant="link" eventKey="2">
                           <h3 className="panel-title">
-                            <span>3 .</span> Address Book{' '}
+                            <span>3 .</span> Create Address{' '}
                           </h3>
                         </Accordion.Toggle>
                       </Card.Header>
                       <Accordion.Collapse eventKey="2">
                         <Card.Body>
-                          <div className="myaccount-info-wrapper">
-                            <div className="row">
-                              <div className="col-lg-6 col-md-6">
-                                <div className="billing-info">
-                                  <label>Full Name</label>
-                                  <input
-                                    type="text"
-                                    onChange={(e) =>
-                                      setValues({
-                                        ...values,
-                                        fullname: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-6 col-md-6">
-                                <div className="billing-info">
-                                  <label>Email</label>
-                                  <input
-                                    type="email"
-                                    onChange={(e) =>
-                                      setValues({
-                                        ...values,
-                                        email: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-6 col-md-6">
-                                <div className="billing-info">
-                                  <label>Wards</label>
-                                  <input
-                                    type="text"
-                                    onChange={(e) =>
-                                      setValues({
-                                        ...values,
-                                        wards: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-6 col-md-6">
-                                <div className="billing-info">
-                                  <label>District</label>
-                                  <input
-                                    type="text"
-                                    onChange={(e) =>
-                                      setValues({
-                                        ...values,
-                                        district: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-12 col-md-12">
-                                <div className="billing-info">
-                                  <label>City</label>
-                                  <input
-                                    type="text"
-                                    onChange={(e) =>
-                                      setValues({
-                                        ...values,
-                                        city: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-12 col-md-12">
-                                <div className="billing-info">
-                                  <label>Address</label>
-                                  <textarea
-                                    onChange={(e) =>
-                                      setValues({
-                                        ...values,
-                                        address: e.target.value,
-                                      })
-                                    }
-                                    style={{ background: '#fff' }}
-                                  ></textarea>
-                                </div>
-                              </div>
-                              <div className="col-lg-6 col-md-6">
-                                <div className="billing-info">
-                                  <label>Company</label>
-                                  <div
-                                    className="form-group d-flex"
-                                    style={{ alignItems: 'center' }}
-                                  >
+                          <form
+                            onSubmit={(e) => submitHandle(e, values, addToast)}
+                          >
+                            <div className="myaccount-info-wrapper">
+                              <div className="row">
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>Full Name</label>
                                     <input
-                                      type="radio"
-                                      value="home"
+                                      placeholder="Full name..."
+                                      required={true}
+                                      type="text"
                                       onChange={(e) =>
                                         setValues({
                                           ...values,
-                                          company: e.target.value,
+                                          fullname: e.target.value,
                                         })
                                       }
-                                      name="company"
-                                      className="form-control"
-                                      style={{ width: '16px', height: '16px' }}
-                                    />{' '}
-                                    <span style={{ marginLeft: '6px' }}>
-                                      Home
-                                    </span>
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>Email</label>
                                     <input
-                                      type="radio"
-                                      name="company"
-                                      className="form-control"
+                                      placeholder="Email..."
+                                      required
+                                      type="email"
                                       onChange={(e) =>
                                         setValues({
                                           ...values,
-                                          company: e.target.value,
+                                          email: e.target.value,
                                         })
                                       }
-                                      value="At work"
-                                      style={{
-                                        width: '16px',
-                                        height: '16px',
-                                        marginLeft: '10px',
-                                      }}
-                                    />{' '}
-                                    <span style={{ marginLeft: '6px' }}>
-                                      At work
-                                    </span>
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>Wards</label>
+                                    <input
+                                      placeholder="wards..."
+                                      required
+                                      type="text"
+                                      onChange={(e) =>
+                                        setValues({
+                                          ...values,
+                                          wards: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>District</label>
+                                    <input
+                                      required
+                                      placeholder="District..."
+                                      type="text"
+                                      onChange={(e) =>
+                                        setValues({
+                                          ...values,
+                                          district: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-lg-12 col-md-12">
+                                  <div className="billing-info">
+                                    <label>City</label>
+                                    <input
+                                      required
+                                      placeholder="City..."
+                                      type="text"
+                                      onChange={(e) =>
+                                        setValues({
+                                          ...values,
+                                          city: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-lg-12 col-md-12">
+                                  <div className="billing-info">
+                                    <label>Address</label>
+                                    <textarea
+                                      required
+                                      placeholder="Address..."
+                                      onChange={(e) =>
+                                        setValues({
+                                          ...values,
+                                          address: e.target.value,
+                                        })
+                                      }
+                                      style={{ background: '#fff' }}
+                                    ></textarea>
+                                  </div>
+                                </div>
+                                <div className="col-lg-12 col-md-12">
+                                  <div className="billing-info">
+                                    <label>Company</label>
+                                    <div
+                                      className="form-group d-flex"
+                                      style={{ alignItems: 'center' }}
+                                    >
+                                      <input
+                                        required
+                                        checked={true}
+                                        type="radio"
+                                        value="home"
+                                        onChange={(e) =>
+                                          setValues({
+                                            ...values,
+                                            company: e.target.value,
+                                          })
+                                        }
+                                        name="company"
+                                        className="form-control"
+                                        style={{
+                                          width: '16px',
+                                          height: '16px',
+                                        }}
+                                      />{' '}
+                                      <span style={{ marginLeft: '6px' }}>
+                                        Home
+                                      </span>
+                                      <input
+                                        type="radio"
+                                        name="company"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                          setValues({
+                                            ...values,
+                                            company: e.target.value,
+                                          })
+                                        }
+                                        value="At work"
+                                        style={{
+                                          width: '16px',
+                                          height: '16px',
+                                          marginLeft: '10px',
+                                        }}
+                                      />{' '}
+                                      <span style={{ marginLeft: '6px' }}>
+                                        At work
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="col-lg-12 col-md-12">
+                                  <div className="billing-info">
+                                    <label>Phone</label>
+                                    <input
+                                      required
+                                      placeholder="Phone..."
+                                      type="text"
+                                      onChange={(e) =>
+                                        setValues({
+                                          ...values,
+                                          phone: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-lg-12 col-md-12">
+                                  <div className="billing-info">
+                                    <label>Company</label>
+                                    <div
+                                      className="form-group d-flex"
+                                      style={{ alignItems: 'center' }}
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        name="company"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                          setValues({
+                                            ...values,
+                                            active: e.target.checked,
+                                          })
+                                        }
+                                        style={{
+                                          width: '16px',
+                                          height: '16px',
+                                          marginLeft: '10px',
+                                        }}
+                                      />{' '}
+                                      <span style={{ marginLeft: '6px' }}>
+                                        Default Address
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              <div className="col-lg-12 col-md-12">
-                                <div className="billing-info">
-                                  <label>Phone</label>
-                                  <input
-                                    type="text"
-                                    onChange={(e) =>
-                                      setValues({
-                                        ...values,
-                                        phone: e.target.value,
-                                      })
-                                    }
-                                  />
+
+                              <div className="billing-back-btn">
+                                <div className="billing-btn">
+                                  <button
+                                    style={{ borderRadius: '5px' }}
+                                    type="submit"
+                                  >
+                                    Add
+                                  </button>
                                 </div>
                               </div>
                             </div>
-                            <div className="billing-back-btn">
-                              <div className="billing-btn">
-                                <button
-                                  style={{ borderRadius: '5px' }}
-                                  type="submit"
-                                  onClick={() => submitHandle(values, addToast)}
-                                >
-                                  Add
-                                </button>
-                              </div>
+                          </form>
+                        </Card.Body>
+                      </Accordion.Collapse>
+                    </Card>
+                    <Card className="single-my-account mb-20">
+                      <Card.Header className="panel-heading">
+                        <Accordion.Toggle variant="link" eventKey="3">
+                          <h3 className="panel-title">
+                            <span>4 .</span> Address Book{' '}
+                          </h3>
+                        </Accordion.Toggle>
+                      </Card.Header>
+                      <Accordion.Collapse eventKey="3">
+                        <Card.Body>
+                          <div className="myaccount-info-wrapper">
+                            <div className="row">
+                              {listAddress?.length > 0
+                                ? listAddress.map((addres, key) => (
+                                    <Fragment key={key}>
+                                      {addres.active === true ? (
+                                        <div
+                                          style={{
+                                            border: '1px solid blue',
+                                            padding: '20px',
+                                            marginBottom: '16px',
+                                          }}
+                                          className="col-lg-12 col-md-12"
+                                        >
+                                          <button
+                                            className="btn btn-secondary"
+                                            style={{ float: 'right' }}
+                                          >
+                                            Edit
+                                          </button>
+                                          <div className="fullname">
+                                            {addres.fullname}{' '}
+                                            <span
+                                              style={{
+                                                color: 'green',
+                                                marginLeft: '8px',
+                                              }}
+                                            >
+                                              <i className="fa fa-check-circle-o"></i>{' '}
+                                              Default Address
+                                            </span>
+                                          </div>
+                                          <div className="address">
+                                            Address: {addres.wards},{' '}
+                                            {addres.district}, {addres.city}
+                                          </div>
+                                          <div className="phone">
+                                            Phone: {addres.phone}
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <div
+                                          style={{
+                                            border: '1px solid blue',
+                                            padding: '20px',
+                                            marginBottom: '16px',
+                                          }}
+                                          className="col-lg-12 col-md-12"
+                                        >
+                                          <button
+                                            className="btn btn-secondary"
+                                            style={{ float: 'right' }}
+                                          >
+                                            Edit
+                                          </button>
+                                          <button
+                                            onClick={() =>
+                                              removeAddress(addres, addToast)
+                                            }
+                                            className="btn btn-danger"
+                                            style={{
+                                              float: 'right',
+                                              marginRight: '8px',
+                                            }}
+                                          >
+                                            Remove
+                                          </button>
+                                          <div className="fullname">
+                                            {addres.fullname}{' '}
+                                          </div>
+                                          <div className="address">
+                                            Address: {addres.wards},{' '}
+                                            {addres.district}, {addres.city}
+                                          </div>
+                                          <div className="phone">
+                                            Phone: {addres.phone}
+                                          </div>
+                                        </div>
+                                      )}
+                                    </Fragment>
+                                  ))
+                                : 'Please add an address'}
                             </div>
                           </div>
                         </Card.Body>

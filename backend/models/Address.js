@@ -10,6 +10,9 @@ const addressSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    addressId: {
+      type: String,
+    },
     wards: {
       type: String,
       required: true,
@@ -30,6 +33,11 @@ const addressSchema = mongoose.Schema(
       type: String,
       required: true,
       maxLength: 10,
+    },
+    active: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

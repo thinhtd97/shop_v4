@@ -1,6 +1,7 @@
 import express from 'express'
 import { protect } from '../middleware/middlewares.js'
 import {
+  changeActive,
   create,
   list,
   read,
@@ -15,5 +16,6 @@ router
   .put(protect, update)
   .delete(protect, remove)
   .get(protect, read)
+router.put('/address/change-active/:id', protect, changeActive)
 
 export default router

@@ -1,6 +1,9 @@
 import * as addressConstant from '../constants/AddressConstant'
 
-export const addressReducer = (state = { address: [] }, action) => {
+export const addressReducer = (
+  state = { address: [], addressOne: {} },
+  action,
+) => {
   let address = action.address
   switch (action.type) {
     case addressConstant.ADDRESS_LIST_REQUEST:
@@ -28,12 +31,21 @@ export const addressReducer = (state = { address: [] }, action) => {
       }
     case addressConstant.REMOVE_ADDRESS:
       let removeAddress = state.address.filter(
-        (addres) => addres._id !== address._id,
+        (addres) => addres.addressId !== address.addressId,
       )
       return {
         ...state,
         loading: false,
         address: removeAddress,
+      }
+    case addressConstant.DETAIL_ADDRESS:
+      let detail = state.address.find(
+        (addres) => addres.addressId === address.addressId,
+      )
+      return {
+        ...state,
+        loading: false,
+        addressOne: detail,
       }
     case addressConstant.ADDRESS_LIST_RESET:
       return {

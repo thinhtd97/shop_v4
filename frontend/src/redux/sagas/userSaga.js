@@ -341,7 +341,7 @@ function* updatePasswordProfile(action) {
 }
 
 function* userReview(action) {
-  const { slug, comment, rating } = action
+  const { slug, comment, rating, addToast } = action
   try {
     const { userInfo } = yield select((state) => state.userLogin)
     const config = {
@@ -376,6 +376,16 @@ function* userReview(action) {
           ? error.response.data.message
           : error.message,
     })
+    addToast(
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+      {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 1000,
+      },
+    )
   }
 }
 

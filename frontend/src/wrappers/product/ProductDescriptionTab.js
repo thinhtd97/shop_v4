@@ -10,6 +10,7 @@ import {
   replyComment,
 } from '../../redux/actions/userActions'
 import Loader from '../../components/Loader'
+import { useToasts } from 'react-toast-notifications'
 
 const ProductDescriptionTab = ({
   spaceBottomClass,
@@ -18,14 +19,15 @@ const ProductDescriptionTab = ({
   userInfo,
 }) => {
   const dispatch = useDispatch()
+  const { addToast } = useToasts()
   const { loading } = useSelector((state) => state.userReview)
   const [openReply, setOpenReply] = useState(false)
   const [comment, setComment] = useState('')
   const [reply, setReply] = useState('')
   const [rating, setRating] = useState('')
-  const reviewHandler = (e, slug, comment, rating) => {
+  const reviewHandler = (e, slug, comment, rating, addToast) => {
     e.preventDefault()
-    dispatch(userReviewsAction(slug, comment, rating))
+    dispatch(userReviewsAction(slug, comment, rating, addToast))
   }
   const replyHandler = (slug, user, reply) => {
     dispatch(replyComment(slug, user, reply))
@@ -45,7 +47,9 @@ const ProductDescriptionTab = ({
                 <Nav.Link eventKey="productDescription">Description</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="productReviews">Reviews(2)</Nav.Link>
+                <Nav.Link eventKey="productReviews">
+                  Reviews({product.reviews.length})
+                </Nav.Link>
               </Nav.Item>
             </Nav>
             <Tab.Content className="description-review-bottom">
@@ -92,9 +96,17 @@ const ProductDescriptionTab = ({
                             <Fragment>
                               {product.reviews.map((el, key) => (
                                 <div key={key} className="review-wrapper">
-                                  <div className="single-review" style={{marginBottom: '20px'}}>
+                                  <div
+                                    className="single-review"
+                                    style={{ marginBottom: '20px' }}
+                                  >
                                     <div className="review-img">
-                                      <img src={Avartar} width={80} alt="" />
+                                      <img
+                                        src={Avartar}
+                                        width={50}
+                                        style={{ borderRadius: '50%' }}
+                                        alt=""
+                                      />
                                     </div>
                                     <div className="review-content">
                                       <div className="review-top-wrap">
@@ -126,11 +138,15 @@ const ProductDescriptionTab = ({
                                     <Fragment>
                                       {el.reply.map((repl, key) => (
                                         <Fragment key={key}>
-                                          <div className="single-review child-review">
+                                          <div
+                                            style={{ marginTop: '20px' }}
+                                            className="single-review child-review"
+                                          >
                                             <div className="review-img">
                                               <img
                                                 src={Avartar}
-                                                width={80}
+                                                width={50}
+                                                style={{ borderRadius: '50%' }}
                                                 alt=""
                                               />
                                             </div>
@@ -156,7 +172,12 @@ const ProductDescriptionTab = ({
                                   {openReply ? (
                                     <div className="single-review child-review">
                                       <div className="review-img">
-                                        <img src={Avartar} width={80} alt="" />
+                                        <img
+                                          src={Avartar}
+                                          width={50}
+                                          style={{ borderRadius: '50%' }}
+                                          alt=""
+                                        />
                                       </div>
                                       <div className="review-content">
                                         <div className="review-top-wrap">
@@ -212,6 +233,7 @@ const ProductDescriptionTab = ({
                                     product.slug,
                                     comment,
                                     rating,
+                                    addToast,
                                   )
                                 }
                               >

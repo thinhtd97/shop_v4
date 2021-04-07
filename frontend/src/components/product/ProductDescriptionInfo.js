@@ -112,9 +112,9 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
     <div className="product-details-content ml-70">
       <h2>{product.name}</h2>
       <div className="product-details-price">
-        {discountedPrice !== null ? (
+        {discountedPrice !== 0 ? (
           <Fragment>
-            <span>${product.price.toFixed(2)}</span>{' '}
+            <span>${product.price?.toFixed(2)}</span>{' '}
             <span className="old">${discountedPrice.toFixed(2)}</span>
           </Fragment>
         ) : (

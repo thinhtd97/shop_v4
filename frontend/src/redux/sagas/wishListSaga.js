@@ -12,7 +12,7 @@ function* addToWishlist(action) {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    addToast('Added To Wishlist', { appearance: 'success', autoDismiss: true })
+    
     yield call(() =>
       axios.post(
         `${process.env.REACT_APP_API}/user/wishlist/${slug}`,
@@ -20,6 +20,7 @@ function* addToWishlist(action) {
         config,
       ),
     )
+    addToast('Added To Wishlist', { appearance: 'success', autoDismiss: true })
     const { data } = yield call(() =>
       axios.get(`${process.env.REACT_APP_API}/user/wishlist`, config),
     )

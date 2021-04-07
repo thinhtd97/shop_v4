@@ -30,8 +30,7 @@ export const createReview = asyncHandle(async (req, res) => {
         product.rating = (
           Number(reviews.reduce((acc, i) => acc + i.rating, 0)) / reviews.length
         ).toFixed(2)
-        product.numReviews += 1
-        console.log(product.rating)
+        product.numReviews = reviews.length
         await product.save()
       }
       res.json(review)

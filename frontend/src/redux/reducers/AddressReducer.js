@@ -59,22 +59,24 @@ export const addressReducer = (
         loading: false,
         addressOne: detail,
       }
+    case addressConstant.UPDATE_ADDRESS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
     case addressConstant.UPDATE_ADDRESS:
-      let arrayCurrent = [...state.address]
-      if (address.active === true) {
-        arrayCurrent.map((addres) => {
-          if (addres.active === address.active) {
-            addres.active = true
-          }
-          addres.active = false
-        })
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        addressOne: action.payload,
       }
 
     case addressConstant.ADDRESS_LIST_RESET:
       return {
         ...state,
         addressOne: address,
-        address: arrayCurrent,
+        address: [],
       }
     default:
       return state

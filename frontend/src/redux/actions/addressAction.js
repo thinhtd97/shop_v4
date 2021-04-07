@@ -18,7 +18,8 @@ export const detailAddressAction = (addressId) => ({
   type: addressConstant.DETAIL_ADDRESS,
   addressId,
 })
-export const updateAddressAction = (address) => ({
-  type: addressConstant.UPDATE_ADDRESS,
+export const updateAddressAction = (address, addToast) => ({
+  type: addressConstant.UPDATE_ADDRESS_REQUEST,
   address,
+  addToast
 })

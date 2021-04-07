@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux'
 import { logoutAction } from '../../redux/actions/userActions'
 
 const IconGroup = ({ iconWhiteClass }) => {
-
   const { userInfo } = useSelector((state) => state.userLogin)
   const dispatch = useDispatch()
   const handleClick = (e) => {
@@ -34,8 +33,11 @@ const IconGroup = ({ iconWhiteClass }) => {
   const currency = useSelector((state) => state.currencyData)
   const { wishlist } = useSelector((state) => state.wishListData)
 
-  const { cartItems: cartItemsUser } = useSelector((state) => state.listCart);
-  const finalCartItems = userInfo ? cartItemsUser : cartItems; 
+  const { cartItems: cartItemsUser } = useSelector((state) => state.listCart)
+  const finalCartItems = userInfo ? cartItemsUser : cartItems
+
+  const countQty = finalCartItems.reduce((acc, item) => item.qty + acc, 0)
+
   return (
     <div
       className={`header-right-wrap ${iconWhiteClass ? iconWhiteClass : ''}`}
@@ -46,6 +48,7 @@ const IconGroup = ({ iconWhiteClass }) => {
             style={{ margin: '0' }}
             className="same-style account-setting d-none d-lg-block"
           >
+            {' '}
             <button
               className="account-setting-active"
               onClick={(e) => handleClick(e)}
@@ -99,9 +102,7 @@ const IconGroup = ({ iconWhiteClass }) => {
       <div className="same-style cart-wrap d-none d-lg-block">
         <button className="icon-cart" onClick={(e) => handleClick(e)}>
           <i className="pe-7s-shopbag" />
-          <span className="count-style">
-            {finalCartItems && finalCartItems.length ? finalCartItems.length : 0}
-          </span>
+          <span className="count-style">{countQty && countQty}</span>
         </button>
         {/* menu cart */}
         <MenuCart
@@ -114,7 +115,9 @@ const IconGroup = ({ iconWhiteClass }) => {
         <Link className="icon-cart" to={process.env.PUBLIC_URL + '/cart'}>
           <i className="pe-7s-shopbag" />
           <span className="count-style">
-            {finalCartItems && finalCartItems.length ? finalCartItems.length : 0}
+            {finalCartItems && finalCartItems.length
+              ? finalCartItems.length
+              : 0}
           </span>
         </Link>
       </div>

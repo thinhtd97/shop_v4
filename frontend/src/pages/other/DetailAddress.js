@@ -4,11 +4,16 @@ import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
 import LayoutOne from '../../layouts/LayoutOne'
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb'
 import { useDispatch, useSelector } from 'react-redux'
-import { detailAddressAction } from '../../redux/actions/addressAction'
+import {
+  detailAddressAction,
+  updateAddressAction,
+} from '../../redux/actions/addressAction'
+import { useToasts } from 'react-toast-notifications'
 
 const DetailAddress = ({ location, match, history }) => {
   const { pathname } = location
   const dispatch = useDispatch()
+  const { addToast } = useToasts()
   const addressId = match.params.addressId
   const { addressOne, address: addressData } = useSelector(
     (state) => state.listAddress,
@@ -18,16 +23,18 @@ const DetailAddress = ({ location, match, history }) => {
   const [values, setValues] = useState({
     email: '',
     fullname: '',
-    ward: '',
+    wards: '',
     district: '',
+    addressId: addressId,
     company: '',
     phone: '',
     address: '',
     city: '',
     active: '',
   })
-  const handleSubmit = (e, values) => {
+  const handleSubmit = (e, values, addToast) => {
     e.preventDefault()
+    dispatch(updateAddressAction(values, addToast))
   }
   useEffect(() => {
     if (!userInfo) {
@@ -77,8 +84,7 @@ const DetailAddress = ({ location, match, history }) => {
               <div className="col-lg-8 ml-auto mr-auto">
                 <div className="billing-info-wrap">
                   <h3>Edit Address</h3>
-
-                  <form onSubmit={(e) => handleSubmit(e)}>
+                  <form onSubmit={(e) => handleSubmit(e, values, addToast)}>
                     <div className="row">
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
@@ -197,7 +203,6 @@ const DetailAddress = ({ location, match, history }) => {
                           <label>Default:</label>
                           {addressData.length < 2 ? (
                             <input
-                              disabled
                               checked={values.active}
                               type="checkbox"
                               style={{
@@ -215,7 +220,6 @@ const DetailAddress = ({ location, match, history }) => {
                             />
                           ) : (
                             <input
-                              required
                               checked={values.active}
                               type="checkbox"
                               style={{

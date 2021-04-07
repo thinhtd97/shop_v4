@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Tab from 'react-bootstrap/Tab'
 import Nav from 'react-bootstrap/Nav'
 import ProductRating from '../../components/product/sub-components/ProductRating'
-import Avartar from '../../assets/avt.png'
+import Avartar from '../../assets/default-user-avatar.jpg'
 import {
   userReviewsAction,
   replyComment,
@@ -170,7 +170,7 @@ const ProductDescriptionTab = ({
                                     ''
                                   )}
                                   {openReply ? (
-                                    <div className="single-review child-review">
+                                    <div className="single-review child-review" style={{marginTop: '20px'}}>
                                       <div className="review-img">
                                         <img
                                           src={Avartar}

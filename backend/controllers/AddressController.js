@@ -71,16 +71,12 @@ export const update = asyncHandler(async (req, res) => {
     }
 
     if (address) {
-      address.fullname = req.body.fullname || address.fullname
-      address.district = req.body.district || address.district
-      address.wards = req.body.wards || address.wards
-      address.city = req.body.city || address.city
-      address.address = req.body.address || address.address
-      address.company = req.body.company || address.company
-      address.email = req.body.email || address.email
-      address.phone = req.body.phone || address.phone
-      address.active = req.body.active || address.active
-      const updated = await address.save()
+      const updated = await Address.findOneAndUpdate(
+        { addressId: req.params.id },
+        req.body,
+        { new: true },
+      ).exec()
+
       res.json(updated)
     } else {
       res.status(404)

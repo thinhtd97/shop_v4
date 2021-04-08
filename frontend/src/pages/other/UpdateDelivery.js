@@ -22,7 +22,7 @@ const UpdateDelivery = ({ location }) => {
     if (!userInfo) {
       history.push('/login-register')
     }
-  }, [userInfo])
+  }, [userInfo, history])
   return (
     <Fragment>
       <MetaTags>
@@ -63,7 +63,7 @@ const UpdateDelivery = ({ location }) => {
                                   {shippingAddress.phone}
                                 </li>
                                 <li>
-                                  Address: {shippingAddress.wards},{' '}
+                                  Address:{shippingAddress.address}, {shippingAddress.wards},{' '}
                                   {shippingAddress.district},{' '}
                                   {shippingAddress.city}
                                 </li>

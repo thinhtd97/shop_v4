@@ -56,28 +56,28 @@ const ProductTabLeft = ({ location, match }) => {
           <>
             {product ? (
               <Fragment>
-              <ProductImageDescription
-                spaceTopClass="pt-100"
-                spaceBottomClass="pb-100"
-                product={product}
-                galleryType="leftThumb"
-              />
+                <ProductImageDescription
+                  spaceTopClass="pt-100"
+                  spaceBottomClass="pb-100"
+                  product={product}
+                  galleryType="leftThumb"
+                />
 
-              {/* product description tab */}
-              <ProductDescriptionTab
-                spaceBottomClass="pb-90"
-                productFullDesc={product?.description}
-                product={product}
-                userInfo={userInfo}
-              />
-              {/* related product slider */}
-              <RelatedProductSlider
-                spaceBottomClass="pb-95"
-                category={product && product.category?.name}
-              />
-            </Fragment>
+                {/* product description tab */}
+                <ProductDescriptionTab
+                  spaceBottomClass="pb-90"
+                  productFullDesc={product?.description}
+                  product={product}
+                  userInfo={userInfo}
+                />
+                {/* related product slider */}
+                <RelatedProductSlider
+                  spaceBottomClass="pb-95"
+                  category={product && product.category?.name}
+                />
+              </Fragment>
             ) : (
-             <NotFoundComponent />
+              <NotFoundComponent />
             )}
           </>
         )}

@@ -17,6 +17,7 @@ import {
 } from './userReducer'
 import { addWishlistReducer, listWishlistReducer } from './wishlistReducer'
 import { addressReducer } from './AddressReducer'
+import { orderCreateReducer } from './OrderReducer'
 
 const rootReducer = combineReducers({
   multilanguage: createMultilanguageReducer({ currentLanguageCode: 'en' }),
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   userReview: userReviewReducer,
   coupons: couponReducer,
   listAddress: addressReducer,
+  orderCreate: orderCreateReducer,
 })
 
 export default rootReducer

@@ -591,8 +591,9 @@ const MyAccount = ({ location, history }) => {
                                             {addres.fullname}{' '}
                                           </div>
                                           <div className="address">
-                                            Address: {addres.wards},{' '}
-                                            {addres.district}, {addres.city}
+                                            Address: {addres.address},{' '}
+                                            {addres.wards}, {addres.district},{' '}
+                                            {addres.city}
                                           </div>
                                           <div className="phone">
                                             Phone: {addres.phone}

@@ -63,23 +63,23 @@ export const update = asyncHandler(async (req, res) => {
     const address = await Address.findOne({ addressId: req.params.id })
     const listAddress = await Address.find({ user: req.user.id })
 
-    if (req.body.active === true) {
+    if (address) {
       listAddress.forEach(async (addres) => {
         addres.active = false
         await addres.save()
       })
-    }
-
-    if (address) {
       const updated = await Address.findOneAndUpdate(
         { addressId: req.params.id },
-        req.body,
+        {
+          ...req.body,
+          active: req.body.active,
+        },
         { new: true },
       ).exec()
 
       res.json(updated)
     } else {
-      res.status(404)
+      res.status(404) 
       throw new Error('Update Address Failed!!!')
     }
   } catch (error) {

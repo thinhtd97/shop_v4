@@ -74,7 +74,7 @@ const LoginRegister = ({ location, history }) => {
     }
   }, [history, userInfo, redirect])
   return (
-    <MyLoader active={loading} text="Loading...">
+    <MyLoader active={loading}>
       <MetaTags>
         <title>Shop | Login</title>
         <meta

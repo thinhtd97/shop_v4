@@ -7,7 +7,6 @@ import {
   removeCartItem,
   updateQuantity,
 } from '../controllers/CartController.js'
-import { paymentStripe } from '../controllers/PaymentController.js'
 const router = express.Router()
 
 router
@@ -16,7 +15,5 @@ router
   .delete(protect, removeCartItem)
 router.route('/cart').get(protect, listCart).delete(protect, removeAllCartItem)
 router.put('/cart/:slug/:qty', protect, updateQuantity)
-
-router.post('/payment', paymentStripe)
 
 export default router

@@ -219,6 +219,7 @@ const DetailAddress = ({ location, match, history }) => {
                             <label>Default:</label>
                             <input
                               checked={values.active}
+                              value={values.active}
                               type="checkbox"
                               style={{
                                 width: '14px',

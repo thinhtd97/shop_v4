@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Fragment, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Rating from './sub-components/ProductRating'
 import {
   addToCartAction,
@@ -11,8 +11,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useToasts } from 'react-toast-notifications'
 import { useCallback } from 'react'
 
-const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
+const ProductDescriptionInfo = ({
+  product,
+  discountedPrice,
+  wishlistItem,
+  cartItem,
+}) => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const { addToast } = useToasts()
   const [selectedProductColor, setSelectedProductColor] = useState(
     product.variation ? product.variation[0]?.color : '',
@@ -100,10 +106,7 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
 
   const handleAddToWishlist = (addToast, slug) => {
     if (!userInfo) {
-      return addToast('Please login to add', {
-        appearance: 'error',
-        autoDismiss: true,
-      })
+      history.push('/login-register')
     } else {
       dispatch(addWishlistAction(addToast, slug))
     }
@@ -250,48 +253,60 @@ const ProductDescriptionInfo = ({ product, discountedPrice, wishlistItem }) => {
             {productStock && productStock > 0 ? (
               <>
                 {userInfo ? (
-                  <button
-                    onClick={() =>
-                      addToCartDatabase(
-                        product._id,
-                        product.slug,
-                        product.name,
-                        product.image[0].url,
-                        product.price,
-                        product.countInStock,
-                        quantityCount,
-                        selectedProductSize,
-                        selectedProductColor,
-                        discountedPrice,
-                        addToast,
-                      )
-                    }
-                  >
-                    {' '}
-                    Add To Cart{' '}
-                  </button>
+                  <Fragment>
+                    {cartItem ? (
+                      <button disabled>Added To Cart</button>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          addToCartDatabase(
+                            product._id,
+                            product.slug,
+                            product.name,
+                            product.image[0].url,
+                            product.price,
+                            product.countInStock,
+                            quantityCount,
+                            selectedProductSize,
+                            selectedProductColor,
+                            discountedPrice,
+                            addToast,
+                          )
+                        }
+                      >
+                        {' '}
+                        Add To Cart{' '}
+                      </button>
+                    )}
+                  </Fragment>
                 ) : (
-                  <button
-                    onClick={(e) =>
-                      addToCart(
-                        e,
-                        product._id,
-                        product.slug,
-                        product.name,
-                        product.image[0].url,
-                        product.price,
-                        product.countInStock,
-                        quantityCount,
-                        selectedProductSize,
-                        selectedProductColor,
-                        discountedPrice,
-                        addToast,
-                      )
-                    }
-                  >
-                    {' '}
-                    Add To Cart{' '}
-                  </button>
+                  <Fragment>
+                    {cartItem ? (
+                      <button disabled>Added To Cart</button>
+                    ) : (
+                      <button
+                        onClick={(e) =>
+                          addToCart(
+                            e,
+                            product._id,
+                            product.slug,
+                            product.name,
+                            product.image[0].url,
+                            product.price,
+                            product.countInStock,
+                            quantityCount,
+                            selectedProductSize,
+                            selectedProductColor,
+                            discountedPrice,
+                            addToast,
+                          )
+                        }
+                      >
+                        {' '}
+                        Add To Cart{' '}
+                      </button>
+                    )}
+                  </Fragment>
                 )}
               </>
             ) : (

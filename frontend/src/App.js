@@ -29,6 +29,7 @@ const Wishlist = lazy(() => import('./pages/other/Wishlist'))
 
 const Checkout = lazy(() => import('./pages/other/Checkout'))
 const DetailAddress = lazy(() => import('./pages/other/DetailAddress'))
+const UpdateDelivery = lazy(() => import('./pages/other/UpdateDelivery'))
 
 const NotFound = lazy(() => import('./pages/other/NotFound'))
 
@@ -128,6 +129,10 @@ const App = (props) => {
                   <Route
                     path={process.env.PUBLIC_URL + '/detail-address/:addressId'}
                     component={DetailAddress}
+                  />
+                   <Route
+                    path={process.env.PUBLIC_URL + '/update-delivery'}
+                    component={UpdateDelivery}
                   />
                   <Route exact component={NotFound} />
                 </Switch>

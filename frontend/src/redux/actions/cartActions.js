@@ -77,5 +77,9 @@ export const cartAddToDatabase = (
 export const applyCouponAction = (code, addToast) => ({
   type: cartConstant.COUPON_APPLY_REQUEST,
   code,
-  addToast
+  addToast,
+})
+export const addShippingAddressAction = (address) => ({
+  type: cartConstant.CART_ADDRESS_SHIPPING,
+  address,
 })

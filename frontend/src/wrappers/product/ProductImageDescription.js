@@ -18,6 +18,11 @@ const ProductImageDescription = ({
 
   const { wishlist } = useSelector((state) => state.wishListData)
 
+  const { cartItems: cartData } = useSelector((state) => state.listCart)
+  const { userInfo } = useSelector((state) => state.userLogin)
+  const { cartItems } = useSelector((state) => state.cart)
+  const finalCartItems = userInfo ? cartData : cartItems
+
   const discountedPrice = product.discount
     ? getDiscountPrice(product.price, product.discount)
     : 0
@@ -51,7 +56,12 @@ const ProductImageDescription = ({
               product={product}
               discountedPrice={discountedPrice}
               addToast={addToast}
-              wishlistItem={wishlist.filter((item) => item._id === product._id)}
+              wishlistItem={
+                wishlist.filter((item) => item._id === product._id)[0]
+              }
+              cartItem={
+                finalCartItems.filter((item) => item.product === product._id)[0]
+              }
             />
           </div>
         </div>

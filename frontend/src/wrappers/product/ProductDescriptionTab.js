@@ -48,7 +48,7 @@ const ProductDescriptionTab = ({
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="productReviews">
-                  Reviews({product.reviews.length})
+                  Reviews({product.reviews?.length})
                 </Nav.Link>
               </Nav.Item>
             </Nav>
@@ -170,7 +170,10 @@ const ProductDescriptionTab = ({
                                     ''
                                   )}
                                   {openReply ? (
-                                    <div className="single-review child-review" style={{marginTop: '20px'}}>
+                                    <div
+                                      className="single-review child-review"
+                                      style={{ marginTop: '20px' }}
+                                    >
                                       <div className="review-img">
                                         <img
                                           src={Avartar}

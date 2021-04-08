@@ -66,9 +66,9 @@ export const addressReducer = (
       }
     case addressConstant.UPDATE_ADDRESS:
       return {
-        ...state,
         loading: false,
         success: true,
+        address: action.address,
         addressOne: action.payload,
       }
 

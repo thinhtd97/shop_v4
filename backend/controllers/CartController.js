@@ -1,4 +1,5 @@
 import Cart from '../models/Cart.js'
+import Address from '../models/Address.js'
 import asyncHandler from 'express-async-handler'
 import slugify from 'slugify'
 
@@ -40,7 +41,9 @@ export const addToCart = asyncHandler(async (req, res) => {
 
 export const listCart = asyncHandler(async (req, res) => {
   try {
-    const cart = await Cart.find({ orderedBy: req.user.id })
+    const cart = await Cart.find({ orderedBy: req.user.id }).populate(
+      'shippingAddress',
+    )
     if (cart) {
       res.json(cart)
     } else {
@@ -76,11 +79,11 @@ export const removeCartItem = asyncHandler(async (req, res) => {
   res.json(cart)
 })
 export const removeAllCartItem = asyncHandler(async (req, res) => {
-  const cart = await Cart.deleteMany({ orderedBy: req.user.id });
+  const cart = await Cart.deleteMany({ orderedBy: req.user.id })
   if (cart) {
     res.json({
-      message: "Delete All Cart Success."
+      message: 'Delete All Cart Success.',
     })
   }
-  res.send('ok');
+  res.send('ok')
 })

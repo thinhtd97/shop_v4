@@ -4,6 +4,7 @@ import * as userConstant from '../constants/userConstants'
 import * as cartConstant from '../constants/cartConstant'
 import * as productConstant from '../constants/productConstant'
 import * as addressConstant from '../constants/AddressConstant'
+import * as wishlistConstant from '../constants/wishlistConstant'
 
 function* login(action) {
   const { email, password, addToast } = action
@@ -53,19 +54,29 @@ function* login(action) {
       )
     }
 
-    const { data: dataAddress } = yield call(() =>
-      axios.get(`${process.env.REACT_APP_API}/address`, configListCart),
-    )
-
     const { data: dataCart } = yield call(
       async () =>
         await axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
     )
+
+    const { data: dataWishlist } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/user/wishlist`, configListCart),
+    )
+
+    const { data: dataAddress } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/address`, configListCart),
+    )
+
+    yield put({
+      type: wishlistConstant.LIST_WISHLIST_SUCCESS,
+      payload: dataWishlist,
+    })
     yield put({
       type: addressConstant.ADDRESS_LIST_SUCCESS,
       payload: dataAddress,
     })
     yield put({ type: cartConstant.LIST_CART_SUCCESS, payload: dataCart })
+
     yield put({ type: userConstant.USER_LOGIN_SUCCESS, payload: data })
 
     localStorage.setItem('userInfo', JSON.stringify(data))
@@ -92,6 +103,8 @@ function* login(action) {
 }
 function* register(action) {
   const { user, addToast } = action
+  const { cart } = yield select((state) => ({ ...state }))
+  const { cartItems } = cart
   try {
     const config = {
       headers: {
@@ -102,6 +115,60 @@ function* register(action) {
     const { data } = yield call(() =>
       axios.post(`${process.env.REACT_APP_API}/user/register`, user, config),
     )
+
+    const configListCart = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${data.token}`,
+      },
+    }
+    if (cartItems.length >= 1) {
+      yield all(
+        cartItems.map((item) =>
+          call(() =>
+            axios.post(
+              `${process.env.REACT_APP_API}/cart/${item.slug}`,
+              {
+                name: item.name,
+                image: item.image,
+                size: item.size,
+                price: item.price,
+                qty: item.qty,
+                color: item.color,
+                stock: item.stock,
+                product: item.product,
+                priceDiscount: item.priceDiscount,
+              },
+              configListCart,
+            ),
+          ),
+        ),
+      )
+    }
+
+    const { data: dataCart } = yield call(
+      async () =>
+        await axios.get(`${process.env.REACT_APP_API}/cart`, configListCart),
+    )
+
+    const { data: dataWishlist } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/user/wishlist`, configListCart),
+    )
+
+    const { data: dataAddress } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/address`, configListCart),
+    )
+
+    yield put({
+      type: wishlistConstant.LIST_WISHLIST_SUCCESS,
+      payload: dataWishlist,
+    })
+    yield put({
+      type: addressConstant.ADDRESS_LIST_SUCCESS,
+      payload: dataAddress,
+    })
+    yield put({ type: cartConstant.LIST_CART_SUCCESS, payload: dataCart })
+
     yield put({ type: userConstant.USER_REGISTER_SUCCESS })
 
     yield put({ type: userConstant.USER_LOGIN_SUCCESS, payload: data })

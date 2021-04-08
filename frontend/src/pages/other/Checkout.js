@@ -11,7 +11,8 @@ const Checkout = ({ location }) => {
   const { pathname } = location
   const { userInfo } = useSelector((state) => state.userLogin)
   const { cartItems } = useSelector((state) => state.cart)
-  const { cartItems: cartItemsDatabase } = useSelector(
+
+  const { cartItems: cartItemsDatabase, shippingAddress } = useSelector(
     (state) => state.listCart,
   )
   const finalCartItems = userInfo ? cartItemsDatabase : cartItems
@@ -127,22 +128,38 @@ const Checkout = ({ location }) => {
                     <div className="your-order-wrap gray-bg-4">
                       <div className="your-order-product-info">
                         <div className="your-order-top">
-                          <ul>
+                          <ul style={{ borderBottom: '1px solid lightgray' }}>
                             <li>
                               <h3>Delivery Address</h3>
                             </li>
                             <li>
-                              <button className="btn btn-info">Change</button>
+                              <Link
+                                to="/update-delivery"
+                                className="btn btn-outline-secondary btn-sm"
+                              >
+                                Change
+                              </Link>
                             </li>
                           </ul>
                         </div>
 
-                        <hr />
-                        <div className="your-order-bottom">
-                          <ul>
-                            <li className="your-order-shipping">Shipping</li>
-                            <li></li>
-                          </ul>
+                        <div
+                          className="your-order-bottom"
+                          style={{ marginTop: '14px' }}
+                        >
+                          <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                            {shippingAddress.fullname}
+                          </p>
+                        </div>
+                        <div
+                          className="your-order-bottom"
+                          style={{ marginTop: '14px' }}
+                        >
+                          <p>
+                            Address: {shippingAddress.address}{' '}
+                            {shippingAddress.wards}, {shippingAddress.district},{' '}
+                            {shippingAddress.city}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -155,15 +172,7 @@ const Checkout = ({ location }) => {
                       <div className="your-order-product-info">
                         <div className="your-order-top">
                           <ul>
-                            <li>Provisional</li>
-                            <li>${finalPrice.toFixed(2)}</li>
-                          </ul>
-                        </div>
-
-                        <hr />
-                        <div className="your-order-bottom">
-                          <ul>
-                            <li className="your-order-shipping">Shipping</li>
+                            <li>Shipping</li>
                             <li>
                               {shippingPrice !== 0
                                 ? `$${shippingPrice.toFixed(2)}`
@@ -171,6 +180,14 @@ const Checkout = ({ location }) => {
                             </li>
                           </ul>
                         </div>
+                        <hr />
+                        <div className="your-order-bottom">
+                          <ul>
+                            <li className="your-order-shipping">Provisional</li>
+                            <li>${finalPrice.toFixed(2)}</li>
+                          </ul>
+                        </div>
+
                         {coupons.length > 0 ? (
                           <Fragment>
                             <hr />

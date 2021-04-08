@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import LoginPage from '../../components/auth/LoginPage'
 import { useToasts } from 'react-toast-notifications'
 import { registerActionRequest } from '../../redux/actions/userActions'
+import LoadingOverlay from 'react-loading-overlay'
+import MyLoader from '../../components/MyLoader'
 
 const LoginRegister = ({ location, history }) => {
   const { addToast } = useToasts()
@@ -18,7 +20,6 @@ const LoginRegister = ({ location, history }) => {
     lastName: '',
     email: '',
     password: '',
-    address: '',
     phone: '',
   })
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -58,7 +59,13 @@ const LoginRegister = ({ location, history }) => {
       dispatch(registerActionRequest(values, addToast))
     }
   }
-  const { userInfo } = useSelector((state) => state.userLogin)
+  const { userInfo, loading: loadingLogin } = useSelector(
+    (state) => state.userLogin,
+  )
+  const { loading: loadingRegister } = useSelector(
+    (state) => state.userRegister,
+  )
+  const loading = loadingLogin ? loadingLogin : loadingRegister
   const { pathname } = location
   const redirect = location.search ? location.search.split('=')[1] : '/'
   useEffect(() => {
@@ -67,7 +74,7 @@ const LoginRegister = ({ location, history }) => {
     }
   }, [history, userInfo, redirect])
   return (
-    <Fragment>
+    <MyLoader active={loading} text="Loading...">
       <MetaTags>
         <title>Flone | Login</title>
         <meta
@@ -171,17 +178,7 @@ const LoginRegister = ({ location, history }) => {
                                   })
                                 }
                               />
-                              <input
-                                name="user-address"
-                                placeholder="Address"
-                                type="text"
-                                onChange={(e) =>
-                                  setValues({
-                                    ...values,
-                                    address: e.target.value,
-                                  })
-                                }
-                              />
+
                               <div className="button-box">
                                 <button type="submit">
                                   <span>Register</span>
@@ -199,7 +196,7 @@ const LoginRegister = ({ location, history }) => {
           </div>
         </div>
       </LayoutOne>
-    </Fragment>
+    </MyLoader>
   )
 }
 

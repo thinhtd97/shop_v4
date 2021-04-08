@@ -72,13 +72,15 @@ const cartReducer = (state = { cartItems: [] }, action) => {
         ...state,
         cartItems: [],
       }
-
     default:
       return state
   }
 }
 
-export const listCart = (state = { cartItems: [] }, action) => {
+export const listCart = (
+  state = { cartItems: [], shippingAddress: {} },
+  action,
+) => {
   let product = action.item
   switch (action.type) {
     case cartConstant.LIST_CART_REQUEST:
@@ -161,6 +163,11 @@ export const listCart = (state = { cartItems: [] }, action) => {
       return {
         ...state,
         cartItems: [],
+      }
+    case cartConstant.CART_ADDRESS_SHIPPING:
+      return {
+        ...state,
+        shippingAddress: action.address,
       }
     default:
       return state

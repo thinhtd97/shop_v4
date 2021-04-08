@@ -64,9 +64,9 @@ export const update = asyncHandler(async (req, res) => {
     const listAddress = await Address.find({ user: req.user.id })
 
     if (req.body.active === true) {
-      listAddress.forEach((addres) => {
+      listAddress.forEach(async (addres) => {
         addres.active = false
-        addres.save()
+        await addres.save()
       })
     }
 

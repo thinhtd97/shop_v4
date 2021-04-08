@@ -15,6 +15,7 @@ export const listWishlistReducer = (state = { wishlist: [] }, action) => {
         ...state,
         wishlist: removeItem,
       }
+
     case wishlistConstant.REMOVE_WISHLIST_ALL:
       return {
         ...state,

@@ -9,6 +9,7 @@ import ProductDescriptionTab from '../../wrappers/product/ProductDescriptionTab'
 import ProductImageDescription from '../../wrappers/product/ProductImageDescription'
 import { useDispatch, useSelector } from 'react-redux'
 import { detailProductAction } from '../../redux/actions/productActions'
+import NotFoundComponent from '../../components/NotFoundComponent'
 
 const ProductTabLeft = ({ location, match }) => {
   const { userInfo } = useSelector((state) => state.userLogin)
@@ -53,27 +54,31 @@ const ProductTabLeft = ({ location, match }) => {
           </div>
         ) : (
           <>
-            {product && (
+            {product ? (
+              <Fragment>
               <ProductImageDescription
                 spaceTopClass="pt-100"
                 spaceBottomClass="pb-100"
                 product={product}
                 galleryType="leftThumb"
               />
-            )}
 
-            {/* product description tab */}
-            <ProductDescriptionTab
-              spaceBottomClass="pb-90"
-              productFullDesc={product?.description}
-              product={product}
-              userInfo={userInfo}
-            />
-            {/* related product slider */}
-            <RelatedProductSlider
-              spaceBottomClass="pb-95"
-              category={product && product.category?.name}
-            />
+              {/* product description tab */}
+              <ProductDescriptionTab
+                spaceBottomClass="pb-90"
+                productFullDesc={product?.description}
+                product={product}
+                userInfo={userInfo}
+              />
+              {/* related product slider */}
+              <RelatedProductSlider
+                spaceBottomClass="pb-95"
+                category={product && product.category?.name}
+              />
+            </Fragment>
+            ) : (
+             <NotFoundComponent />
+            )}
           </>
         )}
 

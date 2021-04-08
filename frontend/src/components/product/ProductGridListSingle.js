@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Rating from './sub-components/ProductRating'
 import ProductModal from './ProductModal'
 import { getDiscountPrice } from '../../helpers/product.js'
@@ -19,6 +19,7 @@ const ProductGridListSingle = ({
   wishlistItem,
 }) => {
   const { addToast } = useToasts()
+  const history = useHistory()
   const dispatch = useDispatch()
   const [modalShow, setModalShow] = useState(false)
   const [quantityCount] = useState(1)
@@ -90,10 +91,7 @@ const ProductGridListSingle = ({
   }
   const handleAddToWishlist = (addToast, slug) => {
     if (!userInfo) {
-      return addToast('Please login to add', {
-        appearance: 'error',
-        autoDismiss: true,
-      })
+      history.push('/login-register')
     } else {
       dispatch(addWishlistAction(addToast, slug))
     }
@@ -132,7 +130,7 @@ const ProductGridListSingle = ({
             <div className="product-action">
               <div className="pro-same-action pro-wishlist">
                 {wishlistItem ? (
-                  <button disabled style={{cursor: 'not-allowed'}}>
+                  <button disabled style={{ cursor: 'not-allowed' }}>
                     <i className="pe-7s-like" />
                   </button>
                 ) : (
@@ -274,9 +272,7 @@ const ProductGridListSingle = ({
                   {product.newLaunced || product.discount !== 0 ? (
                     <div className="product-img-badges">
                       {product.discount && (
-                        <span className="pink">
-                          -{product.discount}%
-                        </span>
+                        <span className="pink">-{product.discount}%</span>
                       )}
 
                       {product.newLaunced && (

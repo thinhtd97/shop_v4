@@ -89,13 +89,10 @@ function* updateAddress(action) {
     const { data } = yield call(() =>
       axios.get(`${process.env.REACT_APP_API}/address`, config),
     )
-    yield put({
-      type: addressConstant.ADDRESS_LIST_SUCCESS,
-      payload: data,
-    })
 
     yield put({
       type: addressConstant.UPDATE_ADDRESS,
+      address: data,
       payload: dataDetail,
     })
   } catch (error) {

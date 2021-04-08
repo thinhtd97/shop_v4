@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
-import React, { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Fragment, useEffect } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import MetaTags from 'react-meta-tags'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
@@ -21,6 +21,7 @@ const Wishlist = ({
   // removeFromWishlist,
   // removeAllFromWishlist
 }) => {
+  const history = useHistory()
   const { addToast } = useToasts()
   const dispatch = useDispatch()
   const { pathname } = location
@@ -37,6 +38,11 @@ const Wishlist = ({
   const removeWishListAll = (addToast) => {
     dispatch(removeAllWishlistAction(addToast))
   }
+  useEffect(() => {
+    if (!userInfo) {
+      history.push('/login-register')
+    }
+  }, [userInfo, history])
   return (
     <Fragment>
       <MetaTags>

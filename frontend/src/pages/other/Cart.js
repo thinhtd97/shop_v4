@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import MetaTags from 'react-meta-tags'
@@ -13,7 +13,9 @@ import {
   incrementQuantity,
   removeAllItem,
   removeItem,
+  addShippingAddressAction,
 } from '../../redux/actions/cartActions'
+
 const Cart = ({ location }) => {
   const { addToast } = useToasts()
   const { pathname } = location
@@ -60,6 +62,13 @@ const Cart = ({ location }) => {
     e.preventDefault()
     dispatch(applyCouponAction(code, addToast))
   }
+
+  const shippingAddress = address
+    ? address.filter((addres) => addres.active === true)[0]
+    : null
+  useEffect(() => {
+    dispatch(addShippingAddressAction(shippingAddress))
+  }, [dispatch, shippingAddress])
   return (
     <Fragment>
       <MetaTags>
@@ -246,41 +255,51 @@ const Cart = ({ location }) => {
                 </div>
               </div>
 
-              <div className="row">
-                <div className="col-lg-4 col-md-8">
-                  <div className="discount-code-wrapper">
-                    <div className="title-wrap">
-                      <h4 className="cart-bottom-title section-bg-gray">
-                        Delivery Address
-                      </h4>
-                    </div>
-                    <div className="discount-code">
-                      <div className="form-group">
-                        <button className="btn btn-dark">Change</button>
-                        <div style={{ marginTop: '16px' }}>
-                          {address.length > 0 &&
-                            address.map((item, key) => {
-                              if (item.active === true) {
-                                return (
-                                  <ul key={key}>
-                                    <li style={{ marginBottom: '10px' }}>
-                                      {item.fullname} | {item.phone}
-                                    </li>
-                                    <li>
-                                      Address: {item.wards}, Q.{item.district},{' '}
-                                      {item.city}
-                                    </li>
-                                  </ul>
-                                )
-                              }
-                              return ''
-                            })}
+              <div
+                className="row"
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
+              >
+                {userInfo && (
+                  <div className="col-lg-4 col-md-8">
+                    <div className="discount-code-wrapper">
+                      <div className="title-wrap">
+                        <h4 className="cart-bottom-title section-bg-gray">
+                          Delivery Address
+                        </h4>
+                      </div>
+                      <div className="discount-code">
+                        <div className="form-group">
+                          <Link to="/update-delivery" className="btn btn-dark">
+                            Change
+                          </Link>
+                          <div style={{ marginTop: '16px' }}>
+                            {shippingAddress ? (
+                              <ul>
+                                <li style={{ marginBottom: '10px' }}>
+                                  {shippingAddress.fullname} |{' '}
+                                  {shippingAddress.phone}
+                                </li>
+                                <li>
+                                  Address: {shippingAddress.wards},{' '}
+                                  {shippingAddress.district},{' '}
+                                  {shippingAddress.city}
+                                </li>
+                              </ul>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-lg-4 col-md-8">
+                )}
+
+                <div
+                  className={`${
+                    userInfo ? 'col-lg-4 col-md-8' : 'col-lg-8 col-md-12'
+                  }`}
+                >
                   <div className="discount-code-wrapper">
                     <div className="title-wrap">
                       <h4 className="cart-bottom-title section-bg-gray">
@@ -335,7 +354,9 @@ const Cart = ({ location }) => {
                       <span>${finalPrice.toFixed(2)}</span>
                     </h4>
                     {userInfo ? (
-                      <Link to={process.env.PUBLIC_URL + '/checkout'}>
+                      <Link
+                        to={shippingAddress ? '/checkout' : '/update-delivery'}
+                      >
                         Proceed to Checkout
                       </Link>
                     ) : (

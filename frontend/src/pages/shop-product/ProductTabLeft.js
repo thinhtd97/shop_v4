@@ -23,10 +23,10 @@ const ProductTabLeft = ({ location, match }) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Flone | Product Page</title>
+        <title>Shop | Product Page</title>
         <meta
           name="description"
-          content="Product page of flone react minimalist eCommerce template."
+          content="Product page of shp[] react minimalist eCommerce template."
         />
       </MetaTags>
 

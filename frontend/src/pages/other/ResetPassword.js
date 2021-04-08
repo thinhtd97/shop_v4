@@ -28,10 +28,10 @@ const ResetPassword = ({ location, history }) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Flone | Login</title>
+        <title>Shop | Reset Password</title>
         <meta
           name="description"
-          content="Compare page of flone react minimalist eCommerce template."
+          content="Compare page of shop react minimalist eCommerce template."
         />
       </MetaTags>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>

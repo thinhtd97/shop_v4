@@ -66,10 +66,10 @@ const DetailAddress = ({ location, match, history }) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Flone | Address</title>
+        <title>Shop | Address</title>
         <meta
           name="description"
-          content="Checkout page of flone react minimalist eCommerce template."
+          content="Checkout page of shop react minimalist eCommerce template."
         />
       </MetaTags>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>Home</BreadcrumbsItem>
@@ -217,40 +217,21 @@ const DetailAddress = ({ location, match, history }) => {
                             style={{ display: 'flex', alignItems: 'center' }}
                           >
                             <label>Default:</label>
-                            {addressData.length < 2 ? (
-                              <input
-                                checked={values.active}
-                                type="checkbox"
-                                style={{
-                                  width: '14px',
-                                  marginLeft: '20px',
-                                  marginBottom: '8px',
-                                }}
-                                onChange={(e) =>
-                                  setValues({
-                                    ...values,
-                                    active: e.target.checked,
-                                  })
-                                }
-                              />
-                            ) : (
-                              <input
-                                checked={values.active}
-                                type="checkbox"
-                                style={{
-                                  width: '14px',
-                                  marginLeft: '20px',
-                                  marginBottom: '8px',
-                                }}
-                                value={values.active}
-                                onChange={(e) =>
-                                  setValues({
-                                    ...values,
-                                    active: e.target.checked,
-                                  })
-                                }
-                              />
-                            )}
+                            <input
+                              checked={values.active}
+                              type="checkbox"
+                              style={{
+                                width: '14px',
+                                marginLeft: '20px',
+                                marginBottom: '8px',
+                              }}
+                              onChange={(e) =>
+                                setValues({
+                                  ...values,
+                                  active: e.target.checked,
+                                })
+                              }
+                            />
                           </div>
                         </div>
                       </div>

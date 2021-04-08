@@ -211,6 +211,7 @@ export const couponReducer = (state = { coupons: [] }, action) => {
     case cartConstant.COUPON_APPLY_RESET:
       return {
         coupons: [],
+        shippingAddress: {},
       }
     default:
       return state

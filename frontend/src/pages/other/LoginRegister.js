@@ -76,10 +76,10 @@ const LoginRegister = ({ location, history }) => {
   return (
     <MyLoader active={loading} text="Loading...">
       <MetaTags>
-        <title>Flone | Login</title>
+        <title>Shop | Login</title>
         <meta
           name="description"
-          content="Compare page of flone react minimalist eCommerce template."
+          content="Compare page of shop react minimalist eCommerce template."
         />
       </MetaTags>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>Home</BreadcrumbsItem>

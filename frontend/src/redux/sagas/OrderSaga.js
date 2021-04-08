@@ -31,11 +31,11 @@ function* createOrder(action) {
       axios.get(`${process.env.REACT_APP_API}/cart`, config),
     )
     yield put({
-      type: cartConstant.LIST_CART_SUCCESS,
-      payload: data,
+      type: orderConstant.ORDER_CREATE_SUCCESS,
     })
     yield put({
-      type: orderConstant.ORDER_CREATE_SUCCESS,
+      type: cartConstant.LIST_CART_SUCCESS,
+      payload: data,
     })
   } catch (error) {
     yield put({

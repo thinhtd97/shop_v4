@@ -1,7 +1,6 @@
 import path from 'path'
 import multer from 'multer'
 import express from 'express'
-import Avartar from '../models/Avartar.js'
 const router = express.Router()
 
 const DIR = './public/';

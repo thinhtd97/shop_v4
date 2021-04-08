@@ -77,10 +77,7 @@ const cartReducer = (state = { cartItems: [] }, action) => {
   }
 }
 
-export const listCart = (
-  state = { cartItems: [], shippingAddress: {} },
-  action,
-) => {
+export const listCart = (state = { cartItems: [] }, action) => {
   let product = action.item
   switch (action.type) {
     case cartConstant.LIST_CART_REQUEST:

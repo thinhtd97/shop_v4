@@ -11,9 +11,6 @@ export const create = asyncHandler(async (req, res) => {
     orderId,
   } = req.body
   try {
-    const cart = await Cart.findOne({
-      user: req.user.id,
-    })
     const orderItems = cartItems.map((item) => {
       return {
         name: item.name,
@@ -50,8 +47,9 @@ export const create = asyncHandler(async (req, res) => {
 
     const created = await newOrder.save()
     if (created) {
-      await cart.remove()
+      await Cart.deleteMany({ orderedBy: req.user.id })
     }
+
     res.status(200).json(created)
   } catch (error) {
     console.log(error)

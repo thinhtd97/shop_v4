@@ -190,25 +190,36 @@ const Checkout = ({ location, history }) => {
                               </li>
                             </ul>
                           </div>
-
-                          <div
-                            className="your-order-bottom"
-                            style={{ marginTop: '14px' }}
-                          >
-                            <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                              {shippingAddress.fullname}
-                            </p>
-                          </div>
-                          <div
-                            className="your-order-bottom"
-                            style={{ marginTop: '14px' }}
-                          >
-                            <p>
-                              Address: {shippingAddress.address}{' '}
-                              {shippingAddress.wards},{' '}
-                              {shippingAddress.district}, {shippingAddress.city}
-                            </p>
-                          </div>
+                          {shippingAddress ? (
+                            <Fragment>
+                              <div
+                                className="your-order-bottom"
+                                style={{ marginTop: '14px' }}
+                              >
+                                <p
+                                  style={{
+                                    fontWeight: 'bold',
+                                    fontSize: '16px',
+                                  }}
+                                >
+                                  {shippingAddress.fullname}
+                                </p>
+                              </div>
+                              <div
+                                className="your-order-bottom"
+                                style={{ marginTop: '14px' }}
+                              >
+                                <p>
+                                  Address: {shippingAddress.address}{' '}
+                                  {shippingAddress.wards},{' '}
+                                  {shippingAddress.district},{' '}
+                                  {shippingAddress.city}
+                                </p>
+                              </div>
+                            </Fragment>
+                          ) : (
+                            ''
+                          )}
                         </div>
                       </div>
                     </div>
@@ -273,21 +284,27 @@ const Checkout = ({ location, history }) => {
                         <div className="payment-method"></div>
                       </div>
                       <div className="place-order mt-25">
-                        <button
-                          onClick={() =>
-                            createOrder(
-                              finalCartItems,
-                              shippingAddress,
-                              paymentMethod,
-                              shippingPrice,
-                              orderId,
-                              addToast,
-                            )
-                          }
-                          className="btn-hover"
-                        >
-                          Place Order
-                        </button>
+                        {shippingAddress ? (
+                          <button
+                            onClick={() =>
+                              createOrder(
+                                finalCartItems,
+                                shippingAddress,
+                                paymentMethod,
+                                shippingPrice,
+                                orderId,
+                                addToast,
+                              )
+                            }
+                            className="btn-hover"
+                          >
+                            Place Order
+                          </button>
+                        ) : (
+                          <Link to="/update-delivery" className="btn-hover">
+                            Place Order
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </div>

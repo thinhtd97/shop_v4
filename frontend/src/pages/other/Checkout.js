@@ -19,7 +19,7 @@ const Checkout = ({ location, history }) => {
   const dispatch = useDispatch()
 
   const [orderId, setOrderId] = useState(uniqid())
-  const [paymentMethod, setPaymentMethod] = useState('paypal')
+  const [paymentMethod, setPaymentMethod] = useState('stripe')
   const { addToast } = useToasts()
 
   const { cartItems: cartItemsDatabase, shippingAddress } = useSelector(
@@ -116,7 +116,7 @@ const Checkout = ({ location, history }) => {
                                   }
                                   className="form-control"
                                 >
-                                  <option value="paypal">Paypal</option>
+                                  {/* <option value="paypal">Paypal</option> */}
                                   <option value="stripe">Stripe</option>
                                 </select>
                               </div>

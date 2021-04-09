@@ -133,7 +133,7 @@ export const getProductCurrent = asyncHandle(async (req, res) => {
 })
 export const getNewProducts = asyncHandle(async (req, res) => {
   try {
-    const newProduct = await Product.find({ newLaunced: true })
+    const newProduct = await Product.find({ createdAt: -1 })
     if (!newProduct) {
       res.status(400)
       throw new Error('Product not found.')

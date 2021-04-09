@@ -7,7 +7,7 @@ import thunk from 'redux-thunk'
 import sagaMiddleware from 'redux-saga'
 import { save, load } from 'redux-localstorage-simple'
 import { Provider } from 'react-redux'
-import { listProductAction } from './redux/actions/productActions'
+import { listNewProductAction, listProductAction } from './redux/actions/productActions'
 import rootReducer from './redux/reducers/rootReducer'
 import App from './App'
 import './assets/scss/style.scss'
@@ -31,6 +31,7 @@ const store = createStore(
 createSagaMiddleware.run(rootSaga)
 
 store.dispatch(listProductAction())
+store.dispatch(listNewProductAction())
 store.dispatch(listCategories())
 store.dispatch(listSub())
 

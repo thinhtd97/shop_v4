@@ -63,6 +63,11 @@ const IconGroup = ({ iconWhiteClass }) => {
                   </Link>
                 </li>
                 <li>
+                  <Link to={process.env.PUBLIC_URL + '/orders'}>
+                    Orders
+                  </Link>
+                </li>
+                <li>
                   <Link onClick={logout} to="#">
                     Logout
                   </Link>

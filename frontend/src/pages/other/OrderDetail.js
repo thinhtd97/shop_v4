@@ -2,11 +2,9 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import MetaTags from 'react-meta-tags'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
-import { PayPalButton } from 'react-paypal-button-v2'
 import LayoutOne from '../../layouts/LayoutOne'
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb'
 import { loadStripe } from '@stripe/stripe-js'
-import axios from 'axios'
 import { Elements } from '@stripe/react-stripe-js'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,8 +25,7 @@ const OrderDetail = ({ location, history, match }) => {
   const { order } = useSelector((state) => state.orderDetail)
   const { addToast } = useToasts()
   const dispatch = useDispatch()
-  const { coupons } = useSelector((state)=> state.coupons)
-  const [sdkReady, setSdkReady] = useState(false)
+  const { coupons } = useSelector((state) => state.coupons)
   const [values, setValues] = useState({
     shippingPrice: '',
     itemPrice: '',
@@ -39,23 +36,23 @@ const OrderDetail = ({ location, history, match }) => {
     shippingAddress: {},
     paymentMethod: '',
   })
-  const orderHandler = (paymentResult) => {
-    dispatch(orderPaypalAction(paymentResult, addToast, orderId, coupons))
-  }
+  // const orderHandler = (paymentResult) => {
+  //   dispatch(orderPaypalAction(paymentResult, addToast, orderId, coupons))
+  // }
   useEffect(() => {
-    const addScriptPaypal = async () => {
-      const { data: clientId } = await axios.get(
-        `${process.env.REACT_APP_API}/config/paypal`,
-      )
-      const script = document.createElement('script')
-      script.type = 'text/javascript'
-      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
-      script.async = true
-      script.onload = () => {
-        setSdkReady(true)
-      }
-      document.body.appendChild(script)
-    }
+    // const addScriptPaypal = async () => {
+    //   const { data: clientId } = await axios.get(
+    //     `${process.env.REACT_APP_API}/config/paypal`,
+    //   )
+    //   const script = document.createElement('script')
+    //   script.type = 'text/javascript'
+    //   script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+    //   script.async = true
+    //   script.onload = () => {
+    //     setSdkReady(true)
+    //   }
+    //   document.body.appendChild(script)
+    // }
     if (!userInfo.role === 'subscriber') {
       history.push('/login-register')
     } else {
@@ -73,7 +70,7 @@ const OrderDetail = ({ location, history, match }) => {
           paymentMethod: order.paymentMethod,
         })
       }
-      addScriptPaypal()
+      // addScriptPaypal()
     }
   }, [userInfo, history, order, orderId, dispatch])
 
@@ -260,18 +257,17 @@ const OrderDetail = ({ location, history, match }) => {
                           <Fragment>
                             {userInfo._id === order.user.toString() && (
                               <Fragment>
-                                {!sdkReady ? (
+                                {/* {!sdkReady ? (
                                   <p>Loading...</p>
                                 ) : userInfo._id.toString() ===
                                   order.user.toString() ? (
                                   <PayPalButton
                                     amount={order.totalPrice}
-                                    
                                     onSuccess={orderHandler}
                                   />
                                 ) : (
                                   <></>
-                                )}
+                                )} */}
                               </Fragment>
                             )}
                           </Fragment>

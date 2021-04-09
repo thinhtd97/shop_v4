@@ -135,9 +135,37 @@ function* orderPaypal(action) {
   }
 }
 
+function* orderList() {
+  try {
+    const { userInfo } = yield select((state) => state.userLogin)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    const { data } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/order`, config),
+    )
+    yield put({
+      type: orderConstant.ORDER_LIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    yield put({
+      type: orderConstant.ORDER_LIST_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
 function* OrderSaga() {
   yield takeEvery(orderConstant.ORDER_CREATE_REQUEST, createOrder)
   yield takeEvery(orderConstant.ORDER_DETAIL_REQUEST, detailOrder)
   yield takeEvery(orderConstant.ORDER_PAYPAL_REQUEST, orderPaypal)
+  yield takeEvery(orderConstant.ORDER_LIST_REQUEST, orderList)
 }
 export default OrderSaga

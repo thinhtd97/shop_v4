@@ -31,6 +31,7 @@ const Checkout = lazy(() => import('./pages/other/Checkout'))
 const DetailAddress = lazy(() => import('./pages/other/DetailAddress'))
 const UpdateDelivery = lazy(() => import('./pages/other/UpdateDelivery'))
 const OrderDetail = lazy(() => import('./pages/other/OrderDetail'))
+const Orders = lazy(() => import('./pages/other/Orders'))
 
 const NotFound = lazy(() => import('./pages/other/NotFound'))
 
@@ -138,6 +139,10 @@ const App = (props) => {
                   <Route
                     path={process.env.PUBLIC_URL + '/order/:orderId'}
                     component={OrderDetail}
+                  />
+                  <Route
+                    path={process.env.PUBLIC_URL + '/orders'}
+                    component={Orders}
                   />
                   <Route exact component={NotFound} />
                 </Switch>

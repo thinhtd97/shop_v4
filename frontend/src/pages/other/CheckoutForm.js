@@ -51,7 +51,7 @@ const CheckoutForm = ({ totalPrice, shippingAddress, orderId }) => {
             type: cartConstant.COUPON_APPLY_RESET,
           })
         }
-        const { data } = Axios.get(
+        const { data } = await Axios.get(
           `${process.env.REACT_APP_API}/order/${orderId}`,
           config,
         )

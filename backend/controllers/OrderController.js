@@ -103,6 +103,7 @@ export const payments = asyncHandler(async (req, res) => {
         await Coupon.updateOne({ _id: item._id }, { $set: { used: true } })
       })
       order.isPaid = true
+      order.status = 'Succeed'
       await order.save()
     }
     console.log(payment)
@@ -130,6 +131,7 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
       coupons?.forEach(async (item) => {
         await Coupon.updateOne({ _id: item._id }, { $set: { used: true } })
       })
+      order.status = 'Succeed'
       const updatedOrder = await order.save()
       res.json(updatedOrder)
     } else {
@@ -141,4 +143,8 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error('Order Failed!!')
   }
+})
+export const list = asyncHandler(async (req, res) => {
+  const order = await Order.find({ user: req.user.id }).limit(10)
+  res.json(order)
 })

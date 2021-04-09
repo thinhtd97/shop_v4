@@ -7,7 +7,7 @@ import NewsletterTwo from '../../wrappers/newsletter/NewsletterTwo'
 import ProductGridFiveContainer from '../../wrappers/product/ProductGridFiveContainer'
 
 const HomeFashionFour = () => {
-  const { products, loading } = useSelector((state) => state.listProduct)
+  const { products, loading } = useSelector((state) => state.listNewProduct)
   return (
     <Fragment>
       <MetaTags>
@@ -21,7 +21,7 @@ const HomeFashionFour = () => {
         {/* hero slider */}
         <HeroSliderTwelve />
         {/* product grid */}
-        
+
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           {loading ? (
             <div

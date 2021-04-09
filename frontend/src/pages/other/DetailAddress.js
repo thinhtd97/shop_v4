@@ -16,9 +16,7 @@ const DetailAddress = ({ location, match, history }) => {
   const dispatch = useDispatch()
   const { addToast } = useToasts()
   const addressId = match.params.addressId
-  const { addressOne, address: addressData } = useSelector(
-    (state) => state.listAddress,
-  )
+  const { addressOne } = useSelector((state) => state.listAddress)
   const { userInfo } = useSelector((state) => state.userLogin)
 
   const [values, setValues] = useState({

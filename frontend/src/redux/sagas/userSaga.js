@@ -5,6 +5,7 @@ import * as cartConstant from '../constants/cartConstant'
 import * as productConstant from '../constants/productConstant'
 import * as addressConstant from '../constants/AddressConstant'
 import * as wishlistConstant from '../constants/wishlistConstant'
+import * as orderConstant from '../constants/OrderConstant'
 
 function* login(action) {
   const { email, password, addToast } = action
@@ -206,6 +207,7 @@ function* logout() {
   yield put({ type: cartConstant.LIST_CART_RESET })
   yield put({ type: cartConstant.COUPON_APPLY_RESET })
   yield put({ type: addressConstant.ADDRESS_LIST_RESET })
+  yield put({ type: orderConstant.ORDER_DETAIL_RESET })
 }
 function* sendMail(action) {
   const { email, addToast } = action

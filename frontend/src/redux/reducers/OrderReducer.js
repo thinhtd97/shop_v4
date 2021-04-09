@@ -36,6 +36,8 @@ export const orderDetailReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       }
+    case orderConstant.ORDER_DETAIL_RESET:
+      return {}
     default:
       return state
   }

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MetaTags from 'react-meta-tags'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
 import Tab from 'react-bootstrap/Tab'
@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import LoginPage from '../../components/auth/LoginPage'
 import { useToasts } from 'react-toast-notifications'
 import { registerActionRequest } from '../../redux/actions/userActions'
-import LoadingOverlay from 'react-loading-overlay'
 import MyLoader from '../../components/MyLoader'
 
 const LoginRegister = ({ location, history }) => {

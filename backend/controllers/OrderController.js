@@ -2,6 +2,8 @@ import asyncHandler from 'express-async-handler'
 import Order from '../models/Order.js'
 import slugify from 'slugify'
 import Cart from '../models/Cart.js'
+import Stripe from 'stripe'
+const stripe = new Stripe(`${process.env.SERECT_KEY_STRIPE}`)
 
 export const create = asyncHandler(async (req, res) => {
   const {
@@ -42,8 +44,8 @@ export const create = asyncHandler(async (req, res) => {
         phone: shippingAddress.phone,
       },
       paymentMethod: paymentMethod,
-      shippingPrice: shippingPrice.toFixed(2),
-      itemsPrice: itemsPrice.toFixed(2),
+      shippingPrice,
+      itemsPrice,
       totalPrice,
       orderId,
       user: req.user.id,
@@ -68,6 +70,52 @@ export const read = asyncHandler(async (req, res) => {
       throw new Error('Order Not Found')
     }
     res.status(200).json(order)
+  } catch (error) {
+    console.log(error)
+    res.status(400)
+    throw new Error(error)
+  }
+})
+export const payments = asyncHandler(async (req, res) => {
+  const { id, amount, orderId, shippingAddress } = req.body
+  try {
+    const order = await Order.findOne({ orderId })
+    const payment = await stripe.paymentIntents.create({
+      amount,
+      currency: 'USD',
+      description: `#${orderId}`,
+      payment_method: id,
+      confirm: true,
+      shipping: {
+        address: {
+          city: shippingAddress.city,
+          line1: `${shippingAddress.address} ${shippingAddress.wards}`,
+          state: shippingAddress.district,
+        },
+        name: shippingAddress.fullname,
+        phone: shippingAddress.phone,
+      },
+    })
+    // const payment = await stripe.customers
+    //   .create({
+    //     name: shippingAddress.fullname,
+    //     phone: shippingAddress.phone,
+    //     source: stripeToken,
+    //   })
+    //   .then((customer) =>
+    //     stripe.charges.create({
+    //       amount,
+    //       currency: 'USD',
+    //       customer: customer.id,
+    //     }),
+    //   )
+    //   .catch((err) => console.log(err))
+    if (payment) {
+      order.isPaid = true
+      await order.save()
+    }
+    console.log(payment)
+    res.json(payment)
   } catch (error) {
     console.log(error)
     res.status(400)

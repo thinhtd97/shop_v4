@@ -4,9 +4,6 @@ import ProductGridSingle from '../../components/product/ProductGridSingle'
 
 const ProductGrid = ({ category, sliderClassName, spaceBottomClass }) => {
   const { products } = useSelector((state) => state.listProduct)
-  const sortedProduct = products?.filter(
-    (product) => product.category?.name === category,
-  )
   return (
     <Fragment>
       {products?.map((product, key) => (

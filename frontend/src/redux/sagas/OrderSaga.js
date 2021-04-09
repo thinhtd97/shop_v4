@@ -11,6 +11,7 @@ function* createOrder(action) {
     shippingPrice,
     orderId,
     addToast,
+    history,
   } = action
   try {
     const { userInfo } = yield select((state) => state.userLogin)
@@ -20,7 +21,7 @@ function* createOrder(action) {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    yield call(() =>
+    const { data: dataOrder } = yield call(() =>
       axios.post(
         `${process.env.REACT_APP_API}/order`,
         { cartItems, shippingAddress, orderId, paymentMethod, shippingPrice },
@@ -31,12 +32,14 @@ function* createOrder(action) {
       axios.get(`${process.env.REACT_APP_API}/cart`, config),
     )
     yield put({
-      type: orderConstant.ORDER_CREATE_SUCCESS,
-    })
-    yield put({
       type: cartConstant.LIST_CART_SUCCESS,
       payload: data,
     })
+    yield put({
+      type: orderConstant.ORDER_CREATE_SUCCESS,
+    })
+
+    history.push(`/order/${dataOrder.orderId}`)
   } catch (error) {
     yield put({
       type: orderConstant.ORDER_CREATE_FAILED,
@@ -45,6 +48,7 @@ function* createOrder(action) {
           ? error.response.data.message
           : error.message,
     })
+
     addToast(`${error}`, { appearance: 'error', autoDismiss: true })
   }
 }

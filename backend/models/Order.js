@@ -72,6 +72,11 @@ const orderSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    expireAt: {
+      type: Date,
+      default: Date.now,
+      index: { expires: '365d' },
+    },
   },
   { timestamps: true },
 )

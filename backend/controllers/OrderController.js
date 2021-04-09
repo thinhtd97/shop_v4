@@ -49,7 +49,6 @@ export const create = asyncHandler(async (req, res) => {
     if (created) {
       await Cart.deleteMany({ orderedBy: req.user.id })
     }
-
     res.status(200).json(created)
   } catch (error) {
     console.log(error)

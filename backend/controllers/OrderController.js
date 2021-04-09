@@ -2,7 +2,9 @@ import asyncHandler from 'express-async-handler'
 import Order from '../models/Order.js'
 import slugify from 'slugify'
 import Cart from '../models/Cart.js'
+import Coupon from '../models/Coupon.js'
 import Stripe from 'stripe'
+
 const stripe = new Stripe(`${process.env.SERECT_KEY_STRIPE}`)
 
 export const create = asyncHandler(async (req, res) => {
@@ -12,6 +14,7 @@ export const create = asyncHandler(async (req, res) => {
     paymentMethod,
     shippingPrice,
     orderId,
+    finalPrice,
   } = req.body
   try {
     const orderItems = cartItems.map((item) => {
@@ -32,7 +35,6 @@ export const create = asyncHandler(async (req, res) => {
       0,
     )
 
-    const totalPrice = (itemsPrice + Number(shippingPrice)).toFixed(2)
     const newOrder = new Order({
       orderItems,
       shippingAddress: {
@@ -46,7 +48,7 @@ export const create = asyncHandler(async (req, res) => {
       paymentMethod: paymentMethod,
       shippingPrice,
       itemsPrice,
-      totalPrice,
+      totalPrice: finalPrice.toFixed(2),
       orderId,
       user: req.user.id,
     })
@@ -77,7 +79,7 @@ export const read = asyncHandler(async (req, res) => {
   }
 })
 export const payments = asyncHandler(async (req, res) => {
-  const { id, amount, orderId, shippingAddress } = req.body
+  const { id, amount, orderId, shippingAddress, coupons } = req.body
   try {
     const order = await Order.findOne({ orderId })
     const payment = await stripe.paymentIntents.create({
@@ -96,21 +98,10 @@ export const payments = asyncHandler(async (req, res) => {
         phone: shippingAddress.phone,
       },
     })
-    // const payment = await stripe.customers
-    //   .create({
-    //     name: shippingAddress.fullname,
-    //     phone: shippingAddress.phone,
-    //     source: stripeToken,
-    //   })
-    //   .then((customer) =>
-    //     stripe.charges.create({
-    //       amount,
-    //       currency: 'USD',
-    //       customer: customer.id,
-    //     }),
-    //   )
-    //   .catch((err) => console.log(err))
     if (payment) {
+      coupons.forEach(async (item) => {
+        await Coupon.updateOne({ _id: item._id }, { $set: { used: true } })
+      })
       order.isPaid = true
       await order.save()
     }

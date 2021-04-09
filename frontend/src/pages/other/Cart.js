@@ -338,7 +338,7 @@ const Cart = ({ location }) => {
                       Total products <span>{totalProducts}</span>
                     </h5>
                     <ul style={{ display: 'flex', marginBottom: '20px' }}>
-                      {coupons.map((coupon, key) => (
+                      {coupons && coupons.map((coupon, key) => (
                         <li key={key}>
                           <span
                             style={{ margin: '8px', fontSize: '15px' }}

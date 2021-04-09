@@ -11,6 +11,7 @@ function* createOrder(action) {
     shippingPrice,
     orderId,
     addToast,
+    finalPrice,
     history,
   } = action
   try {
@@ -24,7 +25,14 @@ function* createOrder(action) {
     const { data: dataOrder } = yield call(() =>
       axios.post(
         `${process.env.REACT_APP_API}/order`,
-        { cartItems, shippingAddress, orderId, paymentMethod, shippingPrice },
+        {
+          cartItems,
+          shippingAddress,
+          orderId,
+          paymentMethod,
+          shippingPrice,
+          finalPrice,
+        },
         config,
       ),
     )

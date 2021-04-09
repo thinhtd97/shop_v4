@@ -52,7 +52,8 @@ const Checkout = ({ location, history }) => {
     shippingPrice,
     orderId,
     addToast,
-    history 
+    finalPrice,
+    history,
   ) => {
     setOrderId(uniqid())
     dispatch(
@@ -63,7 +64,8 @@ const Checkout = ({ location, history }) => {
         shippingPrice,
         orderId,
         addToast,
-        history
+        finalPrice,
+        history,
       ),
     )
   }
@@ -296,7 +298,8 @@ const Checkout = ({ location, history }) => {
                                 shippingPrice,
                                 orderId,
                                 addToast,
-                                history
+                                finalPrice,
+                                history,
                               )
                             }
                             className="btn-hover"

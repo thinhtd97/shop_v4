@@ -4,6 +4,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { useToasts } from 'react-toast-notifications'
 import { useDispatch, useSelector } from 'react-redux'
 import * as orderConstant from '../../redux/constants/OrderConstant'
+import * as cartConstant from '../../redux/constants/cartConstant'
 
 const CheckoutForm = ({ totalPrice, shippingAddress, orderId }) => {
   const dispatch = useDispatch()
@@ -12,6 +13,7 @@ const CheckoutForm = ({ totalPrice, shippingAddress, orderId }) => {
   const { addToast } = useToasts()
 
   const { userInfo } = useSelector((state) => state.userLogin)
+  const { coupons } = useSelector((state) => state.coupons)
 
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (e) => {
@@ -33,17 +35,22 @@ const CheckoutForm = ({ totalPrice, shippingAddress, orderId }) => {
         },
       }
       try {
-        await Axios.post(
+        const ordered = await Axios.post(
           `${process.env.REACT_APP_API}/order/payments`,
           {
             id,
             amount: totalPrice * 100,
             shippingAddress,
             orderId,
+            coupons
           },
           config,
         )
-
+        if (ordered) {
+          dispatch({
+            type: cartConstant.COUPON_APPLY_RESET,
+          })
+        }
         const { data } = Axios.get(
           `${process.env.REACT_APP_API}/order/${orderId}`,
           config,

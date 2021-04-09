@@ -13,12 +13,14 @@ import {
   useElements,
 } from '@stripe/react-stripe-js'
 import Axios from 'axios'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { detailOrderAction } from '../../redux/actions/orderAction'
+import NotFoundCompent from '../../components/NotFoundComponent'
 const stripePromise = loadStripe(
   'pk_test_51IcTOcFCGbTef4Xnl90bc1mqeg85QhRRvBRH5Z7Uslmmcw8LuyZ3VBScxtUo3hhMcjoAV8tZQBrV6NEmJAL4qaJn00f6OuLWRC',
 )
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ totalPrice }) => {
   const stripe = useStripe()
   const elements = useElements()
 
@@ -42,7 +44,7 @@ const CheckoutForm = () => {
           'http://localhost:3001/api/checkout',
           {
             id,
-            amount: 10000, //cents
+            amount: totalPrice, //cents
           },
         )
         console.log(data)
@@ -78,13 +80,41 @@ const CheckoutForm = () => {
   )
 }
 
-const OrderDetail = ({ location, history }) => {
+const OrderDetail = ({ location, history, match }) => {
+  const orderId = match.params.orderId
   const { userInfo } = useSelector((state) => state.userLogin)
+  const { order } = useSelector((state) => state.orderDetail)
+  const dispatch = useDispatch()
+  const [values, setValues] = useState({
+    shippingPrice: '',
+    itemPrice: '',
+    totalPrice: '',
+    isPaid: '',
+    isDelivery: '',
+    orderItems: [],
+    shippingAddress: {},
+    paymentMethod: '',
+  })
   useEffect(() => {
     if (!userInfo) {
       history.push('/login-register')
+    } else {
+      if (!order || !order.paymentMethod || order.orderId !== orderId) {
+        dispatch(detailOrderAction(orderId))
+      } else {
+        setValues({
+          shippingAddress: order.shippingAddress,
+          itemPrice: Number(order.itemsPrice).toFixed(2),
+          totalPrice: Number(order.totalPrice).toFixed(2),
+          isPaid: order.isPaid,
+          isDelivery: order.isDelivery,
+          orderItems: order.orderItems,
+          shippingPrice: order.shippingPrice,
+          paymentMethod: order.paymentMethod,
+        })
+      }
     }
-  }, [userInfo, history])
+  }, [userInfo, history, order, orderId, dispatch])
 
   const { pathname } = location
   return (
@@ -105,57 +135,163 @@ const OrderDetail = ({ location, history }) => {
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
         <Breadcrumb />
-        <div className="cart-main-area pt-30 pb-100">
-          <div className="container">
-            <Elements stripe={stripePromise}>
-              <div
-                className="row"
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <div className="col-lg-8 col-md-12">
-                  <div className="discount-code-wrapper">
-                    <div className="title-wrap">
-                      <h4 className="cart-bottom-title section-bg-gray">
-                        Order Items
-                      </h4>
+        {order ? (
+          <div className="cart-main-area pt-30 pb-100">
+            <div className="container">
+              <Elements stripe={stripePromise}>
+                <span
+                  className="mb-30"
+                  style={{ fontSize: '20px', display: 'block' }}
+                >
+                  Order Detail: #{orderId}
+                </span>
+                <div className="row">
+                  <div className="col-lg-8 col-md-12">
+                    <div className="row mb-20">
+                      <div className="col-lg-6 col-md-12">
+                        {' '}
+                        <div className="grand-totall">
+                          <div className="title-wrap">
+                            <h4 className="cart-bottom-title section-bg-gary-cart">
+                              Payment Method
+                            </h4>
+                          </div>
+                          <br />
+                          <span style={{ fontWeight: 'bolder' }}>
+                            Payment by {values.paymentMethod}
+                          </span>
+                          <br />
+                          <hr />
+                          {values.isPaid ? (
+                            <span
+                              className="alert alert-success mt-20"
+                              style={{ display: 'block', color: 'green' }}
+                            >
+                              <i className="fa fa-check"></i> Paid
+                            </span>
+                          ) : (
+                            <span style={{ display: 'block', color: 'red' }}>
+                              <i className="fa fa-times"></i> Not Paid
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-12">
+                        {' '}
+                        <div className="grand-totall">
+                          <div className="title-wrap">
+                            <h4 className="cart-bottom-title section-bg-gary-cart">
+                              Delivery Method
+                            </h4>
+                          </div>
+                          <br />
+                          <span style={{ fontWeight: 'bolder' }}>
+                            {values.shippingPrice === 0 ? 'Free Shipping' : ''}
+                          </span>
+                          <br />
+
+                          <span>Delivered on Saturday, March 6</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="discount-code">
-                      <div className="row">
-                        <div className="col-sm-3">Hihi</div>
-                        <div className="col-sm-6">Hihi</div>
-                        <div className="col-sm-3">Hihi</div>
+                    <div className="discount-code-wrapper">
+                      <div className="title-wrap">
+                        <h4 className="cart-bottom-title section-bg-gray">
+                          Order Items
+                        </h4>
+                      </div>
+                      <div className="discount-code">
+                        {values.orderItems.map((item, key) => (
+                          <Fragment key={key}>
+                            <div
+                              className="row"
+                              style={{ display: 'flex', alignItems: 'center' }}
+                            >
+                              <div className="col-sm-3">
+                                <img
+                                  src={item.image}
+                                  width={80}
+                                  alt="Image Items"
+                                />
+                              </div>
+                              <div className="col-sm-6">
+                                ${item.price.toFixed(2)} x {item.qty} = $
+                                {(item.price * item.qty).toFixed(2)}
+                              </div>
+                              <div className="col-sm-3">{item.name}</div>
+                              <div
+                                className="col-sm-12"
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'flex-end',
+                                }}
+                              >
+                                <Link
+                                  to={`/product/${item.slug}`}
+                                  className="btn btn-outline-secondary btn-sm"
+                                >
+                                  Reviews
+                                </Link>
+                              </div>
+                            </div>
+                            <hr />
+                          </Fragment>
+                        ))}
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-lg-4 col-md-12">
-                  <div className="grand-totall">
-                    <div className="title-wrap">
-                      <h4 className="cart-bottom-title section-bg-gary-cart">
-                        Order Summary
-                      </h4>
+                  <div className="col-lg-4 col-md-12">
+                    <div className="grand-totall">
+                      <div className="title-wrap">
+                        <h4 className="cart-bottom-title section-bg-gary-cart">
+                          Shipping
+                        </h4>
+                      </div>
+                      <span
+                        className="mt-10"
+                        style={{ fontWeight: 'bolder', display: 'block' }}
+                      >
+                        {values.shippingAddress.fullname}
+                      </span>
+                      <span>
+                        Address: {values.shippingAddress.address},{' '}
+                        {values.shippingAddress.wards},{' '}
+                        {values.shippingAddress.district},{' '}
+                        {values.shippingAddress.city}
+                      </span>
+                      <br />
+                      <span style={{ marginTop: '10px', display: 'block' }}>
+                        Phone: {values.shippingAddress.phone}
+                      </span>
                     </div>
-                    <h5>
-                      Total products <span>$0</span>
-                    </h5>
+                    <div className="grand-totall mt-20 mb-20">
+                      <div className="title-wrap">
+                        <h4 className="cart-bottom-title section-bg-gary-cart">
+                          Order Summary
+                        </h4>
+                      </div>
+                      <h5>
+                        Total products <span>${values.itemPrice}</span>
+                      </h5>
 
-                    <h4 className="grand-totall-title">
-                      Grand Total
-                      <span>$0</span>
-                    </h4>
+                      <h4 className="grand-totall-title">
+                        Grand Total
+                        <span>${values.totalPrice}</span>
+                      </h4>
 
-                    <CheckoutForm />
+                      <CheckoutForm totalPrice={values.totalPrice} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Elements>
+              </Elements>
+            </div>
           </div>
-        </div>
+        ) : (
+          <NotFoundCompent />
+        )}
       </LayoutOne>
     </Fragment>
   )
 }
-
-
 
 export default OrderDetail

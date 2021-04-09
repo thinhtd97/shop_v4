@@ -5,6 +5,7 @@ const orderSchema = mongoose.Schema(
     orderItems: [
       {
         name: { type: String, require: true },
+        slug: { type: String, required: true },
         qty: { type: Number, required: true },
         image: { type: String, required: true },
         size: { type: String, required: true },
@@ -18,8 +19,10 @@ const orderSchema = mongoose.Schema(
       },
     ],
     shippingAddress: {
+      fullname: { type: String, required: true },
       district: { type: String, required: true },
       wards: { type: String, required: true },
+      city: { type: String, required: true },
       address: { type: String, required: true },
       phone: { type: String, required: true },
     },

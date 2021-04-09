@@ -7,7 +7,7 @@ export const createOrderAction = (
   shippingPrice,
   orderId,
   addToast,
-  history
+  history,
 ) => ({
   type: orderConstant.ORDER_CREATE_REQUEST,
   cartItems,
@@ -16,5 +16,9 @@ export const createOrderAction = (
   shippingPrice,
   orderId,
   addToast,
-  history
+  history,
+})
+export const detailOrderAction = (orderId) => ({
+  type: orderConstant.ORDER_DETAIL_REQUEST,
+  orderId,
 })

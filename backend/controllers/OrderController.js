@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Order from '../models/Order.js'
+import slugify from 'slugify'
 import Cart from '../models/Cart.js'
 
 export const create = asyncHandler(async (req, res) => {
@@ -14,6 +15,7 @@ export const create = asyncHandler(async (req, res) => {
     const orderItems = cartItems.map((item) => {
       return {
         name: item.name,
+        slug: slugify(item.name).toLowerCase(),
         qty: item.qty,
         image: item.image,
         size: item.size,
@@ -32,8 +34,10 @@ export const create = asyncHandler(async (req, res) => {
     const newOrder = new Order({
       orderItems,
       shippingAddress: {
+        fullname: shippingAddress.fullname,
         district: shippingAddress.district,
         wards: shippingAddress.wards,
+        city: shippingAddress.city,
         address: shippingAddress.address,
         phone: shippingAddress.phone,
       },

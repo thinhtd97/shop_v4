@@ -53,7 +53,36 @@ function* createOrder(action) {
   }
 }
 
+function* detailOrder(action) {
+  const { orderId } = action
+  try {
+    const { userInfo } = yield select((state) => state.userLogin)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    const { data } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/order/${orderId}`, config),
+    )
+    yield put({
+      type: orderConstant.ORDER_DETAIL_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    yield put({
+      type: orderConstant.ORDER_DETAIL_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
 function* OrderSaga() {
   yield takeEvery(orderConstant.ORDER_CREATE_REQUEST, createOrder)
+  yield takeEvery(orderConstant.ORDER_DETAIL_REQUEST, detailOrder)
 }
 export default OrderSaga

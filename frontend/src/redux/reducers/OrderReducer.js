@@ -42,3 +42,24 @@ export const orderDetailReducer = (state = {}, action) => {
       return state
   }
 }
+export const orderPaypalReducer = (state = {}, action) => {
+  switch (action.type) {
+    case orderConstant.ORDER_PAYPAL_REQUEST:
+      return {
+        loading: true,
+      }
+    case orderConstant.ORDER_PAYPAL_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      }
+    case orderConstant.ORDER_PAYPAL_FAILED:
+      return {
+        loading: false,
+        error: action.payload,
+      }
+
+    default:
+      return state
+  }
+}

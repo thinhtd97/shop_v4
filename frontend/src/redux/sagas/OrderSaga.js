@@ -88,9 +88,56 @@ function* detailOrder(action) {
     })
   }
 }
+function* orderPaypal(action) {
+  const { paymentResult, addToast, orderId, coupons } = action
+  try {
+    const { userInfo } = yield select((state) => state.userLogin)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    yield call(() =>
+      axios.put(
+        `${process.env.REACT_APP_API}/order/paid/paypal`,
+        { paymentResult, orderId, coupons },
+        config,
+      ),
+    )
+    const { data } = yield call(() =>
+      axios.get(`${process.env.REACT_APP_API}/order/${orderId}`, config),
+    )
+    yield put({
+      type: orderConstant.ORDER_DETAIL_SUCCESS,
+      payload: data,
+    })
+    yield put({
+      type: orderConstant.ORDER_PAYPAL_SUCCESS,
+    })
+    addToast(`Order Success`, { appearance: 'success', autoDismiss: true })
+  } catch (error) {
+    yield put({
+      type: orderConstant.ORDER_PAYPAL_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+    addToast(
+      `${
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      }`,
+      { appearance: 'error', autoDismiss: true },
+    )
+  }
+}
 
 function* OrderSaga() {
   yield takeEvery(orderConstant.ORDER_CREATE_REQUEST, createOrder)
   yield takeEvery(orderConstant.ORDER_DETAIL_REQUEST, detailOrder)
+  yield takeEvery(orderConstant.ORDER_PAYPAL_REQUEST, orderPaypal)
 }
 export default OrderSaga

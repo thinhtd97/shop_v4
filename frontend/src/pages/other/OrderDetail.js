@@ -2,15 +2,21 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import MetaTags from 'react-meta-tags'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
+import { PayPalButton } from 'react-paypal-button-v2'
 import LayoutOne from '../../layouts/LayoutOne'
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb'
 import { loadStripe } from '@stripe/stripe-js'
+import axios from 'axios'
 import { Elements } from '@stripe/react-stripe-js'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { detailOrderAction } from '../../redux/actions/orderAction'
+import {
+  detailOrderAction,
+  orderPaypalAction,
+} from '../../redux/actions/orderAction'
 
 import CheckoutForm from './CheckoutForm'
+import { useToasts } from 'react-toast-notifications'
 const stripePromise = loadStripe(
   'pk_test_51IcTOcFCGbTef4Xnl90bc1mqeg85QhRRvBRH5Z7Uslmmcw8LuyZ3VBScxtUo3hhMcjoAV8tZQBrV6NEmJAL4qaJn00f6OuLWRC',
 )
@@ -19,7 +25,10 @@ const OrderDetail = ({ location, history, match }) => {
   const orderId = match.params.orderId
   const { userInfo } = useSelector((state) => state.userLogin)
   const { order } = useSelector((state) => state.orderDetail)
+  const { addToast } = useToasts()
   const dispatch = useDispatch()
+  const { coupons } = useSelector((state)=> state.coupons)
+  const [sdkReady, setSdkReady] = useState(false)
   const [values, setValues] = useState({
     shippingPrice: '',
     itemPrice: '',
@@ -30,7 +39,23 @@ const OrderDetail = ({ location, history, match }) => {
     shippingAddress: {},
     paymentMethod: '',
   })
+  const orderHandler = (paymentResult) => {
+    dispatch(orderPaypalAction(paymentResult, addToast, orderId, coupons))
+  }
   useEffect(() => {
+    const addScriptPaypal = async () => {
+      const { data: clientId } = await axios.get(
+        `${process.env.REACT_APP_API}/config/paypal`,
+      )
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+      script.async = true
+      script.onload = () => {
+        setSdkReady(true)
+      }
+      document.body.appendChild(script)
+    }
     if (!userInfo.role === 'subscriber') {
       history.push('/login-register')
     } else {
@@ -48,6 +73,7 @@ const OrderDetail = ({ location, history, match }) => {
           paymentMethod: order.paymentMethod,
         })
       }
+      addScriptPaypal()
     }
   }, [userInfo, history, order, orderId, dispatch])
 
@@ -142,11 +168,7 @@ const OrderDetail = ({ location, history, match }) => {
                             style={{ display: 'flex', alignItems: 'center' }}
                           >
                             <div className="col-sm-3">
-                              <img
-                                src={item.image}
-                                width={80}
-                                alt=""
-                              />
+                              <img src={item.image} width={80} alt="" />
                             </div>
                             <div className="col-sm-6">
                               ${item.price.toFixed(2)} x {item.qty} = $
@@ -217,16 +239,44 @@ const OrderDetail = ({ location, history, match }) => {
                       Grand Total
                       <span>${Number(values.totalPrice).toFixed(2)}</span>
                     </h4>
+
                     {values.isPaid ? (
                       <Fragment></Fragment>
                     ) : (
-                      <Elements stripe={stripePromise}>
-                        <CheckoutForm
-                          totalPrice={values.totalPrice}
-                          shippingAddress={values.shippingAddress}
-                          orderId={orderId}
-                        />
-                      </Elements>
+                      <Fragment>
+                        {values.paymentMethod === 'stripe' ? (
+                          <Fragment>
+                            {userInfo._id === order.user.toString() && (
+                              <Elements stripe={stripePromise}>
+                                <CheckoutForm
+                                  totalPrice={values.totalPrice}
+                                  shippingAddress={values.shippingAddress}
+                                  orderId={orderId}
+                                />
+                              </Elements>
+                            )}
+                          </Fragment>
+                        ) : (
+                          <Fragment>
+                            {userInfo._id === order.user.toString() && (
+                              <Fragment>
+                                {!sdkReady ? (
+                                  <p>Loading...</p>
+                                ) : userInfo._id.toString() ===
+                                  order.user.toString() ? (
+                                  <PayPalButton
+                                    amount={order.totalPrice}
+                                    
+                                    onSuccess={orderHandler}
+                                  />
+                                ) : (
+                                  <></>
+                                )}
+                              </Fragment>
+                            )}
+                          </Fragment>
+                        )}
+                      </Fragment>
                     )}
                   </div>
                 </div>

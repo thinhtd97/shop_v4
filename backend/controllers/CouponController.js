@@ -25,14 +25,14 @@ export const applyCoupon = asyncHandler(async (req, res) => {
   const coupon = await Coupon.findOne({ code, used: false })
   try {
     if (!coupon) {
-      res.status(400)
+      res.status(401)
       throw new Error('Invalid Coupon Code.')
     }
     res.json(coupon)
   } catch (error) {
     console.log(error)
     res.status(400)
-    throw new Error('Apply Coupon Failed.')
+    throw new Error('Invalid Coupon Code.')
   }
 })
 export const removeCouponUsed = asyncHandler(async (req, res) => {

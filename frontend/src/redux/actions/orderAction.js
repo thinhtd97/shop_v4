@@ -24,3 +24,10 @@ export const detailOrderAction = (orderId) => ({
   type: orderConstant.ORDER_DETAIL_REQUEST,
   orderId,
 })
+export const orderPaypalAction = (paymentResult, addToast, orderId, coupons) => ({
+  type: orderConstant.ORDER_PAYPAL_REQUEST,
+  paymentResult,
+  addToast,
+  orderId,
+  coupons
+})

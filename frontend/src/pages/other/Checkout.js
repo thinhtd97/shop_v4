@@ -253,7 +253,7 @@ const Checkout = ({ location, history }) => {
                             </ul>
                           </div>
 
-                          {coupons.length > 0 ? (
+                          {coupons && coupons.length > 0 ? (
                             <Fragment>
                               <hr />
                               <div className="your-order-bottom">

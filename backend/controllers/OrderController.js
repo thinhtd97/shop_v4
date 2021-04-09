@@ -99,7 +99,7 @@ export const payments = asyncHandler(async (req, res) => {
       },
     })
     if (payment) {
-      coupons.forEach(async (item) => {
+      coupons?.forEach(async (item) => {
         await Coupon.updateOne({ _id: item._id }, { $set: { used: true } })
       })
       order.isPaid = true
@@ -111,5 +111,34 @@ export const payments = asyncHandler(async (req, res) => {
     console.log(error)
     res.status(400)
     throw new Error(error)
+  }
+})
+export const updateOrderToPaid = asyncHandler(async (req, res) => {
+  const { paymentResult, orderId, coupons } = req.body
+  try {
+    const order = await Order.findOne({ orderId })
+
+    if (order) {
+      order.isPaid = true
+      order.paidAt = Date.now()
+      order.paymentResult = {
+        id: paymentResult.id,
+        status: paymentResult.status,
+        update_time: paymentResult.update_time,
+        email_address: paymentResult.payer.email_address,
+      }
+      coupons?.forEach(async (item) => {
+        await Coupon.updateOne({ _id: item._id }, { $set: { used: true } })
+      })
+      const updatedOrder = await order.save()
+      res.json(updatedOrder)
+    } else {
+      res.status(404)
+      throw new Error('Order Not found')
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(400)
+    throw new Error('Order Failed!!')
   }
 })
